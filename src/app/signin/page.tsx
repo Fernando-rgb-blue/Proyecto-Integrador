@@ -1,14 +1,29 @@
+"use client"
 import Link from "next/link";
 
-import { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "Sign In Page | Free Next.js Template for Startup and SaaS",
-  description: "This is Sign In Page for Startup Nextjs Template",
-  // other metadata
-};
+import { FormEvent, useState } from "react";
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 const SigninPage = () => {
+
+  const [error, setError] = useState("");
+  const router = useRouter()
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const formData = new FormData(e.currentTarget)
+
+    const res = await signIn("credentials", {
+      email: formData.get("email"),
+      password: formData.get("password"),
+      redirect: false,
+    });
+    if (res?.error) return setError(res.error as string);
+    if (res?.ok) return router.push('/dashboard')
+    console.log(res);
+
+  }
+
   return (
     <>
       <section className="relative z-10 overflow-hidden pb-16 pt-36 md:pb-20 lg:pb-28 lg:pt-[180px]">
@@ -80,7 +95,11 @@ const SigninPage = () => {
                   </p>
                   <span className="hidden h-[1px] w-full max-w-[70px] bg-body-color/50 sm:block"></span>
                 </div>
-                <form>
+                <form onSubmit={handleSubmit}>
+
+                  {error && <div className="bg-red-500 text-white p-2 mb-2">
+                    {error}
+                  </div>}
                   <div className="mb-8">
                     <label
                       htmlFor="email"
