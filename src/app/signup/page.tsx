@@ -1,14 +1,49 @@
+"use client"
+
 import Link from "next/link";
+import axios, {AxiosError} from "axios";
+import { FormEvent, useState } from "react";
 
 import { Metadata } from "next";
+import { error } from "console";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
-export const metadata: Metadata = {
-  title: "Sign Up Page | Free Next.js Template for Startup and SaaS",
-  description: "This is Sign Up Page for Startup Nextjs Template",
-  // other metadata
-};
 
 const SignupPage = () => {
+
+  const [error, setError] = useState();
+  const router = useRouter()
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const formData = new FormData(e.currentTarget)
+    try {
+      const singupResponse = await axios.post("/api/auth/singup", {
+        email: formData.get("email"),
+        password: formData.get("password"),
+        fullname: formData.get("fullname")
+      });
+      console.log(singupResponse)
+
+      const res = await signIn("credentials",{
+        email :  singupResponse.data.email,
+        password: formData.get("password"),
+        redirect: false,
+      });
+
+      if(res?.ok) return router.push('/dashboard')
+      console.log(res);
+
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        setError(error.response?.data.message)
+      }
+      console.log(error);
+
+    }
+
+  }
+
   return (
     <>
       <section className="relative z-10 overflow-hidden pb-16 pt-36 md:pb-20 lg:pb-28 lg:pt-[180px]">
@@ -17,10 +52,10 @@ const SignupPage = () => {
             <div className="w-full px-4">
               <div className="shadow-three mx-auto max-w-[500px] rounded bg-white px-6 py-10 dark:bg-dark sm:p-[60px]">
                 <h3 className="mb-3 text-center text-2xl font-bold text-black dark:text-white sm:text-3xl">
-                  Create your account
+                  Crear Cuenta
                 </h3>
                 <p className="mb-11 text-center text-base font-medium text-body-color">
-                  It’s totally free and super easy
+                  Crear cuenta x2
                 </p>
                 <button className="border-stroke dark:text-body-color-dark dark:shadow-two mb-6 flex w-full items-center justify-center rounded-sm border bg-[#f8f8f8] px-6 py-3 text-base text-body-color outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none">
                   <span className="mr-3">
@@ -80,7 +115,18 @@ const SignupPage = () => {
                   </p>
                   <span className="hidden h-[1px] w-full max-w-[60px] bg-body-color/50 sm:block"></span>
                 </div>
-                <form>
+
+
+
+
+
+                <form onSubmit={handleSubmit}>
+
+                  {error && <div className="bg-red-500 text-white p-2 mb-2">
+                    {error}
+                  </div>}
+
+                  {/* Nombre */}
                   <div className="mb-8">
                     <label
                       htmlFor="name"
@@ -91,11 +137,12 @@ const SignupPage = () => {
                     </label>
                     <input
                       type="text"
-                      name="name"
+                      name="fullname"
                       placeholder="Enter your full name"
                       className="border-stroke dark:text-body-color-dark dark:shadow-two w-full rounded-sm border bg-[#f8f8f8] px-6 py-3 text-base text-body-color outline-none transition-all duration-300 focus:border-primary dark:border-transparent dark:bg-[#2C303B] dark:focus:border-primary dark:focus:shadow-none"
                     />
                   </div>
+                  {/* email */}
                   <div className="mb-8">
                     <label
                       htmlFor="email"
@@ -111,6 +158,7 @@ const SignupPage = () => {
                       className="border-stroke dark:text-body-color-dark dark:shadow-two w-full rounded-sm border bg-[#f8f8f8] px-6 py-3 text-base text-body-color outline-none transition-all duration-300 focus:border-primary dark:border-transparent dark:bg-[#2C303B] dark:focus:border-primary dark:focus:shadow-none"
                     />
                   </div>
+                  {/* password */}
                   <div className="mb-8">
                     <label
                       htmlFor="password"
@@ -126,6 +174,11 @@ const SignupPage = () => {
                       className="border-stroke dark:text-body-color-dark dark:shadow-two w-full rounded-sm border bg-[#f8f8f8] px-6 py-3 text-base text-body-color outline-none transition-all duration-300 focus:border-primary dark:border-transparent dark:bg-[#2C303B] dark:focus:border-primary dark:focus:shadow-none"
                     />
                   </div>
+
+                  {/* --------------- */}
+
+
+
                   <div className="mb-8 flex">
                     <label
                       htmlFor="checkboxLabel"
@@ -171,11 +224,17 @@ const SignupPage = () => {
                     </label>
                   </div>
                   <div className="mb-6">
+
                     <button className="shadow-submit dark:shadow-submit-dark flex w-full items-center justify-center rounded-sm bg-primary px-9 py-4 text-base font-medium text-white duration-300 hover:bg-primary/90">
                       Sign up
                     </button>
+
                   </div>
                 </form>
+
+
+
+
                 <p className="text-center text-base font-medium text-body-color">
                   Already using Startup?{" "}
                   <Link href="/signin" className="text-primary hover:underline">
