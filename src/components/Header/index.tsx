@@ -1,3 +1,4 @@
+// El header general
 "use client";
 import Image from "next/image";
 import Link from "next/link";
@@ -57,14 +58,14 @@ const Header = () => {
                 } `}
               >
                 <Image
-                  src="/images/logo/logo-2.svg"
+                  src="/images/logo/infClaro.svg"
                   alt="logo"
                   width={140}
                   height={30}
                   className="w-full dark:hidden"
                 />
                 <Image
-                  src="/images/logo/logo.svg"
+                  src="/images/logo/infOscuro.svg"
                   alt="logo"
                   width={140}
                   height={30}
@@ -146,6 +147,9 @@ const Header = () => {
                                   href={submenuItem.path}
                                   key={index}
                                   className="block rounded py-2.5 text-sm text-dark hover:text-primary dark:text-white/70 dark:hover:text-white lg:px-3"
+                                  target={submenuItem.newTab ? "_blank" : "_self"}  // Aquí se condiciona el target
+                                  rel={submenuItem.newTab ? "noopener noreferrer" : undefined}  // Añade rel por seguridad
+
                                 >
                                   {submenuItem.title}
                                 </Link>
