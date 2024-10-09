@@ -8,7 +8,7 @@ interface ISchedule extends Document {
 
 const scheduleSchema = new Schema<ISchedule>({
     day: {
-asd
+        type: String,
         required: true,
     },
     hours: {
