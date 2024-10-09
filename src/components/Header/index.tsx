@@ -147,6 +147,9 @@ const Header = () => {
                                   href={submenuItem.path}
                                   key={index}
                                   className="block rounded py-2.5 text-sm text-dark hover:text-primary dark:text-white/70 dark:hover:text-white lg:px-3"
+                                  target={submenuItem.newTab ? "_blank" : "_self"}  // Aquí se condiciona el target
+                                  rel={submenuItem.newTab ? "noopener noreferrer" : undefined}  // Añade rel por seguridad
+
                                 >
                                   {submenuItem.title}
                                 </Link>
