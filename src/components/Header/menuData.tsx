@@ -69,7 +69,7 @@ const menuData: Menu[] = [
       {
         id: 47,
         title: "Perfil del Egresado",
-        path: "/signin",
+        path: "/blog-details",
         newTab: false,
       },
       {
