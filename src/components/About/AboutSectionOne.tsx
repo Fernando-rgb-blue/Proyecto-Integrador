@@ -24,46 +24,27 @@ const AboutSectionOne = () => {
           <div className="-mx-4 flex flex-wrap items-center">
             <div className="w-full px-4 lg:w-1/2">
               <SectionTitle
-                title="Crafted for Startup, SaaS and Business Sites."
-                paragraph="The main ‘thrust’ is to focus on educating attendees on how to best protect highly vulnerable business applications with interactive panel discussions and roundtables."
+                title="Breve reseña histórica"
+                paragraph="La Escuela de Informática de la Universidad Nacional de Trujillo (UNT) fue fundada el 12 de septiembre de 1995, impulsada por un grupo de docentes del Departamento de Matemáticas. Inicialmente, las clases se dictaban en el aula F9 de la Escuela de Física y contaban con un laboratorio equipado con 8 PCs Olivetti que usaban Windows 3.11, actualizándose a Windows 95 a finales de ese año. Los primeros docentes fueron el Prof. José Olivencia Quiñones (Geometría), la Prof. Roxana Rodríguez Escobedo (Cálculo I), el Prof. Guillermo Ramírez Lara (Lógica para Computación), el Prof. José Roldan López (Física I) y el Prof. Stephen Backle (Arquitectura de Computadoras). El Prof. Oswaldo Sánchez Rosales fue el primer coordinador y, en 1996, el Dr. Ausberto Castro se convirtió en el primer Director de la Escuela. Para su funcionamiento, se realizaron ajustes en el currículo que fueron aprobados por el Consejo Universitario el 25 de abril de 1996. El 29 de mayo de 1997, se aprobó oficialmente el currículo de la Escuela Académica Profesional de Informática mediante la Resolución Rectoral no. 1037 - 97/UNT. Con el tiempo, la informática ha evolucionado, y actualmente se entiende como sinónimo de computación, a abarcar desde el diseño de hardware y software hasta el desarrollo de sistemas inteligentes y la gestión de información. Las aplicaciones de la computación son vastas y continúan expandiéndose."
                 mb="44px"
               />
-
-              <div
-                className="mb-12 max-w-[570px] lg:mb-0"
-                data-wow-delay=".15s"
-              >
-                <div className="mx-[-12px] flex flex-wrap">
-                  <div className="w-full px-3 sm:w-1/2 lg:w-full xl:w-1/2">
-                    <List text="Premium quality" />
-                    <List text="Tailwind CSS" />
-                    <List text="Use for lifetime" />
-                  </div>
-
-                  <div className="w-full px-3 sm:w-1/2 lg:w-full xl:w-1/2">
-                    <List text="Next.js" />
-                    <List text="Rich documentation" />
-                    <List text="Developer friendly" />
-                  </div>
-                </div>
-              </div>
             </div>
-
             <div className="w-full px-4 lg:w-1/2">
-              <div className="relative mx-auto aspect-[25/24] max-w-[500px] lg:mr-0">
+              <div className="relative mx-auto aspect-[25/24] max-w-[600px] lg:mr-0">
                 <Image
-                  src="/images/about/about-image.svg"
+                  src="/images/about/26230831_10210858085074753_5299069311000616759_n.2.jpg"
                   alt="about-image"
                   fill
                   className="mx-auto max-w-full drop-shadow-three dark:hidden dark:drop-shadow-none lg:mr-0"
                 />
                 <Image
-                  src="/images/about/about-image-dark.svg"
+                  src="/images/about/26230831_10210858085074753_5299069311000616759_n.2.jpg"
                   alt="about-image"
                   fill
                   className="mx-auto hidden max-w-full drop-shadow-three dark:block dark:drop-shadow-none lg:mr-0"
                 />
               </div>
+
             </div>
           </div>
         </div>
