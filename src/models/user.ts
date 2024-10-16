@@ -19,6 +19,7 @@ const userSchema = new Schema({
     minlength: [3, "mínimo 3 caracteres"], // Corregido aquí
     maxlength: [20, "máximo 20 caracteres"] // Corregido aquí
   },
+  
 });
 
 const User = models.User || model('User', userSchema);

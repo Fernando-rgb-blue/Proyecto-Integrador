@@ -40,12 +40,20 @@ const authOptions = {
       console.log(token);
       return token;
     },
-    Session({session,token}){
-      session.user = token.user as any;
+    session({ session, token }) {
+      // Pasa la información completa del usuario a la sesión
+      if (token.user) {
+        session.user = {
+          _id: token.user._id, 
+          email: token.user.email,
+          fullname: token.user.fullname,
+        };
+      }
       return session;
     },
   },
   pages:{
+    secret: process.env.NEXTAUTH_SECRET,  // Aquí se añade el secret
     signIn: '/signin',
   }
 };

@@ -162,6 +162,7 @@ const Header = () => {
                   </ul>
                 </nav>
               </div>
+{/* Borrar */}
               <div className="flex items-center justify-end pr-16 lg:pr-0">
                 <Link
                   href="/signin"
@@ -179,6 +180,7 @@ const Header = () => {
                   <ThemeToggler />
                 </div>
               </div>
+              
             </div>
           </div>
         </div>

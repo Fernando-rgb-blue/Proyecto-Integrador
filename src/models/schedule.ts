@@ -1,3 +1,4 @@
+// src/models/schedule.ts
 import { Schema, models, model, Document, Model, Types } from 'mongoose';
 
 interface ISchedule extends Document {

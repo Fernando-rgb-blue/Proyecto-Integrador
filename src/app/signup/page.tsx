@@ -18,7 +18,7 @@ const SignupPage = () => {
     e.preventDefault()
     const formData = new FormData(e.currentTarget)
     try {
-      const singupResponse = await axios.post("/api/auth/singup", {
+      const singupResponse = await axios.post("/api/auth/signup", {
         email: formData.get("email"),
         password: formData.get("password"),
         fullname: formData.get("fullname")
