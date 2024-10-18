@@ -1,4 +1,4 @@
-// Contenedor general
+// Contenedor general de el home
 
 import AboutSectionOne from "@/components/About/AboutSectionOne";
 import AboutSectionTwo from "@/components/About/AboutSectionTwo";

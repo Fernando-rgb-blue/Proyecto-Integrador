@@ -1,13 +1,26 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SectionTitle from "../Common/SectionTitle";
-
 import ModalVideo from "react-modal-video";
 
 const Video = () => {
   const [isOpen, setOpen] = useState(false);
+
+  // Usamos useEffect para bloquear el scroll cuando el modal está abierto
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    // Limpiar el efecto cuando el componente se desmonta o cuando el modal se cierra
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
 
   return (
     <section className="relative z-10 py-16 md:py-20 lg:py-28">
@@ -26,7 +39,11 @@ const Video = () => {
               data-wow-delay=".15s"
             >
               <div className="relative aspect-[77/40] items-center justify-center">
-                <Image src="/images/video/Fondovideo2.png" alt="video image" fill />
+                <Image
+                  src="/images/video/Fondovideo2.png"
+                  alt="video image"
+                  fill
+                />
                 <div className="absolute right-0 top-0 flex h-full w-full items-center justify-center">
                   <button
                     aria-label="video play button"
