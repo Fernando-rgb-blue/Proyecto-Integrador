@@ -30,4 +30,28 @@
   input#checkboxLabel:checked ~ .box span {
     @apply opacity-100;
   }
+
+  input {
+    @apply p-2 rounded-md border-2 border-gray-300 dark:border-gray-700 mt-3 mb-5;
+  }
+
+  button[type="submit"], .submit, button.primary{
+    @apply rounded-sm bg-primary text-base font-semibold text-white duration-300 ease-in-out hover:bg-primary/80;
+  }
+
+  button.secondary{
+    @apply bg-transparent rounded-sm border-2 border-primary text-base font-semibold text-primary dark:text-blue-300 duration-300 ease-in-out hover:bg-primary/20;
+  }
+
+  button:disabled{
+    @apply cursor-not-allowed bg-gray-100;
+  }
+
+  div.tabs > * {
+    @apply bg-primary/70 text-white rounded-full py-2 px-4 font-semibold duration-300 ease-in-out hover:bg-primary/90 text-base;
+  }
+
+  div.tabs > *.active{
+    @apply bg-primary text-white rounded-full py-2 px-4 font-semibold duration-300 ease-in-out text-base;
+  }
 }
