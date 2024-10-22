@@ -93,7 +93,7 @@ const menuData: Menu[] = [
       {
         id: 61,
         title: "Documentos Acreditación",
-        path: "/error",
+        path: "/acreditacion",
         newTab: false,
       },
     ],
