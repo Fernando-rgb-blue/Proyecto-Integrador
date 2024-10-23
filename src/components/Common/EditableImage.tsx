@@ -33,25 +33,41 @@ export default function EditableImage({ image, setImage }: EditableImageProps) {
     
     return (
         <>
-            {image ? (
-                <Image className="rounded-lg w-full h-full mb-1" src={image} width="0" height="0" sizes="100vw" style={{ width: '100%', height: 'auto' }} alt="Foto" />
-            ) : (
-                <div className="text-center bg-gray-200 p-4 text-gray-500 rounded-lg mb-1">
-                    Sin imagen
-                </div>
-            )}
+    <div className="flex  flex-row items-center sm:flex-col">
+        {image ? (
+            <Image
+                className="rounded-lg mb-1 sm:w-40 sm:h-40 w-24 h-24 object-cover" // Tamaño pequeño en móviles
+                src={image}
+                width="0"
+                height="0"
+                sizes="100vw"
+                style={{ width: '80px', height: 'auto' }}
+                alt="Foto"
+            />
+        ) : (
+            <div className="text-center bg-gray-200 p-4 text-gray-500 rounded-lg mb-1 sm:w-40 sm:h-40 w-24 h-24">
+                Sin imagen
+            </div>
+        )}
+
+        <div className="flex flex-col sm:ml-4">
             <label>
                 <input type="file" className="hidden" onChange={handleFileChange} />
-                <span className="block border border-gray-300 rounded-lg p-2 text-center font-bold cursor-pointer">
+                <span className="block border border-gray-300 rounded-lg p-2 text-center font-bold cursor-pointer ml-10 mt-2 sm:mt-0 sm:ml-0 ">
                     Editar foto
                 </span>
             </label>
+
             {image !== '/images/props/pfp_default.png' && (
-                <button className="secondary py-2 text-center mt-2 px-[69px]"
-                onClick={() => setImage("/images/props/pfp_default.png")}>
+                <button
+                    className="secondary py-2 text-center ml-10 mt-2 sm:mt-4 px-[40px] sm:ml-0"
+                    onClick={() => setImage("/images/props/pfp_default.png")}
+                >
                     Quitar foto
                 </button>
             )}
-        </>
+        </div>
+    </div>
+</>
     );
 }

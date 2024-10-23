@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 const PerfilPage = () => {
     return (
-        <section className="mt-36 max-w-3xl mx-auto">
+        <section className="pb-[80px] pt-[120px]">
             <DashboardTabs isAdmin={true}/>
         </section>
     );

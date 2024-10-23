@@ -1,3 +1,4 @@
+// PANEL DOCENTE EN VISTA DE ADMIN
 import DashboardTabs from "@/components/Dashboard/DashboardTabs";
 import TeacherList from "@/components/Docentes/TeacherList";
 import { Metadata } from "next";
@@ -9,7 +10,7 @@ export const metadata: Metadata = {
 
 const DocentesPage = () => {
     return (
-        <section className="mt-36 mb-10 max-w-3xl mx-auto">
+        <section className="pb-[80px] pt-[120px]">
             <DashboardTabs isAdmin={true}/>
             <TeacherList />
         </section>

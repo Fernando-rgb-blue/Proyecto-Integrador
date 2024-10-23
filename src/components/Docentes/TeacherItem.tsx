@@ -89,12 +89,24 @@ const TeacherItem = ({ teacherItem, onTeacherUpdated }: TeacherItemProps) => {
             setTimeout(() => setIsDeleteVisible(false), 150);
         }
     }, [showDeletePopup]);
-
+    
+    useEffect(() => {
+        if (showPopup || showDeletePopup) {
+            document.body.classList.add('overflow-hidden');
+        } else {
+            document.body.classList.remove('overflow-hidden');
+        }
+    
+        return () => {
+            document.body.classList.remove('overflow-hidden');
+        };
+    }, [showPopup, showDeletePopup]);
+    
     return (
         <>
             {isVisible && (
                 <div id="popup" onClick={() => setShowPopup(false)}
-                className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 transition-opacity duration-150 opacity-0">
+                className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 transition-opacity duration-150 opacity-0  mx-2 sm:mx-0">
                     <div onClick={ev => ev.stopPropagation()} className="bg-gray-200 p-2 rounded-lg dark:bg-slate-700">
                         <TeacherForm onSubmit={handleFormSubmit} teacher={teacherItem}
                         setShowPopup={setShowPopup}/>
@@ -125,39 +137,42 @@ const TeacherItem = ({ teacherItem, onTeacherUpdated }: TeacherItemProps) => {
                     </div>
                 </div>
             )}
-            <div className="bg-primary/30 dark:bg-slate-800 p-4 my-2 rounded-md text-center flex flex-col dark:text-white hover:bg-blue-300 dark:hover:bg-slate-700 hover:shadow-md hover:shadow-black/25 transition-all">
-                <div className="flex items-center justify-between">
-                    <div className="mr-5">
-                        <Image className="rounded-lg w-full h-full mb-1" src={image} width={200} height={250} sizes="100vw"
-                        style={{ width: 'auto', height: '250px', objectFit: 'cover' }} priority={true} alt="Foto de docente" />
+            <div className="bg-primary/30 dark:bg-slate-800 p-4 my-2 rounded-md text-center flex flex-col dark:text-white  transition-all max-w-3xl sm:mx-auto mx-4">
+                <div className="flex flex-col md:flex-row md:gap-4 w-full">
+                    <div className="mb-4 w-full flex justify-center md:w-1/3">
+                    <Image
+                        className="rounded-lg mb-1"
+                        src={image}
+                        width={200}  
+                        height={250} 
+                        sizes="100vw"
+                        style={{ width: '200px', height: '250px', objectFit: 'cover', objectPosition: 'top' }} // Asegúrate de mantener las dimensiones fijas y recortar si es necesario
+                        priority={true}
+                        alt="Foto de docente"
+                    />
                     </div>
-                    <div className="grow">
-                        <h4 className="font-bold text-2xl pb-3">
-                            {name}
-                        </h4>
-                        <div className="flex flex-col gap-y-3 text-start">
-                            <p>
-                                Correo: {email}
-                            </p>
-                            <p>
-                                Oficina: {office}
-                            </p>
-                            <p>
-                                Áreas de investigación: {areas}
-                            </p>
-                        </div>
+                    <div className="grow text-center md:text-left md:w-1/3">
+                    <h4 className="font-bold text-xl md:text-2xl pb-3">{name}</h4>
+                    <div className="flex flex-col gap-y-3 text-start">
+                        <p>Correo: {email}</p>
+                        <p>Oficina: {office}</p>
+                        <p>Áreas de investigación: {areas}</p>
                     </div>
-                </div>
-                <div className="flex justify-center gap-10">
-                    <div onClick={() => setShowPopup(true)}
-                        className="rounded-sm bg-primary px-8 py-4 mt-3 text-base font-semibold text-white duration-300
-                        ease-in-out hover:bg-primary/80 cursor-pointer">
+                    </div>
+                    {/* Columna para los botones */}
+                    <div className="flex flex-col justify-center gap-4 mt-4 md:mt-0 md:w-1/3">
+                    <div
+                        onClick={() => setShowPopup(true)}
+                        className="rounded-sm bg-primary px-8 py-4 text-base font-semibold text-white duration-300 ease-in-out hover:bg-primary/60 cursor-pointer"
+                    >
                         Editar Docente
                     </div>
-                    <div onClick={() => setShowDeletePopup(true)}
-                        className="rounded-sm border-2 border-primary px-8 py-4 mt-3 text-base font-semibold text-primary duration-300
-                        ease-in-out hover:bg-primary/20 cursor-pointer">
+                    <div
+                        onClick={() => setShowDeletePopup(true)}
+                        className="rounded-sm border-2 border-primary px-8 py-4 text-base font-semibold text-primary duration-300 ease-in-out hover:bg-primary/30 cursor-pointer"
+                    >
                         Eliminar Docente
+                    </div>
                     </div>
                 </div>
             </div>
