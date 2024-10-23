@@ -9,7 +9,6 @@ import Contact from "@/components/Contact";
 import Features from "@/components/Features";
 import Hero from "@/components/Hero";
 import CarreraInfo from "@/components/CarreraInfo";
-import Pricing from "@/components/Pricing";
 import Testimonials from "@/components/Testimonials";
 import Video from "@/components/Video";
 import Conveniosf from "@/components/Convenios/Showcon";

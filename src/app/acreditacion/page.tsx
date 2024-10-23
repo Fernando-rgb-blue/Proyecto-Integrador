@@ -5,8 +5,8 @@ import Documentos from "@/components/Documentos";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Escuela de Informática | Perfil del Egresado",
-    description: "Esta es la página de Perfil del Egresado",
+    title: "Escuela de Informática | Acreditación",
+    description: "Esta es la página de Documentos de Acreditación",
     // other metadata
 };
 
