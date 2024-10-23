@@ -91,7 +91,13 @@ const menuData: Menu[] = [
         newTab: true,
       },
       {
-        id: 61,
+        id: 51,
+        title: "Instrucciones Matrícula ",
+        path: "/matricula",
+        newTab: false,
+      },
+      {
+        id: 52,
         title: "Documentos Acreditación",
         path: "/acreditacion",
         newTab: false,
