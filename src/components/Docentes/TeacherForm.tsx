@@ -42,14 +42,17 @@ const TeacherForm = ({ onSubmit, teacher, setShowPopup }: TeacherFormProps) => {
     }
 
     return (
-        <form onSubmit={(ev) => onSubmit(ev, formData)}
-        className="max-w-3xl mx-auto">
-            <div className="grid gap-4" style={{gridTemplateColumns:'.3fr .7fr'}}>
+        <form onSubmit={(ev) => onSubmit(ev, formData)} className="max-w-3xl mx-auto p-4">
+            <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-[.3fr_.7fr]">
                 <div>
-                    <EditableImage image={formData.image} setImage={handleImageChange} />
+                    <EditableImage
+                        image={formData.image}
+                        setImage={handleImageChange}
+                        // Tamaño pequeño en móviles
+                    />
                 </div>
-                <div className="w-full mx-auto flex flex-col">
-                    <label htmlFor="name">
+                <div className="w-full flex flex-col">
+                    <label htmlFor="name" className="mb-1">
                         Nombres y apellidos
                     </label>
                     <input
@@ -58,10 +61,11 @@ const TeacherForm = ({ onSubmit, teacher, setShowPopup }: TeacherFormProps) => {
                         value={formData.name}
                         onChange={handleInputChange}
                         autoComplete="off"
+                        className="p-2 mb-4 border rounded"
                     />
-                    <div className="grid grid-cols-10 gap-2">
-                        <div className="col-span-7">
-                            <label htmlFor="email">
+                    <div className="grid grid-cols-1 sm:grid-cols-10 gap-2">
+                        <div className="col-span-10 sm:col-span-7">
+                            <label htmlFor="email" className="mb-1">
                                 Correo electrónico
                             </label>
                             <input
@@ -69,12 +73,12 @@ const TeacherForm = ({ onSubmit, teacher, setShowPopup }: TeacherFormProps) => {
                                 type="text"
                                 value={formData.email}
                                 onChange={handleInputChange}
-                                className="w-full"
+                                className="w-full p-2 mb-4 border rounded"
                                 autoComplete="off"
                             />
                         </div>
-                        <div className="col-span-3">
-                            <label htmlFor="office">
+                        <div className="col-span-10 sm:col-span-3">
+                            <label htmlFor="office" className="mb-1">
                                 Oficina
                             </label>
                             <input
@@ -82,11 +86,11 @@ const TeacherForm = ({ onSubmit, teacher, setShowPopup }: TeacherFormProps) => {
                                 type="text"
                                 value={formData.office}
                                 onChange={handleInputChange}
-                                className="w-full"
+                                className="w-full p-2 mb-4 border rounded"
                             />
                         </div>
                     </div>
-                    <label htmlFor="areas">
+                    <label htmlFor="areas" className="mb-1">
                         Áreas
                     </label>
                     <input
@@ -94,20 +98,24 @@ const TeacherForm = ({ onSubmit, teacher, setShowPopup }: TeacherFormProps) => {
                         type="text"
                         value={formData.areas}
                         onChange={handleInputChange}
+                        className="p-2 border rounded"
                     />
                 </div>
             </div>
             <div className="flex gap-4 justify-center items-center mt-4">
-                <button type="submit" className="px-8 py-4">
+                <button type="submit" className="px-8 py-4 bg-primary text-white rounded">
                     Guardar
                 </button>
-                <button className="secondary px-8 py-4"
-                type="button" onClick={() => setShowPopup(false)}>
+                <button
+                    className="secondary px-8 py-4 bg-gray-200 rounded"
+                    type="button"
+                    onClick={() => setShowPopup(false)}
+                >
                     Cancelar
                 </button>
             </div>
             {errorMessage && (
-                <p>
+                <p className="text-red-500 mt-2">
                     {errorMessage}
                 </p>
             )}
