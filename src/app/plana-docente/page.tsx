@@ -13,7 +13,7 @@ const PlanaDocentePage = () => {
     <>
       <Breadcrumb
         pageName="Plana Docente"
-        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. In varius eros eget sapien consectetur ultrices. Ut quis dapibus libero."
+        description="Los encargados de la enseñanza, asesoramiento y guía de los estudiantes de la escuela profesional de informática."
       />
       <div className="max-w-full mx-6 mb-10 text-center pt-10">
         <Link href="/docentes"
