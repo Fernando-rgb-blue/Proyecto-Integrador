@@ -47,6 +47,7 @@ const authOptions = {
           _id: token.user._id, 
           email: token.user.email,
           fullname: token.user.fullname,
+          role: token.user.role, // Incluye el rol en la sesión
         };
       }
       return session;
@@ -62,3 +63,5 @@ const authOptions = {
 const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };
+
+export { authOptions }; // Exportar authOptions

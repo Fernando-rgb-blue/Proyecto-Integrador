@@ -9,18 +9,23 @@ const userSchema = new Schema({
 
   password: {
     type: String,
-    required: [true, "Contraseña requerido"]
+    required: [true, "Contraseña requerida"]
   },
 
   fullname: {
     type: String,
-    unique: false,
     required: [true, "Nombre requerido"],
-    minlength: [3, "mínimo 3 caracteres"], // Corregido aquí
-    maxlength: [20, "máximo 20 caracteres"] // Corregido aquí
+    minlength: [3, "mínimo 3 caracteres"],
+    maxlength: [20, "máximo 20 caracteres"]
   },
-  
+
+  role: {
+    type: String,
+    enum: ['profesor', 'admin'], // Asegúrate de que este campo esté correctamente definido
+    default: 'profesor'
+  }
 });
+
 
 const User = models.User || model('User', userSchema);
 export default User;

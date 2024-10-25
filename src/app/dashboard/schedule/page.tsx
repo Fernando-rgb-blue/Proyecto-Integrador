@@ -1,8 +1,24 @@
 "use client";
 
 import React, { useState } from 'react';
+import { useSession } from 'next-auth/react';
 
 const ScheduleTable: React.FC = () => {
+  const { data: session, status } = useSession();
+
+  // Comprobar el estado de la sesión
+  if (status === 'loading') {
+    return <div>Cargando...</div>;
+  }
+
+  // Si no hay sesión, puedes redirigir o mostrar un mensaje
+  if (!session) {
+    return <div>No estás autenticado. Por favor, inicia sesión.</div>;
+  }
+  
+  console.log (session.user._id);
+
+  const userId = session.user._id; // Obtener el ID del usuario de la sesión
   const days = ['LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES'];
   const hours = [
     '07:00 AM a 08:00 AM',
@@ -31,6 +47,43 @@ const ScheduleTable: React.FC = () => {
       ...prevSelectedCells,
       [cellKey]: !prevSelectedCells[cellKey], // Alternar selección
     }));
+  };
+
+  // Guardar los horarios seleccionados
+  const handleSave = async () => {
+    const selectedSlots = Object.entries(selectedCells)
+      .filter(([, isSelected]) => isSelected) // Filtrar solo las celdas seleccionadas
+      .map(([cellKey]) => {
+        const [day, hour] = cellKey.split('-');
+        return { day, timeSlot: hour }; // Formato para enviar al servidor
+      });
+
+    // Preparar el cuerpo de la solicitud
+    const body = {
+      action: 'save', // Esta acción puede ser utilizada en la API para guardar
+      user: userId,
+      selectedSlots,
+    };
+
+    try {
+      const response = await fetch('/api/schedule', {
+        method: 'PUT', // Cambia esto según el método que uses en la API para guardar
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Horarios guardados:', data);
+        // Aquí puedes mostrar un mensaje de éxito o limpiar la selección si lo deseas
+      } else {
+        console.error('Error al guardar los horarios');
+      }
+    } catch (error) {
+      console.error('Error al hacer la solicitud:', error);
+    }
   };
 
   return (
@@ -66,6 +119,12 @@ const ScheduleTable: React.FC = () => {
           ))}
         </tbody>
       </table>
+      <button
+        onClick={handleSave}
+        className="mt-4 bg-blue-600 text-white p-2 rounded"
+      >
+        Guardar Horario
+      </button>
     </div>
   );
 };
