@@ -14,12 +14,13 @@ const TeacherCard = ({docente}: {docente: Teacher}) => {
 
     return (
         <>
-            <div className="relative w-[260px] h-[350px] overflow-hidden"
+            <div className="relative w-[250px] h-[340px] overflow-hidden hover:shadow-one bg-primary/10 dark:bg-slate-800"
+            style={{ boxShadow: '1px 1px 3px rgba(0, 0, 0, 0.2)' }}
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}>
-                <Image src={image} width={200} height={200} sizes="100vw" onError={handleImageError}
-                style={{ width: '260px', height: '280px', objectFit: 'cover' }} priority={true} alt="Foto del docente" />
-                <div className="bg-slate-800 text-white h-[70px] flex flex-col justify-center font-bold text-lg">
+                <Image src={image} width={150} height={150} sizes="100vw" onError={handleImageError}
+                style={{ width: '250px', height: '270px', objectFit: 'cover' }} priority={true} alt="Foto del docente" />
+                <div className="text-black dark:text-white h-[70px] flex flex-col justify-center font-bold text-lg">
                     {docente.name}
                 </div>
                 <div className={`absolute inset-x-0 bottom-0 bg-slate-200 dark:bg-gray-200 flex flex-col justify-center px-4

@@ -15,9 +15,9 @@ const MainTeacherList = () => {
     }, []);
 
     return (
-        <div className="mt-12">
+        <div className="flex flex-wrap justify-center gap-9 py-3 md:py-2 lg:py-2">
             {docentes?.length > 0 ? (
-                <ul className="md:grid md:grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-16 items-center">
+                <ul className="md:grid md:grid-cols-2 lg:grid-cols-4 gap-x-12 gap-y-16 items-center">
                     {docentes.map(docente => (
                         <li key={docente._id} className="flex justify-center my-10 md:my-0 items-center w-full">
                             <TeacherCard docente={docente} />
