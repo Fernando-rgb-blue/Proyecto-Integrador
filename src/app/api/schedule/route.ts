@@ -1,66 +1,40 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { connectDB } from "@/libs/mongodb";
+// api/schedule/route.ts
+import { NextRequest, NextResponse } from 'next/server';
 import Schedule from '@/models/schedule';
+import { connectDB } from '@/libs/mongodb';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+// POST: Crear un nuevo horario
+export async function POST(req: NextRequest) {
+  await connectDB();
 
-    await connectDB(); // Conectar a la base de datos
+  const { userId, lunes, martes, miercoles, jueves, viernes } = await req.json();
 
-    const { method, query: { id } } = req;
+  try {
+    const newSchedule = new Schedule({
+      _id: userId, // Asigna el userId al campo _id
+      userId,
+      lunes: lunes || Array(14).fill(0),
+      martes: martes || Array(14).fill(0),
+      miercoles: miercoles || Array(14).fill(0),
+      jueves: jueves || Array(14).fill(0),
+      viernes: viernes || Array(14).fill(0),
+    });
 
-    switch (method) {
+    await newSchedule.save();
+    return NextResponse.json({ message: 'Horario creado con éxito', schedule: newSchedule });
+  } catch (error) {
+    return NextResponse.json({ error: 'Error al crear el horario' }, { status: 500 });
+  }
+}
 
-        case 'GET':
-            try {
-                const schedules = await Schedule.find({ user: req.user.id }).populate('user');
-                res.status(200).json(schedules);
-            } catch (error) {
-                res.status(400).json({ message: 'Error al obtener los horarios' });
-            }
-            break;
+// GET: Obtener todos los horarios
+export async function GET() {
+  await connectDB();
 
-        case 'POST':
-
-            try {
-                const { day, hours} = req.body;
-                const newSchedule = new Schedule({
-                    day,
-                    hours,
-                    user: req.user.id,
-                });
-                const savedSchedule = await newSchedule.save();
-                res.status(201).json(savedSchedule);
-            } catch (error) {
-                res.status(400).json({ message: 'Error al crear el horario' });
-            }
-
-            break;
-
-	case 'PUT':
-
-            try {
-                const schedule = await Schedule.findByIdAndUpdate(id, req.body, { new: true });
-                if (!schedule) return res.status(404).json({ message: 'Horario no encontrado' });
-                res.status(200).json(schedule);
-            } catch (error) {
-                res.status(400).json({ message: 'Error al actualizar el horario' });
-            }
-            break;
-
-        case 'DELETE':
-
-            try {
-                const schedule = await Schedule.findByIdAndDelete(id);
-                if (!schedule) return res.status(404).json({ message: 'Horario no encontrado' });
-                res.status(204).end();
-            } catch (error) {
-                res.status(400).json({ message: 'Error al eliminar el horario' });
-            }
-            break;
-
-        default:
-            res.setHeader('Allow', ['GET', 'PUT','POST', 'DELETE']);
-            res.status(405).end(`Method ${method} Not Allowed`);
-
-    }
+  try {
+    const schedules = await Schedule.find();
+    return NextResponse.json(schedules);
+  } catch (error) {
+    return NextResponse.json({ error: 'Error al obtener los horarios' }, { status: 500 });
+  }
 }
