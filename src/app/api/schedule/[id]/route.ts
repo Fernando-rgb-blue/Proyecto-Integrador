@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import Schedule from '@/models/schedule';
 import { connectDB } from '@/libs/mongodb';
 
-// GET: Obtener un horario específico por ID
+
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
   await connectDB();
   const { id } = params;
@@ -20,7 +20,6 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
   }
 }
 
-// PUT: Actualizar un horario específico por ID
 export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
   await connectDB();
   const { id } = params;

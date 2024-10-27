@@ -6,7 +6,7 @@ import { connectDB } from "@/libs/mongodb";
 export async function POST(request: Request) {
   const { fullname, email, password, role = 'profesor' } = await request.json();
 
-  console.log(fullname, email, password, role); // Asegúrate de que el valor del 'role' esté aquí
+  console.log(fullname, email, password, role); 
 
   if (!password || password.length < 6) {
     return NextResponse.json({
@@ -33,7 +33,7 @@ export async function POST(request: Request) {
       fullname,
       email,
       password: hashedPassword,
-      role // Asegúrate de que estás asignando el role aquí
+      role 
     });
 
     const savedUser = await user.save();
@@ -42,7 +42,7 @@ export async function POST(request: Request) {
       _id: savedUser.id,
       email: savedUser.email,
       fullname: savedUser.fullname,
-      role: savedUser.role // Asegúrate de devolver también el rol guardado
+      role: savedUser.role 
     });
 
   } catch (error) {
