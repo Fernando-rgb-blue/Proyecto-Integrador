@@ -16,7 +16,7 @@ const userSchema = new Schema({
     type: String,
     required: [true, "Nombre requerido"],
     minlength: [3, "mínimo 3 caracteres"],
-    maxlength: [20, "máximo 20 caracteres"]
+    maxlength: [100, "máximo 20 caraddcteres"]
   },
 
   role: {

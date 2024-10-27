@@ -1,28 +1,3 @@
-// "use client";
-
-// import { useSession } from "next-auth/react";
-
-// function ProfileIDPage() {
-//   const { data: session, status } = useSession();
-
-//   return (
-//     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 p-5">
-//       {/* Título y descripción alineados a la izquierda */}
-//       <div className="w-full text-left mb-4">
-//         <h1 className="text-2xl font-bold">Perfil del Usuario</h1>
-//         <p className="text-gray-600">Aquí puedes ver el ID de tu perfil.</p>
-//       </div>
-
-//       {/* Mostrar el _id del usuario */}
-//       <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-md text-center mb-4">
-//         <p className="font-medium text-lg">ID de Usuario: {session?.user?._id || "ID no disponible"}</p>
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default ProfileIDPage;
-
 "use client";
 
 import { useState } from "react";
@@ -91,6 +66,7 @@ const EditUser = () => {
           <label className="block text-gray-700 text-sm font-bold mb-2">
             Nueva Contraseña:
           </label>
+          
           <input
             type="password"
             value={password}
@@ -98,6 +74,7 @@ const EditUser = () => {
             placeholder={session?.user?.password}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           />
+
         </div>
 
         {/* Nuevo campo select para el rol */}

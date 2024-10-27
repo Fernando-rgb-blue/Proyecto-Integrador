@@ -1,30 +1,25 @@
-import mongoose, { Schema, Document } from 'mongoose';
-
-// Definir la interfaz para los intervalos de tiempo
-interface ITimeSlot {
-  start: string; // Hora de inicio, ejemplo: '07:00 AM'
-  end: string;   // Hora de fin, ejemplo: '08:00 AM'
-}
+import { Schema, Document, model, models } from 'mongoose';
 
 // Definir la interfaz para el esquema de horarios de usuario
 interface ISchedule extends Document {
-  userId: string; // Identificador del usuario
-  lunes: ITimeSlot[];      // Múltiples intervalos para lunes
-  martes: ITimeSlot[];     // Múltiples intervalos para martes
-  miercoles: ITimeSlot[];  // Múltiples intervalos para miércoles
-  jueves: ITimeSlot[];     // Múltiples intervalos para jueves
-  viernes: ITimeSlot[];    // Múltiples intervalos para viernes
+  userId: string;           // Identificador del usuario
+  lunes: number[];          // Array de 0 o 1 para cada hora en lunes
+  martes: number[];         // Array de 0 o 1 para cada hora en martes
+  miercoles: number[];      // Array de 0 o 1 para cada hora en miércoles
+  jueves: number[];         // Array de 0 o 1 para cada hora en jueves
+  viernes: number[];        // Array de 0 o 1 para cada hora en viernes
 }
 
 // Definir el esquema del horario en Mongoose
 const ScheduleSchema: Schema = new Schema({
-  userId: { type: String, required: true }, // ID del usuario es obligatorio
-  lunes: { type: [{ start: String, end: String }], default: [] },    // Los intervalos de lunes son opcionales, con array vacío por defecto
-  martes: { type: [{ start: String, end: String }], default: [] },   // Los intervalos de martes son opcionales
-  miercoles: { type: [{ start: String, end: String }], default: [] },// Los intervalos de miércoles son opcionales
-  jueves: { type: [{ start: String, end: String }], default: [] },   // Los intervalos de jueves son opcionales
-  viernes: { type: [{ start: String, end: String }], default: [] }   // Los intervalos de viernes son opcionales
+  userId: { type: String, required: true },       // ID del usuario es obligatorio
+  lunes: { type: [Number], default: Array(14).fill(0) },       // 14 slots para horas (de 07:00 AM a 08:00 PM)
+  martes: { type: [Number], default: Array(14).fill(0) },      // Array de 14 booleanos para martes
+  miercoles: { type: [Number], default: Array(14).fill(0) },   // Array de 14 booleanos para miércoles
+  jueves: { type: [Number], default: Array(14).fill(0) },      // Array de 14 booleanos para jueves
+  viernes: { type: [Number], default: Array(14).fill(0) }      // Array de 14 booleanos para viernes
 });
 
 // Exportar el modelo
-export default mongoose.models.Schedule || mongoose.model<ISchedule>('Schedule', ScheduleSchema);
+const Schedule = models.Schedule || model<ISchedule>('Schedule', ScheduleSchema);
+export default Schedule;
