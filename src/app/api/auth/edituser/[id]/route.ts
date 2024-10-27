@@ -17,13 +17,13 @@ export async function PUT(request: Request) {
   try {
     await connectDB();
 
-    // Buscar el usuario actual por ID de sesión
+
     const user = await User.findById(session.user._id);
     if (!user) {
       return NextResponse.json({ message: "Usuario no encontrado" }, { status: 404 });
     }
 
-    // Actualizar campos si se proporcionan
+
     if (fullname) user.fullname = fullname;
     if (email) user.email = email;
     if (password) {
@@ -33,14 +33,14 @@ export async function PUT(request: Request) {
       user.password = await bcrypt.hash(password, 12);
     }
 
-    // Validación adicional para cambiar el rol
+    // Validación roles xD
     if (role) {
-      const validRoles = ["profesor", "admin"]; // Asegura que solo se asignen roles válidos
+      const validRoles = ["profesor", "admin"]; 
       if (!validRoles.includes(role)) {
         return NextResponse.json({ message: "Rol no válido" }, { status: 400 });
       }
       
-      // // Permitir solo a administradores cambiar el rol
+      // // Permitir solo a administradores cambiar el rol -> cambiar adelante
       // if (session.user.role !== "admin") {
       //   return NextResponse.json({ message: "No autorizado para cambiar roles" }, { status: 403 });
       // }

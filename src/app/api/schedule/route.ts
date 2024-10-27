@@ -1,9 +1,9 @@
-// api/schedule/route.ts
+
 import { NextRequest, NextResponse } from 'next/server';
 import Schedule from '@/models/schedule';
 import { connectDB } from '@/libs/mongodb';
 
-// POST: Crear un nuevo horario
+
 export async function POST(req: NextRequest) {
   await connectDB();
 
@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const newSchedule = new Schedule({
-      _id: userId, // Asigna el userId al campo _id
+      _id: userId,
       userId,
       lunes: lunes || Array(14).fill(0),
       martes: martes || Array(14).fill(0),
