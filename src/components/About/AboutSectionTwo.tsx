@@ -17,13 +17,13 @@ const AboutSectionTwo = () => {
                   data-wow-delay=".15s"
                 >
                   <Image
-                    src="/images/about/14244339.svg"
+                    src="/images/nosotros/mision.svg"
                     alt="about image"
                     fill
                     className="drop-shadow-three dark:hidden dark:drop-shadow-none"
                   />
                   <Image
-                    src="/images/about/14244339.svg"
+                    src="/images/nosotros/mision.svg"
                     alt="about image"
                     fill
                     className="hidden drop-shadow-three dark:block dark:drop-shadow-none"
@@ -47,13 +47,13 @@ const AboutSectionTwo = () => {
                   data-wow-delay=".15s"
                 >
                   <Image
-                    src="/images/about/17234191.svg"
+                    src="/images/nosotros/vision.svg"
                     alt="about image"
                     fill
                     className="drop-shadow-three dark:hidden dark:drop-shadow-none"
                   />
                   <Image
-                    src="/images/about/17234191.svg"
+                    src="/images/nosotros/vision.svg"
                     alt="about image"
                     fill
                     className="hidden drop-shadow-three dark:block dark:drop-shadow-none"
