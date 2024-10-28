@@ -3,6 +3,8 @@ import DashboardTabs from "@/components/Dashboard/DashboardTabs";
 import TeacherList from "@/components/Docentes/TeacherList";
 import { Metadata } from "next";
 
+import BreadDash from "@/components/Common/BreadDash";
+
 export const metadata: Metadata = {
     title: "Gestionar docentes | Escuela de Informática",
     description: "Página de administrador para gestionar docentes."
@@ -10,8 +12,10 @@ export const metadata: Metadata = {
 
 const DocentesPage = () => {
     return (
-        <section className="pb-[80px] pt-[120px]">
-            <DashboardTabs isAdmin={true}/>
+        <section >
+            {/* pa lo del name del usuario*/}
+            <BreadDash/>
+            <DashboardTabs/>
             <TeacherList />
         </section>
     );
