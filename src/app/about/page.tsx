@@ -5,7 +5,7 @@ import Breadcrumb from "@/components/Common/Breadcrumb";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Escuela de Informática | Nosotros",
+  title: "Nosotros | Escuela de Informática",
   description: "Esta es la página de Nosotros",
   // other metadata
 };

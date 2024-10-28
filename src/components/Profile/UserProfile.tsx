@@ -59,7 +59,7 @@ const UserProfile = () => {
             <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
               Email:
             </label>
-            <p className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight bg-gray-200 dark:bg-gray-600">
+            <p className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight bg-gray-200 dark:bg-gray-600">
               {email}
             </p>
           </div>

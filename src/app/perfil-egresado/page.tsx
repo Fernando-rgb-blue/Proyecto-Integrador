@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Escuela de Informática | Perfil del Egresado",
+  title: "Perfil del Egresado | Escuela de Informática",
   description: "Esta es la página de Perfil del Egresado",
   // other metadata
 };

@@ -15,7 +15,7 @@ import Conveniosf from "@/components/Convenios/Showcon";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Escuela de Informática | Inicio",
+  title: "Inicio | Escuela de Informática",
   description: "Esta es la página de Inicio",
   // other metadata
 };

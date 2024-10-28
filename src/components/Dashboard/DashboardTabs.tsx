@@ -18,7 +18,7 @@ const DashboardTabs = () => {
                 <Link className={path === '/dashboard/profile' ? 'active' : ''} href={'/dashboard/profile'}>
                 Perfil
                 </Link>
-                <Link className={path === '/docentes' ? 'active' : ''} href={'/docentes'}>
+                <Link className={path === '/dashboard/docentes' ? 'active' : ''} href={'/dashboard/docentes'}>
                 Docentes
                 </Link>
                 <Link href="/dashboard/courses">

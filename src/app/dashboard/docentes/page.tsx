@@ -2,7 +2,6 @@
 import DashboardTabs from "@/components/Dashboard/DashboardTabs";
 import TeacherList from "@/components/Docentes/TeacherList";
 import { Metadata } from "next";
-
 import BreadDash from "@/components/Common/BreadDash";
 
 export const metadata: Metadata = {
@@ -13,7 +12,6 @@ export const metadata: Metadata = {
 const DocentesPage = () => {
     return (
         <section >
-            {/* pa lo del name del usuario*/}
             <BreadDash/>
             <DashboardTabs/>
             <TeacherList />

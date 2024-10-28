@@ -63,13 +63,13 @@ const menuData: Menu[] = [
       {
         id: 56,
         title: "Accede al FUT",
-        path: "/blog-details",
+        path: "/fut",
         newTab: false,
       },
       {
         id: 57,
         title: "Perfil del Egresado",
-        path: "/blog-details",
+        path: "/perfil-egresado",
         newTab: false,
       },
       {
