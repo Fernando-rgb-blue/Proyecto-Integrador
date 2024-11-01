@@ -1,19 +1,20 @@
 import { NextResponse } from "next/server";
 import User from "@/models/user";
-import bcrypt from 'bcryptjs'
+import bcrypt from 'bcryptjs';
 import { connectDB } from "@/libs/mongodb";
 
-export async function POST(request: Request) {
-  const { fullname, email, password, role = 'profesor' } = await request.json();
+// POST: Registra un nuevo usuario
 
-  console.log(fullname, email, password, role); 
+export async function POST(request: Request) {
+  const { fullname, email, password, role = 'profesor', image, office, areas } = await request.json();
+
+  console.log(fullname, email, password, role, image, office, areas);
 
   if (!password || password.length < 6) {
-    return NextResponse.json({
-      message: "La contraseña debe tener un mínimo de 6 caracteres"
-    }, {
-      status: 400
-    });
+    return NextResponse.json(
+      { message: "La contraseña debe tener un mínimo de 6 caracteres" },
+      { status: 400 }
+    );
   }
 
   try {
@@ -33,7 +34,10 @@ export async function POST(request: Request) {
       fullname,
       email,
       password: hashedPassword,
-      role 
+      role,
+      image,
+      office,
+      areas,
     });
 
     const savedUser = await user.save();
@@ -42,7 +46,10 @@ export async function POST(request: Request) {
       _id: savedUser.id,
       email: savedUser.email,
       fullname: savedUser.fullname,
-      role: savedUser.role 
+      role: savedUser.role,
+      image: savedUser.image,
+      office: savedUser.office,
+      areas: savedUser.areas,
     });
 
   } catch (error) {
@@ -50,6 +57,22 @@ export async function POST(request: Request) {
     return NextResponse.json(
       { message: error instanceof Error ? error.message : 'Error' },
       { status: 400 }
+    );
+  }
+}
+
+// GET / General Para ver todos los usuarios
+
+export async function GET() {
+  try {
+    await connectDB();
+    const users = await User.find({}, 'fullname email role image office areas');
+    return NextResponse.json(users);
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      { message: error instanceof Error ? error.message : "Error al obtener los usuarios" },
+      { status: 500 }
     );
   }
 }

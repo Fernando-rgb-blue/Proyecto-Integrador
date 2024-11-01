@@ -39,12 +39,10 @@ export async function PUT(request: Request) {
       if (!validRoles.includes(role)) {
         return NextResponse.json({ message: "Rol no válido" }, { status: 400 });
       }
-      
       // // Permitir solo a administradores cambiar el rol -> cambiar adelante
       // if (session.user.role !== "admin") {
       //   return NextResponse.json({ message: "No autorizado para cambiar roles" }, { status: 403 });
       // }
-
       user.role = role; // Actualizar el rol si todo está bien
     }
 
