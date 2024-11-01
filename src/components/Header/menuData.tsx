@@ -57,7 +57,7 @@ const menuData: Menu[] = [
       {
         id: 55,
         title: "Horarios",
-        path: "/blog-sidebar",
+        path: "/horarios",
         newTab: false,
       },
       {

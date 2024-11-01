@@ -49,8 +49,8 @@ const TeacherForm = ({ onSubmit, teacher, setShowPopup }: TeacherFormProps) => {
     }
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-            <form onSubmit={(ev) => onSubmit(ev, formData)} className="max-w-3xl w-full mx-4 p-4 bg-white rounded shadow-lg">
+        <div className="fixed inset-0 mt-9 z-50 flex items-center justify-center bg-black bg-opacity-50">
+            <form onSubmit={(ev) => onSubmit(ev, formData)} className="max-w-3xl w-full mx-4 p-4 bg-white dark:bg-dark rounded shadow-lg">
                 <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-[.3fr_.7fr]">
                     <div>
                         <EditableImage
