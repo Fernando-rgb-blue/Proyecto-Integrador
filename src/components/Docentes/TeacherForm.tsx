@@ -1,24 +1,27 @@
 'use client';
 import { FormEvent, useEffect, useState, ChangeEvent, SetStateAction, Dispatch } from "react";
-import { Teacher } from "@/types/teacher";
+import { User } from "@/types/user";
 import EditableImage from "../Common/EditableImage";
 
 interface TeacherFormProps {
-    onSubmit: (event: FormEvent<HTMLFormElement>, teacher: Teacher) => void;
-    teacher: Teacher;
+    onSubmit: (event: FormEvent<HTMLFormElement>, teacher: User) => void;
+    teacher: User;
     setShowPopup: Dispatch<SetStateAction<boolean>>;
 }
 
 const TeacherForm = ({ onSubmit, teacher, setShowPopup }: TeacherFormProps) => {
-    const [formData, setFormData] = useState<Teacher>({
+    const [formData, setFormData] = useState<User>({
         _id: teacher?._id || "",
-        image: teacher?.image || "/images/props/pfp_default.png",
-        name: teacher?.name || "",
         email: teacher?.email || "",
+        password: teacher?.password || "informatica2025",
+        fullname: teacher?.fullname || "",
+        role: teacher?.role || "profesor",
+        image: teacher?.image || "/images/props/pfp_default.png",
         office: teacher?.office || "",
         areas: teacher?.areas || ""
     });
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [showPassword, setShowPassword] = useState<boolean>(false);
 
     useEffect(() => {
         document.body.style.overflow = "hidden"; // Deshabilita el scroll
@@ -60,20 +63,20 @@ const TeacherForm = ({ onSubmit, teacher, setShowPopup }: TeacherFormProps) => {
                         />
                     </div>
                     <div className="w-full flex flex-col">
-                        <label htmlFor="name" className="mb-1">
+                        <label htmlFor="fullname">
                             Nombres y apellidos
                         </label>
                         <input
-                            id="name"
+                            id="fullname"
                             type="text"
-                            value={formData.name}
+                            value={formData.fullname}
                             onChange={handleInputChange}
                             autoComplete="off"
-                            className="p-2 mb-4 border rounded"
+                            className="mt-1 mb-5 border rounded"
                         />
                         <div className="grid grid-cols-1 sm:grid-cols-10 gap-2">
                             <div className="col-span-10 sm:col-span-7">
-                                <label htmlFor="email" className="mb-1">
+                                <label htmlFor="email">
                                     Correo electrónico
                                 </label>
                                 <input
@@ -81,12 +84,12 @@ const TeacherForm = ({ onSubmit, teacher, setShowPopup }: TeacherFormProps) => {
                                     type="text"
                                     value={formData.email}
                                     onChange={handleInputChange}
-                                    className="w-full p-2 mb-4 border rounded"
+                                    className="w-full mt-1 mb-5 border rounded"
                                     autoComplete="off"
                                 />
                             </div>
                             <div className="col-span-10 sm:col-span-3">
-                                <label htmlFor="office" className="mb-1">
+                                <label htmlFor="office">
                                     Oficina
                                 </label>
                                 <input
@@ -94,11 +97,37 @@ const TeacherForm = ({ onSubmit, teacher, setShowPopup }: TeacherFormProps) => {
                                     type="text"
                                     value={formData.office}
                                     onChange={handleInputChange}
-                                    className="w-full p-2 mb-4 border rounded"
+                                    className="w-full mt-1 mb-5 border rounded"
                                 />
                             </div>
                         </div>
-                        <label htmlFor="areas" className="mb-1">
+                        {teacher && (
+                            <div className="grid grid-cols-1 sm:grid-cols-10 gap-x-2">
+                                <div className="col-span-10 sm:col-span-5">
+                                    <label htmlFor="password">
+                                        Cambiar contraseña
+                                    </label>
+                                    <input
+                                        id="password"
+                                        type={showPassword ? "text" : "password"}
+                                        value=""
+                                        onChange={handleInputChange}
+                                        className="w-full mt-1 mb-1 sm:mb-5"
+                                    />
+                                </div>
+                                <div className="col-span-10 sm:col-span-5 flex gap-2 sm:pt-1 mb-4 sm:my-auto">
+                                    <input
+                                        id="showPassword"
+                                        type="checkbox"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                    />
+                                    <label htmlFor="showPassword">
+                                        Mostrar contraseña
+                                    </label>
+                                </div>
+                            </div>
+                        )}
+                        <label htmlFor="areas">
                             Áreas
                         </label>
                         <input
@@ -106,8 +135,19 @@ const TeacherForm = ({ onSubmit, teacher, setShowPopup }: TeacherFormProps) => {
                             type="text"
                             value={formData.areas}
                             onChange={handleInputChange}
-                            className="p-2 border rounded"
+                            className="p-2 mt-1 mb-5 border rounded"
                         />
+                        <div className="flex gap-2">
+                            <input
+                                id="role"
+                                type="checkbox"
+                                checked={formData.role === "admin"}
+                                onChange={() => setFormData({...formData, "role": formData.role === "admin" ? "profesor" : "admin"})}
+                            />
+                            <label htmlFor="role">
+                                Rol de administrador
+                            </label>
+                        </div>
                     </div>
                 </div>
                 <div className="flex gap-4 justify-center items-center mt-4">

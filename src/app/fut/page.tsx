@@ -1,4 +1,5 @@
 import Breadcrumb from "@/components/Common/Breadcrumb";
+import FUTForm from "@/components/FUT/FUTForm";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -8,9 +9,13 @@ export const metadata: Metadata = {
 
 const FUTPage = () => {
     return (
-        <Breadcrumb
-            pageName="Formato Único de Trámite"
-            description="Este formulario te permite editar y descargar el Formato Único de Trámite para el fin que se desee." />
+        <>
+            <Breadcrumb
+                pageName="Formato Único de Trámite"
+                description="Este formulario te permite editar y descargar el Formato Único de Trámite para el fin que se desee." />
+            <FUTForm />
+            {/* PDF Viewer */}
+        </>
     );
 }
 

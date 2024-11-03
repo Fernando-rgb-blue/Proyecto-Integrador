@@ -1,26 +1,26 @@
 'use client';
-import { Teacher } from "@/types/teacher";
+import { User } from "@/types/user";
 import { FormEvent, useEffect, useState } from "react";
 import TeacherForm from "./TeacherForm";
 import Image from "next/image";
 
-interface TeacherItemProps {
-    teacherItem: Teacher;
-    onTeacherUpdated: () => void;
+interface UserItemProps {
+    userItem: User;
+    onUserUpdated: () => void;
 }
 
-const TeacherItem = ({ teacherItem, onTeacherUpdated }: TeacherItemProps) => {
-    const { _id, image, name, email, office, areas } = teacherItem;
+const UserItem = ({ userItem, onUserUpdated }: UserItemProps) => {
+    const { _id, image, fullname, email, office, areas } = userItem;
     const [showPopup, setShowPopup] = useState<boolean>(false);
     const [showDeletePopup, setShowDeletePopup] = useState<boolean>(false);
     const [isVisible, setIsVisible] = useState<boolean>(false);
     const [isDeleteVisible, setIsDeleteVisible] = useState<boolean>(false);
 
-    async function handleFormSubmit(ev: FormEvent, data: Teacher) {
+    async function handleFormSubmit(ev: FormEvent, data: User) {
         ev.preventDefault();
     
         try {
-            const response = await fetch('/api/docentes', {
+            const response = await fetch(`/api/auth/signup/${_id}`, {
                 method: 'PUT',
                 body: JSON.stringify(data),
                 headers: { 'Content-Type': 'application/json' },
@@ -33,7 +33,7 @@ const TeacherItem = ({ teacherItem, onTeacherUpdated }: TeacherItemProps) => {
 
             //console.log('Ítem actualizado correctamente');
             setShowPopup(false);
-            onTeacherUpdated();
+            onUserUpdated();
         } catch (error) {
             console.error('Error de red o servidor: ', error);
         }
@@ -41,7 +41,7 @@ const TeacherItem = ({ teacherItem, onTeacherUpdated }: TeacherItemProps) => {
 
     async function handleDelete(id: string) {
         try {
-            const response = await fetch('/api/docentes', {
+            const response = await fetch(`/api/auth/signup/${_id}`, {
                 method: 'DELETE',
                 body: JSON.stringify({ _id: id }),
                 headers: { 'Content-Type': 'application/json' },
@@ -54,7 +54,7 @@ const TeacherItem = ({ teacherItem, onTeacherUpdated }: TeacherItemProps) => {
 
             console.log('Item eliminado correctamente');
             setShowDeletePopup(false);
-            onTeacherUpdated();
+            onUserUpdated();
         } catch (error) {
             console.error('Error de red o servidor: ', error);
         }
@@ -108,7 +108,7 @@ const TeacherItem = ({ teacherItem, onTeacherUpdated }: TeacherItemProps) => {
                 <div id="popup" onClick={() => setShowPopup(false)}
                 className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 transition-opacity duration-150 opacity-0  mx-2 sm:mx-0">
                     <div onClick={ev => ev.stopPropagation()} className="bg-gray-200 p-2 rounded-lg dark:bg-slate-700">
-                        <TeacherForm onSubmit={handleFormSubmit} teacher={teacherItem}
+                        <TeacherForm onSubmit={handleFormSubmit} teacher={userItem}
                         setShowPopup={setShowPopup}/>
                     </div>
                 </div>
@@ -122,7 +122,7 @@ const TeacherItem = ({ teacherItem, onTeacherUpdated }: TeacherItemProps) => {
                             ¿Estás seguro?
                         </h4>
                         <p>
-                            Eliminar docente: {name}
+                            Eliminar docente: {fullname}
                         </p>
                         <div className="flex gap-8 justify-center mt-3">
                             <button className="secondary py-2 px-6"
@@ -152,7 +152,7 @@ const TeacherItem = ({ teacherItem, onTeacherUpdated }: TeacherItemProps) => {
                     />
                     </div>
                     <div className="grow text-center md:text-left md:w-1/3">
-                    <h4 className="font-bold text-xl md:text-2xl pb-3">{name}</h4>
+                    <h4 className="font-bold text-xl md:text-2xl pb-3">{fullname}</h4>
                     <div className="flex flex-col gap-y-3 text-start">
                         <p>Correo: {email}</p>
                         <p>Oficina: {office}</p>
@@ -180,4 +180,4 @@ const TeacherItem = ({ teacherItem, onTeacherUpdated }: TeacherItemProps) => {
     );
 }
 
-export default TeacherItem;
+export default UserItem;
