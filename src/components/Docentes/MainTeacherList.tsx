@@ -1,15 +1,15 @@
 'use client';
-import { Teacher } from "@/types/teacher";
+import { User } from "@/types/user";
 import { useEffect, useState } from "react";
 import TeacherCard from "./TeacherCard";
 
 const MainTeacherList = () => {
-    const [docentes, setDocentes] = useState<Teacher[]>([]);
+    const [docentes, setDocentes] = useState<User[]>([]);
 
     useEffect(() => {
-        fetch('/api/docentes')
+        fetch('/api/auth/signup')
             .then(res => {
-                res.json().then((docentes: Teacher[]) => setDocentes(docentes));
+                res.json().then((docentes: User[]) => setDocentes(docentes));
             })
             .catch(error => console.error('Error al cargar docentes:', error));
     }, []);
@@ -18,7 +18,7 @@ const MainTeacherList = () => {
         <div className="flex flex-wrap justify-center gap-9 py-3 md:py-2 lg:py-2">
             {docentes?.length > 0 ? (
                 <ul className="md:grid md:grid-cols-2 lg:grid-cols-4 gap-x-12 gap-y-16 items-center">
-                    {docentes.map(docente => (
+                    {docentes.filter(docente => docente.role === "profesor").map(docente => (
                         <li key={docente._id} className="flex justify-center my-10 md:my-0 items-center w-full">
                             <TeacherCard docente={docente} />
                         </li>

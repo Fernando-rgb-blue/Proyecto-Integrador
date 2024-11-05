@@ -16,16 +16,30 @@ const userSchema = new Schema({
     type: String,
     required: [true, "Nombre requerido"],
     minlength: [3, "mínimo 3 caracteres"],
-    maxlength: [100, "máximo 20 caraddcteres"]
+    maxlength: [100, "máximo 100 caracteres"]
   },
 
   role: {
     type: String,
-    enum: ['profesor', 'admin'], // Asegúrate de que este campo esté correctamente definido
+    enum: ['profesor', 'admin'],
     default: 'profesor'
+  },
+
+  image: {
+    type: String,
+    default: ""
+  },
+
+  office: {
+    type: String,
+    default: ""
+  },
+
+  areas: {
+    type: String,
+    default: "" 
   }
 });
-
 
 const User = models.User || model('User', userSchema);
 export default User;

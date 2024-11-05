@@ -107,7 +107,7 @@ const Footer = () => {
                   </li>
                   <li>
                     <Link
-                      href="/nosotros"
+                      href="/plana-docente"
                       className="mb-4 inline-block text-base text-body-color duration-300 hover:text-primary dark:text-body-color-dark dark:hover:text-primary"
                     >
                       Plana Docente
@@ -125,15 +125,17 @@ const Footer = () => {
                 <ul>
                   <li>
                     <Link
-                      href="/"
+                      href="https://transparencia.unitru.edu.pe/doc/TUSNE/Anexo%20Oficio%20015-2019%20Tasas%20UNT%202019.pdf"
                       className="mb-4 inline-block text-base text-body-color duration-300 hover:text-primary dark:text-body-color-dark dark:hover:text-primary"
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
                       Tasas Educativas
                     </Link>
                   </li>
                   <li>
                     <Link
-                      href="/"
+                      href="/acreditacion"
                       className="mb-4 inline-block text-base text-body-color duration-300 hover:text-primary dark:text-body-color-dark dark:hover:text-primary"
                     >
                       Documentos Acreditación
@@ -141,7 +143,7 @@ const Footer = () => {
                   </li>
                   <li>
                     <Link
-                      href="/"
+                      href="/fut"
                       className="mb-4 inline-block text-base text-body-color duration-300 hover:text-primary dark:text-body-color-dark dark:hover:text-primary"
                     >
                       FUT
@@ -149,8 +151,10 @@ const Footer = () => {
                   </li>
                   <li>
                     <Link
-                      href="/"
+                      href="https://aulavirtual2.unitru.edu.pe"
                       className="mb-4 inline-block text-base text-body-color duration-300 hover:text-primary dark:text-body-color-dark dark:hover:text-primary"
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
                       Aula Virtual UNT
                     </Link>

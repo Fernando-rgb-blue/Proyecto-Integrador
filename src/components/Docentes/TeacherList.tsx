@@ -1,19 +1,19 @@
 'use client';
-import { Teacher } from "@/types/teacher";
+import { User } from "@/types/user";
 import { FormEvent, useEffect, useState } from "react";
 import TeacherForm from "./TeacherForm";
 import TeacherItem from "./TeacherItem";
 
 const TeacherList = () => {
-    const [docentes, setDocentes] = useState<Teacher[]>([]);
+    const [docentes, setDocentes] = useState<User[]>([]);
     const [showPopup, setShowPopup] = useState<boolean>(false);
     const [isVisible, setIsVisible] = useState<boolean>(false);
 
-    async function handleFormSubmit(ev: FormEvent, data: Teacher) {
+    async function handleFormSubmit(ev: FormEvent, data: User) {
         ev.preventDefault();
     
         try {
-            const response = await fetch('/api/docentes', {
+            const response = await fetch('/api/auth/signup', {
                 method: 'POST',
                 body: JSON.stringify(data),
                 headers: {'Content-Type': 'application/json'},
@@ -32,9 +32,9 @@ const TeacherList = () => {
     }
 
     const fetchDocentes = async () => {
-        fetch('/api/docentes')
+        fetch('/api/auth/signup')
             .then(res => {
-                res.json().then((docentes: Teacher[]) => setDocentes(docentes));
+                res.json().then((docentes: User[]) => setDocentes(docentes));
             })
             .catch(error => console.error('Error al cargar docentes:', error));
     }
@@ -55,7 +55,7 @@ const TeacherList = () => {
         }
     }, [showPopup]);
 
-    const handleTeachersUpdate = () => {
+    const handleUsersUpdate = () => {
         fetchDocentes();
     }
 
@@ -81,7 +81,7 @@ const TeacherList = () => {
                 <ul>
                     {docentes.map(docente => (
                         <li key={docente._id}>
-                            <TeacherItem teacherItem={docente} onTeacherUpdated={handleTeachersUpdate}/>
+                            <TeacherItem userItem={docente} onUserUpdated={handleUsersUpdate}/>
                         </li>
                     ))}
                 </ul>

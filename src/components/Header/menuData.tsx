@@ -39,17 +39,17 @@ const menuData: Menu[] = [
       {
         id: 52,
         title: "SUV",
-        path: "http://suv2.unitru.edu.pe/portal/index.php",
+        path: "http://suv2.unitru.edu.pe",
         newTab: true,
       },
       {
         id: 53,
-        title: "Aula virtual unt",
-        path: "https://aulavirtual2.unitru.edu.pe/login/index.php",
+        title: "Aula virtual UNT",
+        path: "https://aulavirtual2.unitru.edu.pe",
         newTab: true,
       },
       {
-        id: 55,
+        id: 54,
         title: "Cronograma académico",
         path: "/error",
         newTab: false,
@@ -57,12 +57,12 @@ const menuData: Menu[] = [
       {
         id: 55,
         title: "Horarios",
-        path: "/blog-sidebar",
+        path: "/horarios",
         newTab: false,
       },
       {
         id: 56,
-        title: "Accede al FUT",
+        title: "Formato Único de Tramite (FUT)",
         path: "/fut",
         newTab: false,
       },
@@ -91,13 +91,13 @@ const menuData: Menu[] = [
         newTab: true,
       },
       {
-        id: 51,
+        id: 61,
         title: "Instrucciones Matrícula ",
         path: "/matricula",
         newTab: false,
       },
       {
-        id: 52,
+        id: 62,
         title: "Documentos Acreditación",
         path: "/acreditacion",
         newTab: false,

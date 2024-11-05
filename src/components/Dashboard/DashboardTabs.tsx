@@ -3,85 +3,85 @@ import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { redirect, usePathname } from "next/navigation";
 
-
+import { useState } from 'react';
+import CerrarSes from '@/components/Dashboard/CerrarSes';
 
 const DashboardTabs = () => {
     const { data: session, status } = useSession();
     const path = usePathname();
     const isAdmin2 = session?.user?.role === "admin";
     const isDocente = session?.user?.role === "profesor";
+
+    const [mostrarCerrarSes, setMostrarCerrarSes] = useState(false);
+
+    const handleCerrarSesion = () => {
+        setMostrarCerrarSes(true);
+    };
+
     return (
         <>
-        <div className="flex flex-wrap items-center justify-center tabs gap-4 p-4">
+        <div className="flex flex-wrap items-center justify-center gap-4 p-4">
             {isAdmin2 && (
             <>
-                <Link className={path === '/dashboard/profile' ? 'active' : ''} href={'/dashboard/profile'}>
+                <Link 
+                className={`${path === '/dashboard/profile' 
+                    ? 'bg-primary text-white rounded-full py-2 px-4 font-semibold duration-300 ease-in-out text-base' 
+                    : 'bg-primary/70 hover:bg-primary/90 text-white rounded-full py-2 px-4 font-semibold duration-300 ease-in-out text-base'}`} 
+                href={'/dashboard/profile'}>
                 Perfil
                 </Link>
-                <Link className={path === '/dashboard/docentes' ? 'active' : ''} href={'/dashboard/docentes'}>
+                <Link
+                className={`${path === '/dashboard/docentes' 
+                    ? 'bg-primary text-white rounded-full py-2 px-4 font-semibold duration-300 ease-in-out text-base' 
+                    : 'bg-primary/70 hover:bg-primary/90 text-white rounded-full py-2 px-4 font-semibold duration-300 ease-in-out text-base'}`} 
+                href={'/dashboard/docentes'}>
                 Docentes
                 </Link>
-                <Link href="/dashboard/courses">
+                <Link 
+                className={`${path === '/dashboard/courses' 
+                    ? 'bg-primary text-white rounded-full py-2 px-4 font-semibold duration-300 ease-in-out text-base' 
+                    : 'bg-primary/70 hover:bg-primary/90 text-white rounded-full py-2 px-4 font-semibold duration-300 ease-in-out text-base'}`} 
+                href={'/dashboard/courses'}>
                 Cursos
                 </Link>
-                <Link href="/dashboard/schedule">
+                <Link
+                className={`${path === '/dashboard/schedule' 
+                    ? 'bg-primary text-white rounded-full py-2 px-4 font-semibold duration-300 ease-in-out text-base' 
+                    : 'bg-primary/70 hover:bg-primary/90 text-white rounded-full py-2 px-4 font-semibold duration-300 ease-in-out text-base'}`} 
+                href={'/dashboard/schedule'}>
                 Ver Horarios
                 </Link>
             </>
             )}
             {isDocente && (
             <>
-                <Link className={path === '/dashboard/profile' ? 'active' : ''} href={'/dashboard/profile'}>
+                <Link 
+                className={`${path === '/dashboard/profile' 
+                    ? 'bg-primary text-white rounded-full py-2 px-4 font-semibold duration-300 ease-in-out text-base' 
+                    : 'bg-primary/70 hover:bg-primary/90 text-white rounded-full py-2 px-4 font-semibold duration-300 ease-in-out text-base'}`} 
+                href={'/dashboard/profile'}>
                     Perfil
                 </Link>
-                <Link className={path === '/dashboard/schedule' ? 'active' : ''} href={'/dashboard/schedule'}>
+                <Link
+                className={`${path === '/dashboard/schedule' 
+                    ? 'bg-primary text-white rounded-full py-2 px-4 font-semibold duration-300 ease-in-out text-base' 
+                    : 'bg-primary/70 hover:bg-primary/90 text-white rounded-full py-2 px-4 font-semibold duration-300 ease-in-out text-base'}`} 
+                href={'/dashboard/schedule'}>
                     Registrar Horario
                 </Link>
             </>
             )}
-            <button
-            onClick={() => signOut()}
-            className="bg-gray-800 text-white py-2 px-4 rounded"
-            >
-            Cerrar Sesión
-            </button>
-        </div>
-        
-        {/* este era el de manu */}
-        {/* <div className="flex flex-wrap items-center justify-center tabs gap-4 p-4">
-            <Link className={path === '/perfil' ? 'active' : ''} href={'/perfil'}>
-                Perfil
-            </Link>
-            {session && !isAdmin &&
-                <>
-                    <Link className={path === '/' ? 'active' : ''} href={'/'}>
-                        Registrar horario
-                    </Link>
-                </>
-            }
-            {isAdmin &&
-                <>
-                    <Link className={path === '/docentes' ? 'active' : ''} href={'/docentes'}>
-                        Docentes
-                    </Link>
-                    <Link className={path === '/' ? 'active' : ''} href={'#'}>
-                        Cursos
-                    </Link>
-                    <Link className={path === '/' ? 'active' : ''} href={'#'}>
-                        Ver horarios
-                    </Link>
-                </>
-            }
-            <button onClick={() => {signOut({callbackUrl: '/', redirect: true})}}>
-                Cerrar sesión
-            </button>
-        </div> */}
+            <a onClick={handleCerrarSesion} style={{ cursor: 'pointer'}}
+                className='bg-primary/70 text-white rounded-full py-2 px-4 font-semibold duration-300 ease-in-out text-base'>
+                Cerrar Sesión
+            </a>
+            {mostrarCerrarSes && <CerrarSes onClose={() => setMostrarCerrarSes(false)} />}
 
-        {/* <p className="mt-8">
-            Status: {status}
-        </p> */}
+
+        </div>
+
         </>
     );
 };
 
-export default DashboardTabs;
+export default DashboardTabs;    

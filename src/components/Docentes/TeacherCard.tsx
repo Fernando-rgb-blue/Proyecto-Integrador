@@ -1,10 +1,10 @@
-import { Teacher } from "@/types/teacher";
+import { User } from "@/types/user";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import EnvelopeIcon from "../Icons/EnvelopeIcon";
 
-const TeacherCard = ({docente}: {docente: Teacher}) => {
+const TeacherCard = ({docente}: {docente: User}) => {
     const [hovered, setHovered] = useState<boolean>(false);
     const [image, setImage] = useState<string>(docente.image);
 
@@ -21,13 +21,13 @@ const TeacherCard = ({docente}: {docente: Teacher}) => {
                 <Image src={image} width={150} height={150} sizes="100vw" onError={handleImageError}
                 style={{ width: '250px', height: '270px', objectFit: 'cover' }} priority={true} alt="Foto del docente" />
                 <div className="text-black dark:text-white h-[70px] flex flex-col justify-center font-bold text-lg">
-                    {docente.name}
+                    {docente.fullname}
                 </div>
                 <div className={`absolute inset-x-0 bottom-0 bg-slate-200 dark:bg-gray-200 flex flex-col justify-center px-4
                     transition-transform duration-[400ms] ease-in-out w-full h-full text-gray-600
                     ${hovered ? 'translate-y-0' : 'translate-y-full'}`}>
                     <h3 className="font-bold text-xl">
-                        {docente.name}
+                        {docente.fullname}
                     </h3>
                     <div className="flex justify-center mr-1 mt-4">
                         <EnvelopeIcon />

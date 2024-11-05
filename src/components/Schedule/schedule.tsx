@@ -8,14 +8,17 @@ const ScheduleTable: React.FC = () => {
   const [schedule, setSchedule] = useState<number[][]>(Array.from({ length: 5 }, () => Array(14).fill(0)));
   const [scheduleId, setScheduleId] = useState<string | null>(null);
   const [isSaved, setIsSaved] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  const [isError, setIsError] = useState(false);
   const userId = session?.user?._id;
   const days = ["LUNES", "MARTES", "MIÉRCOLES", "JUEVES", "VIERNES"];
   const hours = [
     "07:00 AM a 08:00 AM", "08:00 AM a 09:00 AM", "09:00 AM a 10:00 AM", 
     "10:00 AM a 11:00 AM", "11:00 AM a 12:00 PM", "12:00 PM a 01:00 PM", 
-    "01:00 PM a 02:00 PM", "02:00 PM a 03:00 PM", "03:00 PM a 04:00 PM", 
-    "04:00 PM a 05:00 PM", "05:00 PM a 06:00 PM", "06:00 PM a 07:00 PM", 
-    "07:00 PM a 08:00 PM", "08:00 PM a 09:00 PM",
+    "01:00 PM a 02:00 PM", "03:00 PM a 04:00 PM", "04:00 PM a 05:00 PM", 
+    "05:00 PM a 06:00 PM", "06:00 PM a 07:00 PM", "07:00 PM a 08:00 PM", 
+    "08:00 PM a 09:00 PM",
   ];
 
   useEffect(() => {
@@ -43,6 +46,17 @@ const ScheduleTable: React.FC = () => {
     };
     fetchSchedule();
   }, [userId]);
+
+  useEffect(() => {
+    if (modalVisible) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [modalVisible]);
 
   const createSchedule = async (userId: string) => {
     try {
@@ -86,10 +100,21 @@ const ScheduleTable: React.FC = () => {
       });
       if (!response.ok) throw new Error(`Error al ${scheduleId ? 'actualizar' : 'crear'} el horario`);
       setIsSaved(true);
-      console.log('Horarios guardados:', updatedSchedule);
+      setModalMessage("Se registró correctamente");
+      setIsError(false);
+      // setModalMessage("Error al registrar horario");
+      // setIsError(true);
+      setModalVisible(true);
     } catch (error) {
       console.error('Error al hacer la solicitud:', error);
+      setModalMessage("Error al registrar horario");
+      setIsError(true);
+      setModalVisible(true);
     }
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
   };
 
   if (status === "loading") return <div>Cargando...</div>;
@@ -122,7 +147,7 @@ const ScheduleTable: React.FC = () => {
                     <td
                       key={dayIndex}
                       className={`p-3 border border-gray-300 text-center cursor-pointer text-xs dark:bg-dark sm:text-base ${
-                        isSavedCell ? 'bg-blue-400 dark:bg-body-color' : isSelected ? 'bg-blue-300 dark:bg-body-color' : 'bg-blue-50'
+                        isSavedCell ? 'bg-blue-400 dark:bg-gray-500' : isSelected ? 'bg-blue-300 dark:bg-gray-500' : 'bg-blue-50'
                       }`}
                       onClick={() => toggleCellSelection(dayIndex, hourIndex)}
                     />
@@ -141,6 +166,65 @@ const ScheduleTable: React.FC = () => {
           Guardar Horario
         </button>
       </div>
+
+      {modalVisible && (
+        <div
+        className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50" onClick={closeModal}
+        >
+          <div
+            className="bg-white p-6 rounded-md shadow-md text-center"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <svg
+              className="mx-auto mb-4"
+              width="50"
+              height="50"
+              viewBox="0 0 50 50"
+            >
+              <circle
+                cx="25"
+                cy="25"
+                r="22"
+                fill="none"
+                stroke={isError ? "red" : "green"}
+                strokeWidth="4"
+                strokeDasharray="138"
+                strokeDashoffset="138"
+                style={{
+                  animation: "draw-circle 1s forwards",
+                }}
+              />
+              <text
+                x="50%"
+                y="50%"
+                textAnchor="middle"
+                dy=".3em"
+                fontSize="24"
+                fill={isError ? "red" : "green"}
+              >
+                {isError ? "✕" : "✓"}
+              </text>
+            </svg>
+            <p className="text-lg text-dark">{modalMessage}</p>
+            <button
+              onClick={closeModal}
+              className={`mt-4 px-4 py-2 ${isError ? "bg-red-500 hover:bg-red-600" : "bg-green-500 hover:bg-green-600"} text-white rounded`}
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      )}
+      <style jsx>{`
+        @keyframes draw-circle {
+          from {
+            stroke-dashoffset: 138;
+          }
+          to {
+            stroke-dashoffset: 0;
+          }
+        }
+      `}</style>
     </div>
   );
 };
