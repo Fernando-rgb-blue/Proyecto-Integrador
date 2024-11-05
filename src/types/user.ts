@@ -4,6 +4,7 @@ export type User = {
   password: string;
   fullname: string;
   role: string;
+  status: string;
   image: string;
   office: string;
   areas: string;

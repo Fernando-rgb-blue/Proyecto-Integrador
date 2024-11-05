@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import User from "@/models/user";
 import { connectDB } from "@/libs/mongodb";
+import bcrypt from "bcryptjs";
 
 interface Params {
   id: string;
@@ -22,8 +23,10 @@ export async function GET(request: Request, { params }: { params: Params }) {
     return NextResponse.json({
       _id: user._id,
       email: user.email,
+      password: user.password,
       fullname: user.fullname,
       role: user.role,
+      status: user.status,
       image: user.image,
       office: user.office,
       areas: user.areas,
@@ -41,30 +44,35 @@ export async function GET(request: Request, { params }: { params: Params }) {
 // PUT
 export async function PUT(request: Request, { params }: { params: Params }) {
   const { id } = params;
-  const { fullname, email, role, image, office, areas } = await request.json();
+  let { fullname, email, password, role, status, image, office, areas } = await request.json();
+  let userValues = { fullname, email, role, status, image, office, areas };
 
   try {
     await connectDB();
 
-    const user = await User.findByIdAndUpdate(
-      id,
-      { fullname, email, role, image, office, areas },
-      { new: true, runValidators: true }
-    );
+    const user = await User.findById(id);
 
     if (!user) {
       return NextResponse.json({ message: "Usuario no encontrado" }, { status: 404 });
     }
+    
+    for (const key in userValues) {
+      if (userValues[key] !== undefined) {
+        user[key] = userValues[key];
+      }
+    }
 
-    return NextResponse.json({
-      _id: user._id,
-      email: user.email,
-      fullname: user.fullname,
-      role: user.role,
-      image: user.image,
-      office: user.office,
-      areas: user.areas,
-    });
+    if (password && password !== '') {
+      if (password.length < 6) {
+        return NextResponse.json({ message: "Contraseña mínima de 6 caracteres" }, { status: 400 });
+      }
+      user.password = await bcrypt.hash(password, 12);
+    } else {
+      password = user.password;
+    }
+
+    const updatedUser = await user.save();
+    return NextResponse.json({ message: "Usuario actualizado", user: updatedUser });
 
   } catch (error) {
     console.error(error);
