@@ -21,13 +21,12 @@ const AboutSectionOne = () => {
     <section id="nosotros" className="pt-[50px] pb-[120px]">
       <div className="container">
         <div className="border-b border-body-color/[.15] pb-16 dark:border-white/[.15] md:pb-20 lg:pb-28">
-          <div className="-mx-4 flex flex-wrap justify-center">
+          <div className="-mx-4 flex flex-wrap ">
             <div className="w-full px-4">
               <SectionTitle
                 title="Breve reseña histórica"
                 paragraph="La Escuela de Informática de la Universidad Nacional de Trujillo (UNT) fue fundada el 12 de septiembre de 1995, impulsada por un grupo de docentes del Departamento de Matemáticas. Inicialmente, las clases se dictaban en el aula F9 de la Escuela de Física y contaban con un laboratorio equipado con 8 PCs Olivetti que usaban Windows 3.11, actualizándose a Windows 95 a finales de ese año. Los primeros docentes fueron el Prof. José Olivencia Quiñones (Geometría), la Prof. Roxana Rodríguez Escobedo (Cálculo I), el Prof. Guillermo Ramírez Lara (Lógica para Computación), el Prof. José Roldan López (Física I) y el Prof. Stephen Backle (Arquitectura de Computadoras). El Prof. Oswaldo Sánchez Rosales fue el primer coordinador y, en 1996, el Dr. Ausberto Castro se convirtió en el primer Director de la Escuela. Para su funcionamiento, se realizaron ajustes en el currículo que fueron aprobados por el Consejo Universitario el 25 de abril de 1996. El 29 de mayo de 1997, se aprobó oficialmente el currículo de la Escuela Académica Profesional de Informática mediante la Resolución Rectoral no. 1037 - 97/UNT. Con el tiempo, la informática ha evolucionado, y actualmente se entiende como sinónimo de computación, a abarcar desde el diseño de hardware y software hasta el desarrollo de sistemas inteligentes y la gestión de información. Las aplicaciones de la computación son vastas y continúan expandiéndose."
                 mb="44px"
-                className="text-center text-3xl font-bold leading-tight sm:text-4xl sm:leading-tight"
               />
             </div>
             <div className="w-full px-4">

@@ -8,9 +8,9 @@ const AboutSectionTwo = () => {
 
           {/* Sección Misión */}
           <div className="w-full px-4 lg:w-1/2 flex flex-col items-center">
-            <div className="max-w-[470px] text-center">
+            <div className="max-w-[470px] text-justify">
               <div className="mb-9">
-                <h1 className="mb-6 text-3xl font-bold text-black dark:text-white sm:text-4xl sm:leading-tight lg:text-3xl xl:text-4xl xl:leading-tight">
+                <h1 className="mb-6 text-3xl font-bold text-black dark:text-white sm:text-4xl sm:leading-tight lg:text-3xl xl:text-4xl xl:leading-tight text-center">
                   Misión
                 </h1>
                 <div
@@ -39,9 +39,9 @@ const AboutSectionTwo = () => {
 
           {/* Sección Visión */}
           <div className="w-full px-4 lg:w-1/2 flex flex-col items-center">
-            <div className="max-w-[470px] text-center">
+            <div className="max-w-[470px] text-justify">
               <div className="mb-9">
-                <h1 className="mb-6 text-3xl font-bold text-black dark:text-white sm:text-4xl sm:leading-tight lg:text-3xl xl:text-4xl xl:leading-tight">
+                <h1 className="mb-6 text-3xl font-bold text-black dark:text-white sm:text-4xl sm:leading-tight lg:text-3xl xl:text-4xl xl:leading-tight text-center">
                   Visión
                 </h1>
                 <div
