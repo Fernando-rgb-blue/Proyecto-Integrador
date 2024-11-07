@@ -13,15 +13,20 @@ const TeacherForm = ({ onSubmit, teacher, setShowPopup }: TeacherFormProps) => {
     const [formData, setFormData] = useState<User>({
         _id: teacher?._id || "",
         email: teacher?.email || "",
-        password: teacher?.password || "informatica2025",
+        password: teacher?.password || "",
         fullname: teacher?.fullname || "",
         role: teacher?.role || "profesor",
+        status: teacher?.status || "activo",
         image: teacher?.image || "/images/props/pfp_default.png",
         office: teacher?.office || "",
         areas: teacher?.areas || ""
     });
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [showPassword, setShowPassword] = useState<boolean>(false);
+
+    if (!teacher) {
+        formData.password = 'informatica2025';
+    }
 
     useEffect(() => {
         document.body.style.overflow = "hidden"; // Deshabilita el scroll
@@ -37,8 +42,8 @@ const TeacherForm = ({ onSubmit, teacher, setShowPopup }: TeacherFormProps) => {
             [id]: value
         });
         
-        if (value === "") {
-            setErrorMessage("Todos los campos son obligatorios.");
+        if ((id === "fullname" || id === "email") && value === "") {
+            setErrorMessage("Se requiere al menos nombre y apellidos, y correo electrónico.");
         } else {
             setErrorMessage(null);
         }
@@ -110,7 +115,7 @@ const TeacherForm = ({ onSubmit, teacher, setShowPopup }: TeacherFormProps) => {
                                     <input
                                         id="password"
                                         type={showPassword ? "text" : "password"}
-                                        value=""
+                                        value={formData.password}
                                         onChange={handleInputChange}
                                         className="w-full mt-1 mb-1 sm:mb-5"
                                     />
@@ -146,6 +151,17 @@ const TeacherForm = ({ onSubmit, teacher, setShowPopup }: TeacherFormProps) => {
                             />
                             <label htmlFor="role">
                                 Rol de administrador
+                            </label>
+                        </div>
+                        <div className="flex gap-2 mt-2">
+                            <input
+                                id="status"
+                                type="checkbox"
+                                checked={formData.status === "activo"}
+                                onChange={() => setFormData({...formData, "status": formData.status === "activo" ? "inactivo" : "activo"})}
+                            />
+                            <label htmlFor="status">
+                                El docente está activo
                             </label>
                         </div>
                     </div>

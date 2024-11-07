@@ -39,6 +39,10 @@
     @apply p-2 rounded-md border-2 border-gray-500;
   }
 
+  textarea {
+    @apply p-2 rounded-md border-2 border-gray-500;
+  }
+
   button[type="submit"], .submit, button.primary{
     @apply rounded-sm bg-primary text-base font-semibold text-white duration-300 ease-in-out hover:bg-primary/80;
   }

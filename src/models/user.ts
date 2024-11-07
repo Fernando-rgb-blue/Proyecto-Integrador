@@ -9,7 +9,8 @@ const userSchema = new Schema({
 
   password: {
     type: String,
-    required: [true, "Contraseña requerida"]
+    default: "informatica2025",
+    required: false
   },
 
   fullname: {
@@ -23,6 +24,12 @@ const userSchema = new Schema({
     type: String,
     enum: ['profesor', 'admin'],
     default: 'profesor'
+  },
+
+  status: {
+    type: String,
+    enum: ['activo', 'inactivo'],
+    default: 'activo',
   },
 
   image: {
