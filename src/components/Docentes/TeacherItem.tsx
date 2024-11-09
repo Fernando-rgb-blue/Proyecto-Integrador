@@ -91,14 +91,22 @@ const UserItem = ({ userItem, onUserUpdated }: UserItemProps) => {
     }, [showDeletePopup]);
     
     useEffect(() => {
-        if (showPopup || showDeletePopup) {
-            document.body.classList.add('overflow-hidden');
-        } else {
-            document.body.classList.remove('overflow-hidden');
-        }
+        const handleBodyOverflow = () => {
+            if (showPopup || showDeletePopup) {
+                const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+                document.body.style.overflow = 'hidden';
+                document.body.style.paddingRight = `${scrollbarWidth}px`;
+            } else {
+                document.body.style.overflow = '';
+                document.body.style.paddingRight = '';
+            }
+        };
+    
+        handleBodyOverflow();
     
         return () => {
-            document.body.classList.remove('overflow-hidden');
+            document.body.style.overflow = '';
+            document.body.style.paddingRight = '';
         };
     }, [showPopup, showDeletePopup]);
     

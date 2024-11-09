@@ -1,11 +1,22 @@
-import React from "react";
+// ADMINISTRAR CURSOS EN VISTA DE ADMIN
+import DashboardTabs from "@/components/Dashboard/DashboardTabs";
+import Courses from "@/components/CoursesList/index";
+import { Metadata } from "next";
+import BreadDash from "@/components/Common/BreadDash";
 
-const HelloWorld: React.FC = () => {
-    return (
-        <div>
-            <h1>Hola Mundo</h1>
-        </div>
-    );
+export const metadata: Metadata = {
+    title: "Gestionar Cursos | Escuela de Informática",
+    description: "Página de administrador para gestionar Cursos."
 };
 
-export default HelloWorld;
+const DocentesPage = () => {
+    return (
+        <section >
+            <BreadDash/>
+            <DashboardTabs/>
+            <Courses />
+        </section>
+    );
+}
+
+export default DocentesPage;

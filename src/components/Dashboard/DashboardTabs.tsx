@@ -23,50 +23,44 @@ const DashboardTabs = () => {
         <div className="flex flex-wrap items-center justify-center gap-4 p-4">
             {isAdmin2 && (
             <>
-                <Link 
-                className={`${path === '/dashboard/profile' 
-                    ? 'bg-primary text-white rounded-full py-2 px-4 font-semibold duration-300 ease-in-out text-base' 
-                    : 'bg-primary/70 hover:bg-primary/90 text-white rounded-full py-2 px-4 font-semibold duration-300 ease-in-out text-base'}`} 
-                href={'/dashboard/profile'}>
-                Perfil
+                <Link
+                    className={`tab-link ${path === '/dashboard/profile' ? 'active' : ''}`}
+                    href="/dashboard/profile"
+                >
+                    Perfil
                 </Link>
                 <Link
-                className={`${path === '/dashboard/docentes' 
-                    ? 'bg-primary text-white rounded-full py-2 px-4 font-semibold duration-300 ease-in-out text-base' 
-                    : 'bg-primary/70 hover:bg-primary/90 text-white rounded-full py-2 px-4 font-semibold duration-300 ease-in-out text-base'}`} 
-                href={'/dashboard/docentes'}>
-                Docentes
-                </Link>
-                <Link 
-                className={`${path === '/dashboard/courses' 
-                    ? 'bg-primary text-white rounded-full py-2 px-4 font-semibold duration-300 ease-in-out text-base' 
-                    : 'bg-primary/70 hover:bg-primary/90 text-white rounded-full py-2 px-4 font-semibold duration-300 ease-in-out text-base'}`} 
-                href={'/dashboard/courses'}>
-                Cursos
+                    className={`tab-link ${path === '/dashboard/docentes' ? 'active' : ''}`}
+                    href="/dashboard/docentes"
+                >
+                    Docentes
                 </Link>
                 <Link
-                className={`${path === '/dashboard/schedule' 
-                    ? 'bg-primary text-white rounded-full py-2 px-4 font-semibold duration-300 ease-in-out text-base' 
-                    : 'bg-primary/70 hover:bg-primary/90 text-white rounded-full py-2 px-4 font-semibold duration-300 ease-in-out text-base'}`} 
-                href={'/dashboard/schedule'}>
-                Ver Horarios
+                    className={`tab-link ${path === '/dashboard/courses' ? 'active' : ''}`}
+                    href="/dashboard/courses"
+                >
+                    Cursos
+                </Link>
+                <Link
+                    className={`tab-link ${path === '/dashboard/schedule' ? 'active' : ''}`}
+                    href="/dashboard/schedule"
+                >
+                    Ver Horarios
                 </Link>
             </>
             )}
             {isDocente && (
             <>
-                <Link 
-                className={`${path === '/dashboard/profile' 
-                    ? 'bg-primary text-white rounded-full py-2 px-4 font-semibold duration-300 ease-in-out text-base' 
-                    : 'bg-primary/70 hover:bg-primary/90 text-white rounded-full py-2 px-4 font-semibold duration-300 ease-in-out text-base'}`} 
-                href={'/dashboard/profile'}>
+                <Link
+                    className={`tab-link ${path === '/dashboard/profile' ? 'active' : ''}`}
+                    href="/dashboard/profile"
+                >
                     Perfil
                 </Link>
                 <Link
-                className={`${path === '/dashboard/schedule' 
-                    ? 'bg-primary text-white rounded-full py-2 px-4 font-semibold duration-300 ease-in-out text-base' 
-                    : 'bg-primary/70 hover:bg-primary/90 text-white rounded-full py-2 px-4 font-semibold duration-300 ease-in-out text-base'}`} 
-                href={'/dashboard/schedule'}>
+                    className={`tab-link ${path === '/dashboard/schedule' ? 'active' : ''}`}
+                    href="/dashboard/schedule"
+                >
                     Registrar Horario
                 </Link>
             </>
