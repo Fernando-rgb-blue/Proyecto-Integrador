@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import Course from "@/models/course";
 import { connectDB } from "@/libs/mongodb";
 
-
 // GET: Obtener un curso por ID
+
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
   await connectDB();
   try {
@@ -18,14 +18,25 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
 }
 
 // PUT: Actualizar un curso por ID
+
 export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
   await connectDB();
   try {
     const data = await req.json();
+
+    // Validar que los campos necesarios están presentes si se intenta actualizar alguno de ellos
+    if (data.nombre === undefined || data.ciclo === undefined || !Array.isArray(data.profesores)) {
+      return NextResponse.json(
+        { message: "Datos incompletos: nombre, ciclo o profesores" },
+        { status: 400 }
+      );
+    }
+
     const updatedCourse = await Course.findByIdAndUpdate(params.id, data, {
       new: true,
       runValidators: true,
     });
+
     if (!updatedCourse) {
       return NextResponse.json({ message: "Curso no encontrado" }, { status: 404 });
     }
@@ -36,6 +47,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
 }
 
 // DELETE: Eliminar un curso por ID
+
 export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
   await connectDB();
   try {

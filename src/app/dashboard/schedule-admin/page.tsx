@@ -36,7 +36,7 @@ const ScheduleModal: React.FC<{
   }, [visible, initialData]);
 
   const handleSubmit = () => {
-    if (!professor || !course || !activity || !classroom) {
+    if (!course || !activity || !classroom) {
       setError("Todos los campos son obligatorios.");
       return;
     }
@@ -49,16 +49,16 @@ const ScheduleModal: React.FC<{
     onClose();
   };
 
-return (
-  visible && (
-    <div
-      className="bg-white p-4 rounded shadow-lg transform -translate-y-1/2 -translate-x-1/2"
-      style={{ top: '50%', left: '50%', position: 'absolute' }}
-    >
-      <div className="bg-white p-4 rounded shadow-lg">
-        <h2 className="text-xl font-semibold">Modificar Horario</h2>
+  return (
+    visible && (
+      <div
+        className="bg-white p-4 rounded shadow-lg transform -translate-y-1/2 -translate-x-1/2"
+        style={{ top: '50%', left: '50%', position: 'absolute' }}
+      >
+        <div className="bg-white p-4 rounded shadow-lg">
+          <h2 className="text-xl font-semibold">Modificar Horario</h2>
 
-        <div className="mb-4">
+          {/* <div className="mb-4">
           <label>Profesor</label>
           <input
             type="text"
@@ -66,62 +66,69 @@ return (
             onChange={(e) => setProfessor(e.target.value)}
             className="border rounded w-full"
           />
-        </div>
+        </div> */}
 
-        <div className="mb-4">
-          <label>Curso</label>
-          <select
-            value={course}
-            onChange={(e) => setCourse(e.target.value)}
-            className="border rounded w-full appearance-none"
+          <div className="mb-4">
+            <label>Curso / Profesor</label>
+            <select
+              value={course}
+              onChange={(e) => setCourse(e.target.value)}
+              className="border rounded w-full appearance-none"
+            >
+              <option value="">Seleccione un curso</option>
+              {courses.map((courseWithProfessor, index) => (
+                <option key={index} value={courseWithProfessor}>
+                  {courseWithProfessor}
+                </option>
+              ))}
+            </select>
+          </div>
+
+
+
+          <div className="mb-4">
+            <label>Actividad</label>
+            <select
+              value={activity}
+              onChange={(e) => setActivity(e.target.value)}
+              className="border rounded w-full"
+            >
+              <option value="Práctica">Práctica</option>
+              <option value="Laboratorio">Laboratorio</option>
+              <option value="Teoría">Teoría</option>
+            </select>
+          </div>
+
+
+
+          <div className="mb-4">
+            <label>Aula</label>
+            <input
+              type="text"
+              value={classroom}
+              onChange={(e) => setClassroom(e.target.value)}
+              className="border rounded w-full"
+            />
+          </div>
+
+          {error && <div className="text-red-500 mb-4">{error}</div>}
+
+          <button onClick={handleSubmit} className="mt-2 bg-blue-500 text-white p-2 rounded w-full">
+            Guardar Cambios Temporales
+          </button>
+          <button
+            onClick={handleDelete}
+            className="mt-2 bg-red-500 text-white p-2 rounded w-full"
           >
-            <option value="">Seleccione un curso</option>
-            {courses.map((courseName, index) => (
-              <option key={index} value={courseName}>
-                {courseName}
-              </option>
-            ))}
-          </select>
+            Borrar Datos de Celda
+          </button>
+          <button onClick={onClose} className="mt-2 bg-gray-500 text-white p-2 rounded w-full">
+            Cerrar
+          </button>
         </div>
-
-        <div className="mb-4">
-          <label>Actividad</label>
-          <input
-            type="text"
-            value={activity}
-            onChange={(e) => setActivity(e.target.value)}
-            className="border rounded w-full"
-          />
-        </div>
-
-        <div className="mb-4">
-          <label>Aula</label>
-          <input
-            type="text"
-            value={classroom}
-            onChange={(e) => setClassroom(e.target.value)}
-            className="border rounded w-full"
-          />
-        </div>
-
-        {error && <div className="text-red-500 mb-4">{error}</div>}
-
-        <button onClick={handleSubmit} className="mt-2 bg-blue-500 text-white p-2 rounded w-full">
-          Guardar Cambios Temporales
-        </button>
-        <button
-          onClick={handleDelete}
-          className="mt-2 bg-red-500 text-white p-2 rounded w-full"
-        >
-          Borrar Datos de Celda
-        </button>
-        <button onClick={onClose} className="mt-2 bg-gray-500 text-white p-2 rounded w-full">
-          Cerrar
-        </button>
       </div>
-    </div>
-  )
-);
+    )
+  );
 };
 
 
@@ -130,6 +137,8 @@ const ScheduleTable: React.FC = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [cellIndex, setCellIndex] = useState<{ dayIndex: number; hourIndex: number } | null>(null);
   const [loading, setLoading] = useState(true);
+  const [anio, setAnio] = useState('');
+  const [periodo, setPeriodo] = useState('');
   const [ciclo, setCiclo] = useState('');
   const [seccion, setSeccion] = useState('');
   const [horarioID, setHorarioID] = useState(null);
@@ -138,9 +147,17 @@ const ScheduleTable: React.FC = () => {
 
   // Opciones de ciclos y secciones
   const optionsCiclo = {
-    'I': ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X']
+    'I': ['I', 'III', 'V', 'VII', 'IX'],  // Ciclos impares
+    'II': ['II', 'IV', 'VI', 'VIII', 'X'] // Ciclos pares
   };
+
   const optionsSeccion = ['A', 'B'];
+
+  // Opciones de año y periodo
+  const optionsAnio = ['2024', '2025'];
+  const optionsPeriodo = ['I', 'II'];
+
+  const filteredCiclos = periodo ? optionsCiclo[periodo] : [];
 
   const days = ["LUNES", "MARTES", "MIÉRCOLES", "JUEVES", "VIERNES"];
   const hours = [
@@ -151,25 +168,18 @@ const ScheduleTable: React.FC = () => {
     "08:00 PM a 09:00 PM",
   ];
 
-  const handleCicloSeccionChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const [selectedCiclo, selectedSeccion] = e.target.value.split('-');
-    setCiclo(selectedCiclo);
-    setSeccion(selectedSeccion);
-
-    try {
-      const response = await axios.get(`http://localhost:3000/api/course/search?cycle=${selectedCiclo}`);
-      const courses = response.data.map((course: { name: string }) => course.name);
-      setCourses(courses);
-    } catch (error) {
-      console.error("Error fetching courses:", error);
-    }
-  };
-
   const handleSearch = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/scheduleprueba/search?' + new URLSearchParams({
+      // Asegurarse de que todos los parámetros estén definidos
+      if (!anio || !periodo || !ciclo || !seccion) {
+        throw new Error('Por favor complete todos los campos');
+      }
+
+      const response = await fetch('http://localhost:3000/api/cicloperiodo/search?' + new URLSearchParams({
+        anio,
+        periodo,
         ciclo,
-        seccion,
+        seccion
       }));
 
       if (!response.ok) {
@@ -325,7 +335,6 @@ const ScheduleTable: React.FC = () => {
 
   const renderCell = (dayIndex: number, hourIndex: number) => {
     const cellData = schedule[hourIndex][dayIndex];
-
     if (cellData && cellData.available === 1) {
       return (
         <td
@@ -333,11 +342,10 @@ const ScheduleTable: React.FC = () => {
           className="p-3 border border-gray-300 text-center cursor-pointer text-xs dark:bg-dark sm:text-base bg-blue-200"
           onClick={() => toggleCellSelection(dayIndex, hourIndex)}
         >
-          {`${cellData.professor} - ${cellData.course} - ${cellData.activity} - ${cellData.classroom}`}
+          {`${cellData.course} - ${cellData.activity} - ${cellData.classroom}`}
         </td>
       );
     }
-
     return (
       <td
         key={`${hourIndex}-${dayIndex}`}
@@ -350,12 +358,48 @@ const ScheduleTable: React.FC = () => {
   return (
     <div className="container mx-auto p-4" style={{ marginTop: '5cm' }}>
       <h1 className="text-2xl font-bold mb-4">Buscar Horario</h1>
-      <div className="flex space-x-4 mb-4">
-        <div>
-          <label className="block mb-2" htmlFor="ciclo-seccion">
-            Ciclo y Sección
-          </label>
 
+      <div className="flex space-x-4 mb-4">
+        <div className="flex-1">
+          {/* Año */}
+          <label className="block mb-2" htmlFor="anio">Año</label>
+          <select
+            id="anio"
+            value={anio}
+            onChange={(e) => setAnio(e.target.value)}
+            className="border rounded p-2 w-full"
+          >
+            <option value="">Seleccione un año</option>
+            {optionsAnio.map((anio) => (
+              <option key={anio} value={anio}>
+                {anio}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="flex-1">
+          {/* Periodo */}
+          <label className="block mb-2" htmlFor="periodo">Periodo</label>
+          <select
+            id="periodo"
+            value={periodo}
+            onChange={(e) => setPeriodo(e.target.value)}
+            className="border rounded p-2 w-full"
+          >
+            <option value="">Seleccione un periodo</option>
+            {optionsPeriodo.map((periodo) => (
+              <option key={periodo} value={periodo}>
+                {periodo}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="flex-1">
+
+          {/* Ciclo y Sección */}
+          <label className="block mb-2" htmlFor="ciclo-seccion">Ciclo y Sección</label>
           <select
             id="ciclo-seccion"
             value={`${ciclo}-${seccion}`}
@@ -366,36 +410,44 @@ const ScheduleTable: React.FC = () => {
 
               // Hacer la llamada a la API para obtener los cursos después de cambiar el ciclo y sección
               axios
-                .get(`http://localhost:3000/api/course/search?cycle=${selectedCiclo}`)
+                .get(`http://localhost:3000/api/course/search?ciclo=${selectedCiclo}`)
                 .then((response) => {
-                  const courses = response.data.map((course: { name: string }) => course.name);
-                  setCourses(courses); // Actualizar el estado de los cursos
+                  // Mapeamos los cursos para incluir "nombre / profesor" para cada profesor en el curso
+                  const coursesWithProfessors = response.data.flatMap((course: { nombre: string, profesores: string[] }) =>
+                    course.profesores.map((profesor) => `${course.nombre} / ${profesor}`)
+                  );
+                  setCourses(coursesWithProfessors); // Actualizar el estado de los cursos con el formato deseado
                 })
                 .catch((error) => {
                   console.error("Error fetching courses:", error);
                 });
             }}
-            className="border rounded p-2"
+            className="border rounded p-2 w-full"
           >
-
-
             <option value="">Seleccione un ciclo y sección</option>
-            {Object.keys(optionsCiclo).map((period) =>
-              optionsCiclo[period].map((c) =>
-                optionsSeccion.map((s) => (
-                  <option key={`${c}-${s}`} value={`${c}-${s}`}>
-                    {`${c} - ${s}`}
-                  </option>
-                ))
-              )
+            {filteredCiclos.map((c) =>
+              optionsSeccion.map((s) => (
+                <option key={`${c}-${s}`} value={`${c}-${s}`}>
+                  {`${c} - ${s}`}
+                </option>
+              ))
             )}
           </select>
         </div>
       </div>
-      <button onClick={handleSearch} className="bg-blue-500 text-white px-4 py-2 rounded">
-        Buscar
-      </button>
-      {/* {horarioID && <p className="mt-4">ID del horario encontrado: {horarioID}</p>} */}
+
+      {/* Botón de Buscar */}
+      <div className="flex justify-center mb-4">
+        <button onClick={handleSearch} className="bg-blue-500 text-white px-4 py-2 rounded w-full md:w-auto">
+          Buscar
+        </button>
+      </div>
+
+      {/* Resultados
+      {horarioID && <p className="mt-4">ID del horario encontrado: {horarioID}</p>}
+      {error && <p className="mt-4 text-red-500">{error}</p>} */}
+
+
       {error && <p className="mt-4 text-red-500">{error}</p>}
       <div className="container mx-auto mt-10 mb-10 p-4" style={{ marginTop: '1cm' }}>
         <div className="overflow-x-auto sm:flex sm:flex-wrap justify-center">

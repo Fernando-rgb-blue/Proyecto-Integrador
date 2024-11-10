@@ -1,19 +1,21 @@
 import { Document, model, Model, models, Schema } from "mongoose";
 
 interface ICourse extends Document {
-    name: string;
-    cycle: string;
+    nombre: string;
+    ciclo: string;
+    profesores: string[];
 }
 
 const courseSchema = new Schema<ICourse>({
-    name: {
+    nombre: {
         type: String,
-        required: true
     },
-    cycle: {
+    ciclo: {
         type: String,
-        required: true
     },
+    profesores: {
+        type: [String]
+    }
 }, { timestamps: true });
 
 const Course: Model<ICourse> = models.Course || model<ICourse>('Course', courseSchema);
