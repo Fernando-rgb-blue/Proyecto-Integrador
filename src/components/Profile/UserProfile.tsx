@@ -6,29 +6,13 @@ import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 
 // cambio luis debajo
-import { usePathname, redirect } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
+
 
 const UserProfile = () => {
   const { data: session, status } = useSession();
   const [password, setPassword] = useState("");
   const email = session?.user?.email || "";
-
-  // Si el usuario no está autenticado, redirigirlo
-  if (status === "unauthenticated") {
-    redirect("/login"); // Redirige a la página de login si no está autenticado
-    return null; // Evita que el componente se renderice
-  }
-
-  // Cargando estado
-  if (status === "loading") {
-    return <p>Cargando...</p>;
-  }
-
-  const isAdmin = session?.user?.role === "admin";
-  const isDocente = session?.user?.role === "profesor";
-
-  // el de abajo cambio luis
-  const path = usePathname();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,9 +30,23 @@ const UserProfile = () => {
     }
   };
 
+  if (status === "loading") {
+    return <p>Cargando...</p>;
+  }
+
+  if (status === "unauthenticated") {
+    return <p>No estás autenticado.</p>;
+  }
+
+  const isAdmin = session?.user?.role === "admin";
+  const isDocente = session?.user?.role === "profesor";
+  
+  // el de abajo cambio luis
+  const path = usePathname();
   return (
-    <div>
-      <div className="flex items-center justify-center my-8 mx-5 bg-white dark:bg-black sm:my-10">
+    <div>                  
+
+      <div className="flex items-center justify-center my-8 mx-5 bg-white dark:bg-black sm:my-10"  >
         <form
           onSubmit={handleSubmit}
           className="bg-white dark:bg-gray-700 shadow-md rounded px-8 pt-6 pb-8 w-full max-w-md"
