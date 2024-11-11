@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
   try {
     const data = await req.json();
 
-    if (!data.nombre || !data.ciclo || !Array.isArray(data.profesores)) {
+    if (!data.nombre || !data.ciclo) {
       return NextResponse.json(
         { message: "Faltan datos requeridos: nombre, ciclo o profesores" },
         { status: 400 }

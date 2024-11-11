@@ -25,7 +25,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     const data = await req.json();
 
     // Validar que los campos necesarios están presentes si se intenta actualizar alguno de ellos
-    if (data.nombre === undefined || data.ciclo === undefined || !Array.isArray(data.profesores)) {
+    if (data.nombre === undefined || data.ciclo === undefined) {
       return NextResponse.json(
         { message: "Datos incompletos: nombre, ciclo o profesores" },
         { status: 400 }

@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 
 interface Course {
     _id: string;
-    name: string;
-    cycle: string;
+    nombre: string;
+    ciclo: string;
 }
 
 const Courses = () => {
@@ -45,14 +45,15 @@ const Courses = () => {
         }
     };
 
+
     // Crear un nuevo curso
-    const createCourse = async (name: string, cycle: string, event: React.MouseEvent) => {
+    const createCourse = async (nombre: string, ciclo: string, event: React.MouseEvent) => {
         event.preventDefault(); // Prevenir la recarga al guardar
         try {
             const response = await fetch("/api/course", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name, cycle }),
+                body: JSON.stringify({ nombre, ciclo }),
             });
 
             if (!response.ok) {
@@ -71,14 +72,16 @@ const Courses = () => {
         }
     };
 
+
     // Eliminar un curso
+
     const deleteCourse = async (id: string, event: React.MouseEvent) => {
         event.preventDefault(); // Prevenir la recarga al eliminar
         try {
-            const response = await fetch("/api/course", {
+            const response = await fetch(`/api/course/${id}`, { // Usamos el id pasado como parámetro
                 method: "DELETE",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ id }),
+                body: JSON.stringify({ id }), // El cuerpo no es necesario para un DELETE, solo el ID en la URL
             });
 
             if (!response.ok) {
@@ -97,14 +100,17 @@ const Courses = () => {
         }
     };
 
-    // Actualizar un curso
-    const updateCourse = async (id: string, name: string, cycle: string, event: React.MouseEvent) => {
+
+
+    // Actualizar un curs
+
+    const updateCourse = async (id: string, nombre: string, ciclo: string, event: React.MouseEvent) => {
         event.preventDefault(); // Prevenir la recarga al guardar
         try {
-            const response = await fetch("/api/course", {
+            const response = await fetch(`/api/course/${id}`, { // Usamos el id pasado como parámetro
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ id, name, cycle }),
+                body: JSON.stringify({ nombre, ciclo }), // Solo pasar nombre y ciclo en el cuerpo
             });
 
             if (!response.ok) {
@@ -122,6 +128,7 @@ const Courses = () => {
             alert("Error en la solicitud de actualización.");
         }
     };
+
 
     const openEditPopup = (course: Course) => {
         setCurrentCourse(course);
@@ -172,9 +179,9 @@ const Courses = () => {
                             <li key={course._id} className="bg-primary/30 dark:bg-slate-800 p-4 my-2 rounded-md text-center flex flex-col dark:text-white transition-all">
                                 <div className="flex flex-col md:flex-row md:gap-4 w-full">
                                     <div className="grow text-center md:text-left md:w-1/3 flex flex-col justify-center items-center md:items-start">
-                                        <h4 className="font-bold text-xl md:text-2xl pb-3">{course.name}</h4>
+                                        <h4 className="font-bold text-xl md:text-2xl pb-3">{course.nombre}</h4>
                                         <div className="flex flex-col gap-y-3 text-start">
-                                            <p>Ciclo: {course.cycle}</p>
+                                            <p>Ciclo: {course.ciclo}</p>
                                         </div>
                                     </div>
                                     <div className="flex flex-col justify-center gap-4 mt-4 md:mt-0 md:w-1/3">
@@ -243,10 +250,10 @@ const Courses = () => {
                 <div className="fixed inset-0 bg-black/80 flex justify-center items-center z-50 transition-opacity duration-150" onClick={closeModals}>
                     <div onClick={(e) => e.stopPropagation()} className="p-6 rounded-lg max-w-sm w-full bg-white dark:bg-dark">
                         <label>Nombre del Curso</label>
-                        <input type="text" placeholder="Nombre del curso" id="name" defaultValue={currentCourse.name} className="w-full mt-1 mb-5 border rounded" />
+                        <input type="text" placeholder="Nombre del curso" id="name" defaultValue={currentCourse.nombre} className="w-full mt-1 mb-5 border rounded" />
 
                         <label>Ciclo</label>
-                        <select id="cycle" className="w-full mt-1 mb-5 border rounded" defaultValue={currentCourse.cycle}>
+                        <select id="cycle" className="w-full mt-1 mb-5 border rounded" defaultValue={currentCourse.ciclo}>
                             <option value="I">I</option>
                             <option value="II">II</option>
                             <option value="III">III</option>
@@ -282,7 +289,7 @@ const Courses = () => {
             {showDeletePopup && currentCourse && (
                 <div className="fixed inset-0 bg-black/80 flex justify-center items-center z-50 transition-opacity duration-150" onClick={closeModals}>
                     <div onClick={(e) => e.stopPropagation()} className="p-6 rounded-lg max-w-sm w-full bg-white dark:bg-dark">
-                        <p>¿Estás seguro de eliminar el curso <b>{currentCourse.name}</b>?</p>
+                        <p>¿Estás seguro de eliminar el curso <b>{currentCourse.nombre}</b>?</p>
                         <div className="flex justify-between mt-4">
                             <button onClick={(e) => deleteCourse(currentCourse._id, e)} className="px-8 py-4 bg-primary text-white rounded hover:bg-primary/60 cursor-pointer">
                                 Eliminar
