@@ -7,12 +7,10 @@ interface Course {
   ciclo: string;
   profesores: string[];
 }
-
 interface Docente {
   _id: string;
   fullname: string;
 }
-
 const CoursesList = () => {
   const [courses, setCourses] = useState<Course[]>([]);
   const [allCourses, setAllCourses] = useState<Course[]>([]);
@@ -21,12 +19,8 @@ const CoursesList = () => {
   const [error, setError] = useState<string | null>(null);
   const [selectedCourses, setSelectedCourses] = useState<Set<string>>(new Set());
   const [selectedDocente, setSelectedDocente] = useState<string>('');
-
   useEffect(() => {
-
-
     const fetchCourses = async () => {
-      setLoading(true);
       try {
         const response = await fetch('/api/course');
         if (!response.ok) throw new Error('Error al obtener los cursos');
@@ -42,19 +36,21 @@ const CoursesList = () => {
         setCourses(orderedData);
       } catch (error: any) {
         setError(error.message);
-      } finally {
-        setLoading(false);
       }
     };
-
-
 
     const fetchDocentes = async () => {
       try {
         const response = await fetch('http://localhost:3000/api/auth/signup/');
         if (!response.ok) throw new Error('Error al obtener los docentes');
         const data = await response.json();
-        setDocentes(data);
+
+        // Filtrar solo los docentes que no son "admin" y tienen "status" como "activo"
+        const filteredDocentes = data.filter((docente: any) =>
+          docente.role !== 'admin' && docente.status === 'activo'
+        );
+
+        setDocentes(filteredDocentes);
       } catch (error: any) {
         setError(error.message);
       }
@@ -77,7 +73,6 @@ const CoursesList = () => {
       setSelectedCourses(selectedCourseIds);
     }
   };
-
   const handleCheckboxChange = (id: string) => {
     setSelectedCourses(prevSelectedCourses => {
       const newSelectedCourses = new Set(prevSelectedCourses);
@@ -86,12 +81,26 @@ const CoursesList = () => {
       return newSelectedCourses;
     });
   };
+  const handleDocenteChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newDocente = e.target.value;
+    setSelectedDocente(newDocente);
 
-  const handleDocenteChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedDocente(e.target.value);
+    if (newDocente) {
+      // Filtramos los cursos del docente seleccionado
+      const filteredCourses = allCourses.filter(course =>
+        course.profesores.includes(newDocente)
+      );
+
+      // Actualizamos el estado para mostrar los cursos del docente seleccionado
+      const selectedCourseIds = new Set(filteredCourses.map((course: Course) => course._id));
+      setSelectedCourses(selectedCourseIds);
+      setCourses(filteredCourses);
+    } else {
+      // Si no se selecciona un docente, mostramos todos los cursos
+      setCourses(allCourses);
+      setSelectedCourses(new Set());
+    }
   };
-
-
   const handleSave = async () => {
     if (!selectedDocente) {
       alert('Por favor, seleccione un docente para agregar o eliminar.');
@@ -111,7 +120,7 @@ const CoursesList = () => {
     // Actualizar cursos para agregar el docente
     for (const course of coursesToAddDocente) {
       try {
-        await fetch(`http://localhost:3000/api/course/${course._id}`, {
+        const response = await fetch(`http://localhost:3000/api/course/${course._id}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -122,15 +131,24 @@ const CoursesList = () => {
             profesores: [...course.profesores, selectedDocente],
           }),
         });
+        if (response.ok) {
+          // Actualizamos el estado para reflejar el cambio
+          setCourses((prevCourses) =>
+            prevCourses.map((c) =>
+              c._id === course._id
+                ? { ...c, profesores: [...c.profesores, selectedDocente] }
+                : c
+            )
+          );
+        }
       } catch (error) {
         console.error('Error al agregar el docente al curso:', error);
       }
     }
-
     // Actualizar cursos para eliminar el docente
     for (const course of coursesToRemoveDocente) {
       try {
-        await fetch(`http://localhost:3000/api/course/${course._id}`, {
+        const response = await fetch(`http://localhost:3000/api/course/${course._id}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -141,14 +159,44 @@ const CoursesList = () => {
             profesores: course.profesores.filter((prof) => prof !== selectedDocente),
           }),
         });
+        if (response.ok) {
+          // Actualizamos el estado para reflejar el cambio
+          setCourses((prevCourses) =>
+            prevCourses.map((c) =>
+              c._id === course._id
+                ? { ...c, profesores: c.profesores.filter((prof) => prof !== selectedDocente) }
+                : c
+            )
+          );
+        }
       } catch (error) {
         console.error('Error al eliminar el docente del curso:', error);
       }
     }
+    // Recargar los cursos para obtener los datos más actualizados
+    const fetchUpdatedCourses = async () => {
+      try {
+        const response = await fetch('/api/course');
+        if (!response.ok) throw new Error('Error al obtener los cursos actualizados');
+        const updatedCourses = await response.json();
+
+        // Ordena los cursos por ciclo
+        const orderedData = updatedCourses.sort((a: Course, b: Course) => {
+          const cicloOrder = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
+          return cicloOrder.indexOf(a.ciclo) - cicloOrder.indexOf(b.ciclo);
+        });
+
+        setAllCourses(orderedData);
+        setCourses(orderedData); // Actualizamos los cursos con los nuevos datos
+      } catch (error: any) {
+        setError(error.message);
+      }
+    };
+    // Llamamos a la función para obtener los cursos actualizados
+    fetchUpdatedCourses();
 
     alert('Los cambios en los cursos seleccionados han sido guardados.');
   };
-
 
   return (
     <div className="container mx-auto p-6 mt-[150px]">

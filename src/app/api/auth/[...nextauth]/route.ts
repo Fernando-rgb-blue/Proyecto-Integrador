@@ -17,26 +17,33 @@ const authOptions = {
         email: { label: "Email", type: "email", placeholder: "jsmith" },
         password: { label: "Password", type: "password" },
       },
+
       async authorize(credentials, req) {
+
         await connectDB()
         console.log(credentials);
+
         const userFound = await User.findOne({
           email: credentials?.email,
         }).select("+password");
-        if(!userFound) throw new Error("Invalid Credentials");
+
+        if (!userFound) throw new Error("Invalid Credentials");
+
+        if (userFound.status !== "activo") throw new Error("Usuario no activo");
+
         console.log(userFound);
         const passwordMatch = await bcrypt.compare(
           credentials!.password,
           userFound.password
         );
-        if(!passwordMatch) throw new Error("Invalid Credentials");
+        if (!passwordMatch) throw new Error("Invalid Credentials");
         return userFound;
       },
     }),
   ],
-  callbacks:{
-    jwt({account, token, user, profile,session}){
-      if(user) token.user = user;
+  callbacks: {
+    jwt({ account, token, user, profile, session }) {
+      if (user) token.user = user;
       console.log(token);
       return token;
     },
@@ -44,7 +51,7 @@ const authOptions = {
       // Pasa la información completa del usuario a la sesión
       if (token.user) {
         session.user = {
-          _id: token.user._id, 
+          _id: token.user._id,
           email: token.user.email,
           fullname: token.user.fullname,
           role: token.user.role, // Incluye el rol en la sesión
@@ -53,7 +60,7 @@ const authOptions = {
       return session;
     },
   },
-  pages:{
+  pages: {
     secret: process.env.NEXTAUTH_SECRET,  // Aquí se añade el secret
     signIn: '/signin',
   }
