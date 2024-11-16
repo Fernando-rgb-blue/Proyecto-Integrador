@@ -295,11 +295,11 @@ const FUTForm = () => {
 
     return (
         <>
-            <div className="max-w-[800px] mx-auto bg-primary/30 dark:bg-slate-800 rounded-md p-4">
+            <div className="max-w-full sm:max-w-[800px] sm:mx-auto bg-primary/30 dark:bg-slate-800 rounded-md p-4 mt-8 mx-3">
                 <p>
                     Llene el formulario para colocar valores en el FUT.
                 </p>
-                <div className="mt-3 grid grid-cols-12 gap-4">
+                <div className="mt-3 grid grid-cols-1 gap-4">
                     <input
                         name="to"
                         type="text"
@@ -307,14 +307,14 @@ const FUTForm = () => {
                         onChange={handleInputChange}
                         placeholder="Dirigido a"
                         maxLength={70}
-                        className="col-span-8"
+                        className="w-full"
                     />
                     <input
                         name="date"
                         type="date"
                         value={formData.date}
                         onChange={handleInputChange}
-                        className="col-span-4"
+                        className="w-full sm:w-auto text-gray-400"
                     />
                     <input
                         name="name"
@@ -323,7 +323,7 @@ const FUTForm = () => {
                         onChange={handleInputChange}
                         placeholder="Apellidos y nombres"
                         maxLength={45}
-                        className="col-span-9"
+                        className="w-full"
                         autoComplete="off"
                     />
                     <input
@@ -333,7 +333,7 @@ const FUTForm = () => {
                         onChange={handleInputChange}
                         placeholder="DNI"
                         maxLength={10}
-                        className="col-span-3"
+                        className="w-full sm:w-auto"
                     />
                     <input
                         name="address"
@@ -342,7 +342,7 @@ const FUTForm = () => {
                         onChange={handleInputChange}
                         placeholder="Dirección"
                         maxLength={40}
-                        className="col-span-9"
+                        className="w-full"
                         autoComplete="off"
                     />
                     <input
@@ -352,7 +352,7 @@ const FUTForm = () => {
                         onChange={handleInputChange}
                         placeholder="Teléfono"
                         maxLength={12}
-                        className="col-span-3"
+                        className="w-full sm:w-auto"
                         autoComplete="off"
                     />
                     <input
@@ -361,12 +361,17 @@ const FUTForm = () => {
                         value={formData.email}
                         onChange={handleInputChange}
                         placeholder="Correo electrónico"
-                        className="col-span-5"
+                        className="w-full sm:w-auto"
                         autoComplete="off"
                     />
-                    <select name="role" onChange={handleInputChange} value={formData.role} className="col-span-3">
-                        <option className="selected hidden">Elija una opción</option>
-                        <option value="">Ninguno</option>
+                    <select
+                        name="role"
+                        onChange={handleInputChange}
+                        value={formData.role}
+                        className="w-full sm:w-auto text-gray-400"
+                    >
+                        <option value="">Elija una opción</option>
+                        {/* <option className="text-gray-500" value="">Ninguno</option> */}
                         <option value="alumno">Alumno</option>
                         <option value="docente">Docente</option>
                         <option value="administrativo">Administrativo</option>
@@ -378,7 +383,7 @@ const FUTForm = () => {
                         onChange={handleInputChange}
                         placeholder="N° Matrícula/Cod. Trabajador"
                         maxLength={12}
-                        className="col-span-4"
+                        className="w-full sm:w-auto"
                     />
                     <input
                         name="faculty"
@@ -387,7 +392,7 @@ const FUTForm = () => {
                         onChange={handleInputChange}
                         placeholder="De la facultad (u oficina) de"
                         maxLength={60}
-                        className="col-span-12"
+                        className="w-full"
                     />
                     <input
                         name="department"
@@ -396,7 +401,7 @@ const FUTForm = () => {
                         onChange={handleInputChange}
                         placeholder="Escuela o departamento"
                         maxLength={50}
-                        className="col-span-7"
+                        className="w-full sm:w-auto"
                     />
                     <input
                         name="semester"
@@ -404,7 +409,7 @@ const FUTForm = () => {
                         value={formData.semester}
                         onChange={handleInputChange}
                         placeholder="Ciclo o Año"
-                        className="col-span-5"
+                        className="w-full sm:w-auto"
                     />
                     <textarea
                         name="request"
@@ -413,109 +418,121 @@ const FUTForm = () => {
                         onChange={handleInputChange}
                         placeholder="Objeto de la solicitud"
                         maxLength={385}
-                        className="col-span-12"
+                        className="w-full"
                     />
                 </div>
-                <div className="flex gap-2 mt-4 justify-center">
+                <div className="flex flex-col sm:flex-row gap-2 mt-4 justify-center">
                     <label htmlFor="signing" className="my-auto">
                         Firma (en PNG)
                     </label>
-                    <input id="signing" type="file" accept=".png" onChange={handleImageChange} ref={signatureInput} />
+                    <input
+                        id="signing"
+                        type="file"
+                        accept=".png"
+                        onChange={handleImageChange}
+                        ref={signatureInput}
+                        className="block w-full sm:w-auto"
+                    />
                     {image && (
-                        <button className="primary p-1" onClick={handleResetInput}>
+                        <button className="primary p-1 mt-2 sm:mt-0 sm:ml-2" onClick={handleResetInput}>
                             Eliminar imagen
                         </button>
                     )}
                 </div>
             </div>
+
             <div className="mt-10 text-center">
                 <button className="primary p-4" onClick={writeToPDF}>
                     Descargar PDF
                 </button>
             </div>
-            <div className="mt-10 max-w-[900px] mx-auto bg-white mb-10">
-                <svg
-                    width="900"
-                    height="1200"
-                    viewBox="0 0 900 1200"
-                    xmlns="http://www.w3.org/2000/svg"
-                >
-                    <image
-                        href="/assets/fut/FUT_FINAL.svg"
-                        x="0"
-                        y="0"
+            
+
+            <div className="container mx-auto p-4">
+                <div className="mt-10 max-w-[900px] mx-auto bg-white mb-10 overflow-x-auto">
+                    <svg
                         width="900"
                         height="1200"
-                    />
-                    <text x="146" y="164" fontSize={17.2} fill="black">
-                        {formData.to}
-                    </text>
-                    <text x="502" y="133" fontSize={17.2} fill="black">
-                        {formalDate.day}
-                    </text>
-                    <text x="596" y="133" fontSize={17.2} fill="black">
-                        {formalDate.month}
-                    </text>
-                    <text x="767" y="133" fontSize={17.2} fill="black">
-                        {formalDate.year}
-                    </text>
-                    <text x="215" y="199" fontSize={17.2} fill="black">
-                        {formData.name}
-                    </text>
-                    <text x="690" y="199" fontSize={17.2} fill="black">
-                        {formData.dni}
-                    </text>
-                    <text x="144" y="235" fontSize={17.2} fill="black">
-                        {formData.address}
-                    </text>
-                    <text x="538" y="235" fontSize={17.2} fill="black">
-                        {formData.phone}
-                    </text>
-                    <text x="692" y="235" fontSize={11} fill="black">
-                        {formData.email}
-                    </text>
-                    {formData.role !== "" && (
-                        <text x={formData.role === 'alumno' ? "138" : (formData.role === 'docente' ? "458" : "597")} y="273" fontSize={30} fill="black">
-                            X
+                        viewBox="0 0 900 1200"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <image
+                            href="/assets/fut/FUT_FINAL.svg"
+                            x="0"
+                            y="0"
+                            width="900"
+                            height="1200"
+                        />
+                        <text x="146" y="164" fontSize={17.2} fill="black">
+                            {formData.to}
                         </text>
-                    )}
-                    <text x={(formData.role === 'alumno' || formData.role === '') ? "284" : "741"} y="273" fontSize={16} fill="black">
-                        {formData.code}
-                    </text>
-                    <text x="286" y="311" fontSize={17.2} fill="black">
-                        {formData.faculty}
-                    </text>
-                    <text x="188" y="340" fontSize={17.2} fill="black">
-                        {formData.department}
-                    </text>
-                    <text x="655" y="340" fontSize={17.2} fill="black">
-                        {formData.semester}
-                    </text>
-                    <text x="88" y="387" fontSize={16} fill="black">
-                        {lines.map((line, index) => (
-                            <tspan key={index} x="88" dy={index === 0 ? 0 : 30}>
-                                {line}
-                            </tspan>
-                        ))}
-                    </text>
-                    {image && (
-                        <image id="signature" href={image} x="60" y="585" width={200} height={100} />
-                    )}
+                        <text x="502" y="133" fontSize={17.2} fill="black">
+                            {formalDate.day}
+                        </text>
+                        <text x="596" y="133" fontSize={17.2} fill="black">
+                            {formalDate.month}
+                        </text>
+                        <text x="767" y="133" fontSize={17.2} fill="black">
+                            {formalDate.year}
+                        </text>
+                        <text x="215" y="199" fontSize={17.2} fill="black">
+                            {formData.name}
+                        </text>
+                        <text x="690" y="199" fontSize={17.2} fill="black">
+                            {formData.dni}
+                        </text>
+                        <text x="144" y="235" fontSize={17.2} fill="black">
+                            {formData.address}
+                        </text>
+                        <text x="538" y="235" fontSize={17.2} fill="black">
+                            {formData.phone}
+                        </text>
+                        <text x="692" y="235" fontSize={11} fill="black">
+                            {formData.email}
+                        </text>
+                        {formData.role !== "" && (
+                            <text x={formData.role === 'alumno' ? "138" : (formData.role === 'docente' ? "458" : "597")} y="273" fontSize={30} fill="black">
+                                X
+                            </text>
+                        )}
+                        <text x={(formData.role === 'alumno' || formData.role === '') ? "284" : "741"} y="273" fontSize={16} fill="black">
+                            {formData.code}
+                        </text>
+                        <text x="286" y="311" fontSize={17.2} fill="black">
+                            {formData.faculty}
+                        </text>
+                        <text x="188" y="340" fontSize={17.2} fill="black">
+                            {formData.department}
+                        </text>
+                        <text x="655" y="340" fontSize={17.2} fill="black">
+                            {formData.semester}
+                        </text>
+                        <text x="88" y="387" fontSize={16} fill="black">
+                            {lines.map((line, index) => (
+                                <tspan key={index} x="88" dy={index === 0 ? 0 : 30}>
+                                    {line}
+                                </tspan>
+                            ))}
+                        </text>
+                        {image && (
+                            <image id="signature" href={image} x="60" y="585" width={200} height={100} />
+                        )}
 
-                    <text x="215" y="811" fontSize={17.2} fill="black">
-                        {formData.name}
-                    </text>
-                    <text x="690" y="811" fontSize={17.2} fill="black">
-                        {formData.dni}
-                    </text>
-                    <text x="88" y="858" fontSize={16} fill="black">
-                        {lines.map((line, index) => (
-                            <tspan key={index} x="88" dy={index === 0 ? 0 : 28}>
-                                {line}
-                            </tspan>
-                        ))}
-                    </text>
-                </svg>
+                        <text x="215" y="811" fontSize={17.2} fill="black">
+                            {formData.name}
+                        </text>
+                        <text x="690" y="811" fontSize={17.2} fill="black">
+                            {formData.dni}
+                        </text>
+                        <text x="88" y="858" fontSize={16} fill="black">
+                            {lines.map((line, index) => (
+                                <tspan key={index} x="88" dy={index === 0 ? 0 : 28}>
+                                    {line}
+                                </tspan>
+                            ))}
+                        </text>
+                    </svg>
+                </div>
             </div>
         </>
     );
