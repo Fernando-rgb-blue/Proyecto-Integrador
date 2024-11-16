@@ -202,7 +202,6 @@ const ScheduleModal: React.FC<{
 
 
 
-
 const ScheduleTable: React.FC = () => {
   const [schedule, setSchedule] = useState<Array<Array<ScheduleItem | null>>>(Array.from({ length: 13 }, () => Array(5).fill(null)));
   const [modalVisible, setModalVisible] = useState(false);
@@ -239,9 +238,6 @@ const ScheduleTable: React.FC = () => {
     "08:00 PM a 09:00 PM",
   ];
 
-  const handleDeleteCourse = () => {
-
-  };
   const handleSearch = async () => {
     try {
       // Asegurarse de que todos los parámetros estén definidos

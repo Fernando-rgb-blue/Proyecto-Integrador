@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import Schedule from "@/models/scheduleadmin";
-import { connectDB } from "@/libs/mongodb";
+import Schedule from "@/models/scheduleadmin2";  // Importa el modelo que definiste
+import { connectDB } from "@/libs/mongodb";    // Importa la función para conectar a la base de datos
 
 // Función para manejar la solicitud GET (obtener un horario específico por ID)
 export async function GET(request: Request, { params }: { params: { id: string } }) {
@@ -76,38 +76,23 @@ export async function PUT(request: Request, { params }: { params: { id: string }
       {
         lunes: lunes.map((slot: any) => ({
           available: slot.available || 0,
-          course: slot.course || "",
-          professor: slot.professor || "",
-          classroom: slot.classroom || "",
-          activity: slot.activity || ""
+          courses: slot.courses || []
         })),
         martes: martes.map((slot: any) => ({
           available: slot.available || 0,
-          course: slot.course || "",
-          professor: slot.professor || "",
-          classroom: slot.classroom || "",
-          activity: slot.activity || ""
+          courses: slot.courses || []
         })),
         miercoles: miercoles.map((slot: any) => ({
           available: slot.available || 0,
-          course: slot.course || "",
-          professor: slot.professor || "",
-          classroom: slot.classroom || "",
-          activity: slot.activity || ""
+          courses: slot.courses || []
         })),
         jueves: jueves.map((slot: any) => ({
           available: slot.available || 0,
-          course: slot.course || "",
-          professor: slot.professor || "",
-          classroom: slot.classroom || "",
-          activity: slot.activity || ""
+          courses: slot.courses || []
         })),
         viernes: viernes.map((slot: any) => ({
           available: slot.available || 0,
-          course: slot.course || "",
-          professor: slot.professor || "",
-          classroom: slot.classroom || "",
-          activity: slot.activity || ""
+          courses: slot.courses || []
         }))
       },
       { new: true, runValidators: true } // Devuelve el documento actualizado y valida los datos

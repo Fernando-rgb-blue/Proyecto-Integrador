@@ -1,49 +1,43 @@
-import { NextResponse } from "next/server";
-import Schedule from "@/models/scheduleadmin";
+import { NextResponse } from 'next/server';
+import Schedule from "@/models/scheduleadmin2";
 import { connectDB } from "@/libs/mongodb";
 
-// Función para manejar la solicitud POST
-export async function POST(request: Request) {
-  const { id, slots } = await request.json();
+// Conectar a la base de datos
+connectDB();
 
-  // Verificación de campo requerido `id` y `slots`
-  if (!id || !slots) {
-    return NextResponse.json(
-      { message: "Los campos id y slots son requeridos." },
-      { status: 400 }
-    );
-  }
-
+// Obtener todos los horarios (GET)
+export async function GET() {
   try {
-    await connectDB();
-
-    // Crear un nuevo horario con el id proporcionado
-    const newSchedule = new Schedule({ _id: id, ...slots });
-    const savedSchedule = await newSchedule.save();
-
-    return NextResponse.json(savedSchedule, { status: 201 }); // 201 Created
+    const schedules = await Schedule.find();
+    return NextResponse.json(schedules, { status: 200 });
   } catch (error) {
-    console.log(error);
-    return NextResponse.json(
-      { message: error instanceof Error ? error.message : 'Error al crear el horario' },
-      { status: 500 }
-    );
+    return NextResponse.json({ message: 'Error al obtener los horarios', error }, { status: 500 });
   }
 }
 
-
-
-// Función para obtener todos los horarios
-export async function GET() {
+// Crear un nuevo horario (POST)
+export async function POST(req: Request) {
   try {
-    await connectDB();
-    const schedules = await Schedule.find({});
-    return NextResponse.json(schedules);
+    const scheduleData = await req.json();
+
+    // Verificar que cada día tenga 14 slots y que cada slot tenga el formato correcto
+    const daysOfWeek = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes'];
+    daysOfWeek.forEach(day => {
+      if (!scheduleData[day]) {
+        scheduleData[day] = Array(14).fill({ available: 0, courses: [{}] });
+      } else {
+        scheduleData[day].forEach(slot => {
+          if (!slot.courses) {
+            slot.courses = [{}];
+          }
+        });
+      }
+    });
+
+    const newSchedule = new Schedule(scheduleData);
+    await newSchedule.save();
+    return NextResponse.json(newSchedule, { status: 201 });
   } catch (error) {
-    console.log(error);
-    return NextResponse.json(
-      { message: error instanceof Error ? error.message : 'Error al obtener los horarios' },
-      { status: 400 }
-    );
+    return NextResponse.json({ message: 'Error al crear el horario', error }, { status: 500 });
   }
 }
