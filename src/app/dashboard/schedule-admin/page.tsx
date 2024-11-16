@@ -83,9 +83,7 @@ const ScheduleModal: React.FC<{
               ))}
             </select>
           </div>
-
-
-
+          
           <div className="mb-4">
             <label>Actividad</label>
             <select
@@ -98,8 +96,6 @@ const ScheduleModal: React.FC<{
               <option value="Teoría">Teoría</option>
             </select>
           </div>
-
-
 
           <div className="mb-4">
             <label>Aula</label>
