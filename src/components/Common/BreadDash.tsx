@@ -6,6 +6,8 @@ const Breadcrumb = () => {
     const { data: session, status } = useSession();
     const isAdmin = session?.user?.role === "admin";
     const isDocente = session?.user?.role === "profesor";
+    const isDirectorE = session?.user?.role === "directorE";
+    const isDirectorD = session?.user?.role === "directorD";
     
     return (
         <>
@@ -15,12 +17,12 @@ const Breadcrumb = () => {
                 <div className="w-full px-4 md:w-8/12 lg:w-7/12">
                 <div className="mb-8 max-w-[570px] md:mb-0 lg:mb-12">
                     <h1 className="mb-5 text-2xl font-bold text-black dark:text-white sm:text-3xl">
-                    Bienvenido {isAdmin ? "Administrador" : "Docente"}: {session?.user?.fullname}
+                    Bienvenido {(isDocente || isDirectorD ||  isDirectorE) ? "Docente" : "Administrador"}: {session?.user?.fullname}
                     </h1>
                     <p className="text-base font-medium leading-relaxed text-body-color">
-                        {isAdmin
-                    ? "Administra el sistema accediendo a las opciones de gestión."
-                    : "Cambia tu contraseña/Registre su horario"}
+                        {isDocente
+                    ? "Cambia tu contraseña/Registre su horario."
+                    : "Administra el sistema accediendo a las opciones de gestión."}
                     </p>
                 </div>
                 </div>

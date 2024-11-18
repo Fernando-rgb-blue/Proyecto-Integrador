@@ -11,6 +11,8 @@ const DashboardTabs = () => {
     const path = usePathname();
     const isAdmin2 = session?.user?.role === "admin";
     const isDocente = session?.user?.role === "profesor";
+    const isDirectorE = session?.user?.role === "directorE";
+    const isDirectorD = session?.user?.role === "directorD";
 
     const [mostrarCerrarSes, setMostrarCerrarSes] = useState(false);
 
@@ -42,6 +44,12 @@ const DashboardTabs = () => {
                     Cursos
                 </Link>
                 <Link
+                    className={`tab-link ${path === '/dashboard/classrooms' ? 'active' : ''}`}
+                    href="/dashboard/classrooms"
+                >
+                    Aulas
+                </Link>
+                <Link
                     className={`tab-link ${path === '/dashboard/schedule' ? 'active' : ''}`}
                     href="/dashboard/schedule"
                 >
@@ -62,6 +70,56 @@ const DashboardTabs = () => {
                     href="/dashboard/schedule"
                 >
                     Registrar Horario
+                </Link>
+            </>
+            )}
+            {isDirectorE && (
+            <>
+                <Link
+                    className={`tab-link ${path === '/dashboard/profile' ? 'active' : ''}`}
+                    href="/dashboard/profile"
+                >
+                    Perfil
+                </Link>
+                <Link
+                    className={`tab-link ${path === '/dashboard/schedule' ? 'active' : ''}`}
+                    href="/dashboard/schedule"
+                >
+                    Registrar Horario
+                </Link>
+                <Link
+                    className={`tab-link ${path === '/dashboard/schedule' ? 'active' : ''}`}
+                    href="/dashboard/schedule"
+                >
+                    Ver Horarios
+                </Link>
+                <Link
+                    className={`tab-link ${path === '/dashboard/schedule' ? 'active' : ''}`}
+                    href="/dashboard/schedule"
+                >
+                    Horario General
+                </Link>
+            </>
+            )}
+            {isDirectorD && (
+            <>
+                <Link
+                    className={`tab-link ${path === '/dashboard/profile' ? 'active' : ''}`}
+                    href="/dashboard/profile"
+                >
+                    Perfil
+                </Link>
+                <Link
+                    className={`tab-link ${path === '/dashboard/schedule' ? 'active' : ''}`}
+                    href="/dashboard/schedule"
+                >
+                    Registrar Horario
+                </Link>
+                <Link
+                    className={`tab-link ${path === '/dashboard/asigdocentes' ? 'active' : ''}`}
+                    href="/dashboard/asigdocentes"
+                >
+                    Asignar Cursos
                 </Link>
             </>
             )}
