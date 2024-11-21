@@ -44,8 +44,8 @@ const DashboardTabs = () => {
                     Cursos
                 </Link>
                 <Link
-                    className={`tab-link ${path === '/dashboard/classrooms' ? 'active' : ''}`}
-                    href="/dashboard/classrooms"
+                    className={`tab-link ${path === '/dashboard/classroom' ? 'active' : ''}`}
+                    href="/dashboard/classroom"
                 >
                     Aulas
                 </Link>
