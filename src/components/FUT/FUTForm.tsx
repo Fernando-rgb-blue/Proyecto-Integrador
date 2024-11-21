@@ -126,14 +126,29 @@ const FUTForm = () => {
         if (image) {
             const signatureImageBytes = await fetch(image).then((res) => res.arrayBuffer());
             const signatureImage = await pdfDoc.embedPng(signatureImageBytes);
-            const signatureImageDims = signatureImage.scale(0.24);
+            const size = 120;
+            if (signatureImage.width > signatureImage.height) {
+                const scaleFactor = size / signatureImage.width;
+                const heightScaled = signatureImage.height * scaleFactor;
 
-            firstPage.drawImage(signatureImage, {
-                x: 24,
-                y: 367,
-                width: signatureImageDims.width,
-                height: signatureImageDims.height
-            });
+                firstPage.drawImage(signatureImage, {
+                    x: 41,
+                    y: 368,
+                    width: size,
+                    height: heightScaled
+                });
+            } else {
+                const scaleFactor = size / signatureImage.height;
+                const widthScaled = signatureImage.width * scaleFactor;
+                const xValue = 40 + (size / 2) - (widthScaled / 2);
+
+                firstPage.drawImage(signatureImage, {
+                    x: xValue,
+                    y: 340,
+                    width: widthScaled,
+                    height: size
+                });
+            }
         }
         
         firstPage.drawText(formalDate.day, {
@@ -370,8 +385,7 @@ const FUTForm = () => {
                         value={formData.role}
                         className="w-full sm:w-auto text-gray-400"
                     >
-                        <option value="">Elija una opción</option>
-                        {/* <option className="text-gray-500" value="">Ninguno</option> */}
+                        <option value="">Elija un rol</option>
                         <option value="alumno">Alumno</option>
                         <option value="docente">Docente</option>
                         <option value="administrativo">Administrativo</option>
@@ -515,7 +529,7 @@ const FUTForm = () => {
                             ))}
                         </text>
                         {image && (
-                            <image id="signature" href={image} x="60" y="585" width={200} height={100} />
+                            <image id="signature" href={image} x="77" y="536" width={180} height={180} />
                         )}
 
                         <text x="215" y="811" fontSize={17.2} fill="black">

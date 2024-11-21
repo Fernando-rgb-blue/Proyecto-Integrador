@@ -42,7 +42,7 @@ const TeacherForm = ({ onSubmit, teacher, setShowPopup }: TeacherFormProps) => {
     };
 }, []);
 
-    const handleInputChange = (ev: ChangeEvent<HTMLInputElement>) => {
+    const handleInputChange = (ev: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { id, value } = ev.target;
         setFormData({
             ...formData,
@@ -158,16 +158,20 @@ const TeacherForm = ({ onSubmit, teacher, setShowPopup }: TeacherFormProps) => {
                             onChange={handleInputChange}
                             className="p-2 mt-1 mb-5 border rounded"
                         />
-                        <div className="flex gap-2">
-                            <input
-                                id="role"
-                                type="checkbox"
-                                checked={formData.role === "admin"}
-                                onChange={() => setFormData({...formData, "role": formData.role === "admin" ? "profesor" : "admin"})}
-                            />
+                        <div className="flex flex-col mb-3">
                             <label htmlFor="role">
-                                Rol de administrador
+                                Rol de la cuenta
                             </label>
+                            <select
+                                id="role"
+                                onChange={handleInputChange}
+                                value={formData.role}
+                            >
+                                <option value="profesor" className="selected">Profesor</option>
+                                <option value="admin">Administrador</option>
+                                <option value="directorE">Director de escuela</option>
+                                <option value="directorD">Director de departamento</option>
+                            </select>
                         </div>
                         <div className="flex gap-2 mt-2">
                             <input

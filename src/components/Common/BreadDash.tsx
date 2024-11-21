@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
-const Breadcrumb = () => {
+const BreadDash = () => {
     const { data: session, status } = useSession();
     const isAdmin = session?.user?.role === "admin";
     const isDocente = session?.user?.role === "profesor";
@@ -125,4 +125,4 @@ const Breadcrumb = () => {
     );
 };
 
-export default Breadcrumb;
+export default BreadDash;
