@@ -11,7 +11,7 @@ const Barra = ({ convenios }: { convenios: Convenios }) => {
             href={ubicacion.direccionurl} target="_blank"
             className="relative block aspect-[37/22] w-full"
             >
-            <Image src={image} alt="image" fill />
+            <Image src={image} alt="image" fill sizes="(max-width: 768px) 100vw, 50vw"/>
             </Link>
             <div className="p-6 sm:p-8 md:px-6 md:py-8 lg:p-8 xl:px-5 xl:py-8 2xl:p-8">
             <h3>
@@ -29,7 +29,7 @@ const Barra = ({ convenios }: { convenios: Convenios }) => {
                 <div className="mr-5 flex items-center border-r border-body-color border-opacity-10 pr-5 dark:border-white dark:border-opacity-10 xl:mr-3 xl:pr-3 2xl:mr-5 2xl:pr-5">
                 <div className="mr-4">
                     <div className="relative h-10 w-10 overflow-hidden rounded-full">
-                    <Image src={ubicacion.image} alt="author" fill />
+                    <Image src={ubicacion.image} alt="pais" fill sizes="(max-width: 768px) 100vw, 50vw"/>
                     </div>
                 </div>
                 <div className="w-full">
@@ -41,7 +41,7 @@ const Barra = ({ convenios }: { convenios: Convenios }) => {
                 </div>
                 <div className="inline-block">
                 <h4 className="mb-1 text-sm font-medium text-dark dark:text-white">
-                    Desde
+                    Creado en
                 </h4>
                 <p className="text-xs text-body-color">{publishDate}</p>
                 </div>

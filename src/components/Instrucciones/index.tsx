@@ -2,23 +2,13 @@
 //Permite modificar el el contenido de 'N° PASO (orden)' y el contrnido de cada paso (subtitle)
 
 "use client";
-import { useState } from "react";
-import SectionTitle from "../Common/SectionTitle";
 import Pasos from "./Pasos";
 
 const Content = () => {
 
   return (
-    <section className="relative z-10 py-24 md:py-28 lg:py-32 xl:py-40">
+    <section className="relative z-10 py-8 md:py-28 lg:py-6 xl:py-9">
       <div className="container">
-        <SectionTitle
-          title="Instrucciones Para Matrícula Online"
-          paragraph="Escuela de Informática"
-          center
-          width="900px"
-        />
-
-
         <div className="grid grid-cols-1 gap-x-8 gap-y-10  md:grid-cols-2 lg:grid-cols-3 ">
           <Pasos
             orden="1° Paso"

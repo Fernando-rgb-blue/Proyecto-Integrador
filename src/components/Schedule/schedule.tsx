@@ -121,47 +121,61 @@ const ScheduleTable: React.FC = () => {
   if (!session) return <div>No estás autenticado. Por favor, inicia sesión.</div>;
 
   return (
-    <div className="container mx-auto mt-10 mb-10 p-4">
-      <div className="overflow-x-auto sm:flex sm:flex-wrap justify-center ">
-        <table className="w-full sm:w-11/12 md:w-8/12 table-auto border-collapse border border-gray-300">
-          <thead>
-            <tr>
-              <th className="bg-blue-800 text-white p-3 text-xs sm:text-base border border-gray-300 w-1/6">HORARIO</th>
-              {days.map((day, index) => (
-                <th key={index} className="bg-blue-800 text-white p-3 text-xs sm:text-base border border-gray-300 w-1/6">
-                  {day}
+    <>
+      <div className="container w-full sm:w-11/12 md:w-8/12 mx-auto">
+        <p className="text-center mb-6 text-base font-medium leading-relaxed text-body-color sm:text-lg sm:leading-relaxed lg:text-base lg:leading-relaxed xl:text-lg xl:leading-relaxed">
+          Profesores a tiempo completo guardar 20 horas, profesores a tiempo parcial guardar 15 horas.
+        </p>
+        <div className="overflow-x-auto">
+          <table className="w-full table-auto border-collapse border border-gray-300">
+            <thead>
+              <tr>
+                <th className="bg-blue-800 text-white p-3 text-xs sm:text-base border border-gray-300 w-1/6">
+                  HORARIO
                 </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {hours.map((hour, hourIndex) => (
-              <tr key={hourIndex}>
-                <td className="p-3 text-xs sm:text-base border border-gray-300 bg-blue-50 text-center whitespace-nowrap w-1/6 dark:bg-dark">
-                  {hour}
-                </td>
-                {days.map((_, dayIndex) => {
-                  const isSelected = schedule[dayIndex][hourIndex] === 1;
-                  const isSavedCell = isSelected && isSaved;
-                  return (
-                    <td
-                      key={dayIndex}
-                      className={`p-3 border border-gray-300 text-center cursor-pointer text-xs dark:bg-dark sm:text-base ${
-                        isSavedCell ? 'bg-blue-400 dark:bg-gray-500' : isSelected ? 'bg-blue-300 dark:bg-gray-500' : 'bg-blue-50'
-                      }`}
-                      onClick={() => toggleCellSelection(dayIndex, hourIndex)}
-                    />
-                  );
-                })}
+                {days.map((day, index) => (
+                  <th
+                    key={index}
+                    className="bg-blue-800 text-white p-3 text-xs sm:text-base border border-gray-300 w-1/6"
+                  >
+                    {day}
+                  </th>
+                ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {hours.map((hour, hourIndex) => (
+                <tr key={hourIndex}>
+                  <td className="p-3 text-xs sm:text-base border border-gray-300 bg-blue-50 text-center whitespace-nowrap w-1/6 dark:bg-dark">
+                    {hour}
+                  </td>
+                  {days.map((_, dayIndex) => {
+                    const isSelected = schedule[dayIndex][hourIndex] === 1;
+                    const isSavedCell = isSelected && isSaved;
+                    return (
+                      <td
+                        key={dayIndex}
+                        className={`p-3 border border-gray-300 text-center cursor-pointer text-xs dark:bg-dark sm:text-base ${
+                          isSavedCell
+                            ? "bg-blue-400 dark:bg-gray-500"
+                            : isSelected
+                            ? "bg-blue-300 dark:bg-gray-500"
+                            : "bg-blue-50"
+                        }`}
+                        onClick={() => toggleCellSelection(dayIndex, hourIndex)}
+                      />
+                    );
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
-      <div className="flex justify-center">
+      <div className="container mx-auto flex justify-center mt-6 mb-10">
         <button
           onClick={handleSave}
-          className="mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm sm:text-base font-semibold rounded shadow-md"
+          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm sm:text-base font-semibold rounded shadow-md"
         >
           Guardar Horario
         </button>
@@ -169,7 +183,8 @@ const ScheduleTable: React.FC = () => {
 
       {modalVisible && (
         <div
-        className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50" onClick={closeModal}
+          className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50"
+          onClick={closeModal}
         >
           <div
             className="bg-white p-6 rounded-md shadow-md text-center"
@@ -208,13 +223,18 @@ const ScheduleTable: React.FC = () => {
             <p className="text-lg text-dark">{modalMessage}</p>
             <button
               onClick={closeModal}
-              className={`mt-4 px-4 py-2 ${isError ? "bg-red-500 hover:bg-red-600" : "bg-green-500 hover:bg-green-600"} text-white rounded`}
+              className={`mt-4 px-4 py-2 ${
+                isError
+                  ? "bg-red-500 hover:bg-red-600"
+                  : "bg-green-500 hover:bg-green-600"
+              } text-white rounded`}
             >
               OK
             </button>
           </div>
         </div>
       )}
+
       <style jsx>{`
         @keyframes draw-circle {
           from {
@@ -225,7 +245,9 @@ const ScheduleTable: React.FC = () => {
           }
         }
       `}</style>
-    </div>
+    </>
+
+    
   );
 };
 

@@ -1,5 +1,4 @@
-import SharePost from "@/components/Blog/SharePost";
-import TagButton from "@/components/Blog/TagButton";
+import Breadcrumb from "@/components/Common/Breadcrumb";
 import Image from "next/image";
 
 import { Metadata } from "next";
@@ -13,14 +12,15 @@ export const metadata: Metadata = {
 const BlogDetailsPage = () => {
   return (
     <>
-      <section className="pb-[120px] pt-[150px]">
+      <Breadcrumb
+        pageName="Perfil del Egresado"
+        description="Son las capacidades, los conocimientos y habilidades que debe haber adquirido el alumnado al finalizar la titulación."
+      />
+      <section className="pb-[80px] pt-[70px]">
         <div className="container">
           <div className="-mx-4 flex flex-wrap justify-center">
             <div className="w-full px-4 lg:w-8/12">
               <div>
-                <h2 className="mb-8 text-3xl font-bold leading-tight text-black dark:text-white sm:text-4xl sm:leading-tight">
-                  Perfil del Egresado
-                </h2>
                 <div>
                   <h3 className="font-xl mb-10 font-bold leading-tight text-black dark:text-white sm:text-2xl sm:leading-tight lg:text-xl lg:leading-tight xl:text-2xl xl:leading-tight">
                     Unidad de Competencia 1

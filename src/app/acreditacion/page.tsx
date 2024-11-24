@@ -1,6 +1,7 @@
 
 import Image from "next/image";
 import Documentos from "@/components/Documentos";
+import Breadcrumb from "@/components/Common/Breadcrumb";
 
 import { Metadata } from "next";
 
@@ -13,13 +14,17 @@ export const metadata: Metadata = {
 const AcreditacionPage = () => {
     return (
         <>
-        <section className="pb-[80px] pt-[120px]">
+        <Breadcrumb
+        pageName="Acreditación"
+        description="Proceso mediante el cual una entidad evaluadora verifica si una institución educativa o un programa cumple con ciertos criterios de calidad."
+        />
+        <section className="pb-[80px] pt-[70px]">
             <div className="container">
                 <div className="-mx-4 flex flex-wrap justify-center">
                     <div className="w-full px-4 lg:w-8/12">
                         <div>
                             <h2 className="mb-8 text-3xl font-bold leading-tight text-black dark:text-white sm:text-4xl sm:leading-tight">
-                            Acreditación del Programa de <br/> Estudios de Informática (ICACIT)
+                            Programa de Estudios de Informática (ICACIT)
                             </h2>
                             <div>
                             {/* <h3 className="font-xl mb-10 font-bold leading-tight text-black dark:text-white sm:text-2xl sm:leading-tight lg:text-xl lg:leading-tight xl:text-2xl xl:leading-tight">

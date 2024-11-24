@@ -43,6 +43,7 @@ const Video = () => {
                   src="/images/video/Fondovideo2.png"
                   alt="video image"
                   fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
                 />
                 <div className="absolute right-0 top-0 flex h-full w-full items-center justify-center">
                   <button

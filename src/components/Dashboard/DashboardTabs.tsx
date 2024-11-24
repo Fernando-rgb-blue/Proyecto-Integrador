@@ -116,6 +116,12 @@ const DashboardTabs = () => {
                     Registrar Horario
                 </Link>
                 <Link
+                    className={`tab-link ${path === '/dashboard/docentes' ? 'active' : ''}`}
+                    href="/dashboard/docentes"
+                >
+                    Docentes
+                </Link>
+                <Link
                     className={`tab-link ${path === '/dashboard/asigdocentes' ? 'active' : ''}`}
                     href="/dashboard/asigdocentes"
                 >
