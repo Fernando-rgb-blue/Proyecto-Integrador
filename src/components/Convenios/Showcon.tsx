@@ -60,46 +60,71 @@ const Conveniosf = () => {
 
                 <div className="-mx-4 flex flex-wrap" data-wow-delay=".15s">
                     <div className="w-full px-4">
-                    <ul className="flex items-center justify-center pt-8">
+                        <ul className="flex items-center justify-center pt-8">
                         <li className="mx-1">
-                        <button
+                            <a
+                            href="https://drive.google.com/file/d/1dHYYZTPzsbcxSTuh8tqd5RWBRVJAwQUw/view"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex h-9 min-w-[36px] items-center justify-center rounded-md px-4 text-sm transition bg-body-color bg-opacity-[15%] text-body-color hover:bg-primary hover:bg-opacity-100 hover:text-white"
+                            >
+                            Internacionales
+                            </a>
+                        </li>
+                        
+
+                        {/* Botones de navegación */}
+                        <li className="mx-1">
+                            <button
                             onClick={() => setCurrentPage(1)}
                             className={`flex h-9 min-w-[36px] items-center justify-center rounded-md px-4 text-sm transition ${
-                            currentPage === 1
+                                currentPage === 1
                                 ? "bg-primary text-white"
                                 : "bg-body-color bg-opacity-[15%] text-body-color hover:bg-primary hover:bg-opacity-100 hover:text-white"
                             }`}
-                        >
+                            >
                             1
-                        </button>
+                            </button>
                         </li>
                         <li className="mx-1">
-                        <button
+                            <button
                             onClick={() => setCurrentPage(2)}
                             className={`flex h-9 min-w-[36px] items-center justify-center rounded-md px-4 text-sm transition ${
-                            currentPage === 2
+                                currentPage === 2
                                 ? "bg-primary text-white"
                                 : "bg-body-color bg-opacity-[15%] text-body-color hover:bg-primary hover:bg-opacity-100 hover:text-white"
                             }`}
-                        >
+                            >
                             2
-                        </button>
+                            </button>
                         </li>
-                        <li className="mx-1">
-                        <button
+                        {/* <li className="mx-1">
+                            <button
                             onClick={() => setCurrentPage(3)}
                             className={`flex h-9 min-w-[36px] items-center justify-center rounded-md px-4 text-sm transition ${
-                            currentPage === 3
+                                currentPage === 3
                                 ? "bg-primary text-white"
                                 : "bg-body-color bg-opacity-[15%] text-body-color hover:bg-primary hover:bg-opacity-100 hover:text-white"
                             }`}
-                        >
+                            >
                             3
-                        </button>
-                        </li>
-                    </ul>
+                            </button>
+                        </li> */}
+                        {/* Botón Nacionales */}
+                        <li className="mx-1">
+                            <a
+                            href="https://drive.google.com/file/d/1odc_LByuuH01YE8bmp8ArxVrMjedGjNx/view"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex h-9 min-w-[36px] items-center justify-center rounded-md px-4 text-sm transition bg-body-color bg-opacity-[15%] text-body-color hover:bg-primary hover:bg-opacity-100 hover:text-white"
+                            >
+                            Nacionales
+                            </a>
+                        </li>            
+                        
+                        </ul>
                     </div>
-                </div>
+                    </div>
             </div>
         </section>
         </>
