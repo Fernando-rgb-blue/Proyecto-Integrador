@@ -2,8 +2,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-// 'courses' es un arreglo de 'professor', 'activity', y 'classroom', es lo inicial
-
 interface ScheduleItem {
   _id?: string;
   available: number;
@@ -17,12 +15,13 @@ interface ScheduleItem {
 
 //  Inicio del modal para agregar, editar, borrar
 
+// Componente ScheduleModal actualizado
 const ScheduleModal: React.FC<{
   visible: boolean;
   onClose: () => void;
   onSubmit: (data: ScheduleItem) => void;
   onDelete: () => void;
-  onDeleteCourse: (index: number) => void; // -> Borar curso
+  onDeleteCourse: (index: number) => void;
   initialData?: ScheduleItem | null;
   courses: string[];
 }> = ({ visible, onClose, onSubmit, onDelete, onDeleteCourse, initialData, courses }) => {
@@ -31,6 +30,7 @@ const ScheduleModal: React.FC<{
       { course: "", professor: "", activity: "", classroom: "" }
     ]
   );
+  const [classrooms, setClassrooms] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -40,7 +40,19 @@ const ScheduleModal: React.FC<{
     }
   }, [visible, initialData]);
 
-  // Extraer solo el nombre del profesor // Si pasa {curso}/{profesor}, solo quedarse con el nombre del profesor
+  useEffect(() => {
+    const fetchClassrooms = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/api/classroom/");
+        const classroomNames = response.data.map((room: { name: string }) => room.name);
+        setClassrooms(classroomNames);
+      } catch (error) {
+        console.error("Error al cargar las aulas:", error);
+      }
+    };
+
+    fetchClassrooms();
+  }, []);
 
   const handleCourseChange = (index: number, field: string, value: string) => {
     const updatedCourses = [...courseData];
@@ -76,9 +88,9 @@ const ScheduleModal: React.FC<{
 
   const handleDeleteCourse = (index: number) => {
     const updatedCourses = [...courseData];
-    updatedCourses.splice(index, 1); // Eliminar el curso seleccionado
+    updatedCourses.splice(index, 1);
     setCourseData(updatedCourses);
-    onDeleteCourse(index); // Llamar a la función para eliminar el curso (si es necesario)
+    onDeleteCourse(index);
   };
 
   return (
@@ -98,9 +110,7 @@ const ScheduleModal: React.FC<{
                 <label>Curso</label>
                 <select
                   value={course.course}
-                  onChange={(e) => {
-                    handleCourseChange(index, "course", e.target.value); // Actualizar curso
-                  }}
+                  onChange={(e) => handleCourseChange(index, "course", e.target.value)}
                   className="border rounded w-full"
                 >
                   <option value="">Seleccione un curso</option>
@@ -137,12 +147,18 @@ const ScheduleModal: React.FC<{
 
               <div className="mb-4">
                 <label>Aula</label>
-                <input
-                  type="text"
+                <select
                   value={course.classroom}
                   onChange={(e) => handleCourseChange(index, "classroom", e.target.value)}
                   className="border rounded w-full"
-                />
+                >
+                  <option value="">Seleccione un aula</option>
+                  {classrooms.map((classroom, i) => (
+                    <option key={i} value={classroom}>
+                      {classroom}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               {courseData.length > 1 && (
@@ -188,7 +204,10 @@ const ScheduleModal: React.FC<{
   );
 };
 
+
+
 // Fin del modal
+
 
 
 // Inicio del cuadro de horario
@@ -243,11 +262,11 @@ const ScheduleTable: React.FC = () => {
         throw new Error('Error al buscar el horario');
       }
       const data = await response.json();
-      setHorarioID(data._id); // Asignar el ID del horario
-      setError(''); // Limpiar error si hay
+      setHorarioID(data._id); 
+      setError(''); 
     } catch (err) {
       setError(err.message || 'Error al buscar el horario');
-      setHorarioID(null); // Limpiar ID en caso de error
+      setHorarioID(null); 
     }
   };
 
@@ -255,10 +274,10 @@ const ScheduleTable: React.FC = () => {
     const fetchSchedule = async () => {
       if (!horarioID) return;
       try {
-        // Mostrar horario de la base de datos
+
         const response = await axios.get(`/api/scheduleadmin/${horarioID}`);
         const data = response.data;
-        // Validar si el horario tiene datos completos
+
         const requiredDays = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes'];
         const hasCompleteData = requiredDays.every(day =>
           data && data[day] && Array.isArray(data[day])
@@ -289,7 +308,7 @@ const ScheduleTable: React.FC = () => {
   // Función para crear un nuevo horario // En base a la estructura de la api
 
   const createNewSchedule = async (id) => {
-    
+
     const newSchedule = {
       _id: id, // Usar el ID encontrado
       lunes: Array.from({ length: 13 }, () => ({
@@ -374,7 +393,7 @@ const ScheduleTable: React.FC = () => {
               classroom: course.classroom || "",
               activity: course.activity || ""
             })),
-            available: item.available || 0, // Incluye `available` como parte del objeto
+            available: item.available || 0, 
           };
         }
       });
@@ -388,7 +407,7 @@ const ScheduleTable: React.FC = () => {
       const { dayIndex, hourIndex } = cellIndex;
       const updatedSchedule = [...schedule];
 
-      // Actualizar la celda seleccionada
+
       updatedSchedule[hourIndex][dayIndex] = { available: 1, ...data };
 
       // Actualizar la celda directamente debajo de la seleccionada (si existe)
@@ -548,7 +567,7 @@ const ScheduleTable: React.FC = () => {
       {/* Fin de fila de busqueda por ciclo*/}
 
       {/* Cuadro de horario */}
-      
+
       <div className="container mx-auto mt-10 mb-10 p-4" style={{ marginTop: '1cm' }}>
         <div className="overflow-x-auto sm:flex sm:flex-wrap justify-center">
           <table className="w-full sm:w-11/12 md:w-8/12 table-auto border-collapse border border-gray-300">
@@ -602,7 +621,7 @@ const ScheduleTable: React.FC = () => {
           </table>
         </div>
       </div>
-      
+
       {/* Boton de guardado */}
 
       <div className="mt-4 flex justify-center">
