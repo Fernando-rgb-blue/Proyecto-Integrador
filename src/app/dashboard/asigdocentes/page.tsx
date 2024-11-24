@@ -223,6 +223,7 @@ const CoursesList = () => {
       <DashboardTabs />
       <div className="container mx-auto px-4 pb-9 sm:px-6 lg:px-8 mt-4">
         <div className="mb-6">
+          
           <label htmlFor="docentes" className="block text-lg font-medium mb-2">
             Docente
           </label>
