@@ -5,21 +5,26 @@ import { useSession } from "next-auth/react";
 
 const ScheduleTable: React.FC = () => {
   const { data: session, status } = useSession();
-  const [schedule, setSchedule] = useState<number[][]>(Array.from({ length: 5 }, () => Array(14).fill(0)));
+  const [schedule, setSchedule] = useState<number[][]>(Array.from({ length: 5 }, () => Array(15).fill(0)));
   const [scheduleId, setScheduleId] = useState<string | null>(null);
   const [isSaved, setIsSaved] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const [isError, setIsError] = useState(false);
   const userId = session?.user?._id;
+
+  
   const days = ["LUNES", "MARTES", "MIÉRCOLES", "JUEVES", "VIERNES"];
+
   const hours = [
     "07:00 AM a 08:00 AM", "08:00 AM a 09:00 AM", "09:00 AM a 10:00 AM", 
     "10:00 AM a 11:00 AM", "11:00 AM a 12:00 PM", "12:00 PM a 01:00 PM", 
-    "01:00 PM a 02:00 PM", "03:00 PM a 04:00 PM", "04:00 PM a 05:00 PM", 
-    "05:00 PM a 06:00 PM", "06:00 PM a 07:00 PM", "07:00 PM a 08:00 PM", 
-    "08:00 PM a 09:00 PM",
+    "01:00 PM a 02:00 PM", "02:00 PM a 03:00 PM",
+    "03:00 PM a 04:00 PM", "04:00 PM a 05:00 PM", 
+    "05:00 PM a 06:00 PM", "06:00 PM a 07:00 PM", 
+    "07:00 PM a 08:00 PM", "08:00 PM a 09:00 PM",
   ];
+  
 
   useEffect(() => {
     const fetchSchedule = async () => {

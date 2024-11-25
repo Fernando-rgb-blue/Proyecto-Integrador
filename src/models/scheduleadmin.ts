@@ -29,11 +29,11 @@ const TimeSlotSchema = new Schema<ITimeSlot>({
 // Definir el esquema de Schedule
 const ScheduleSchema: Schema = new Schema({
   _id: { type: String, required: true },  // Definir el _id como un campo obligatorio
-  lunes: { type: [TimeSlotSchema], default: Array(14).fill({}) },       // 14 slots para horas en lunes
-  martes: { type: [TimeSlotSchema], default: Array(14).fill({}) },      // Array para martes
-  miercoles: { type: [TimeSlotSchema], default: Array(14).fill({}) },   // Array para miércoles
-  jueves: { type: [TimeSlotSchema], default: Array(14).fill({}) },      // Array para jueves
-  viernes: { type: [TimeSlotSchema], default: Array(14).fill({}) }      // Array para viernes
+  lunes: { type: [TimeSlotSchema], default: Array(15).fill({}) },       // 14 slots para horas en lunes
+  martes: { type: [TimeSlotSchema], default: Array(15).fill({}) },      // Array para martes
+  miercoles: { type: [TimeSlotSchema], default: Array(15).fill({}) },   // Array para miércoles
+  jueves: { type: [TimeSlotSchema], default: Array(15).fill({}) },      // Array para jueves
+  viernes: { type: [TimeSlotSchema], default: Array(15).fill({}) }      // Array para viernes
 });
 
 // Exportar el modelo con el nombre de la colección 'scheduleAdmin'

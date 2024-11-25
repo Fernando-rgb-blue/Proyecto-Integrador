@@ -254,7 +254,7 @@ const ScheduleModal: React.FC<{
 
 
 const ScheduleTable: React.FC = () => {
-  const [schedule, setSchedule] = useState<Array<Array<ScheduleItem | null>>>(Array.from({ length: 13 }, () => Array(5).fill(null)));
+  const [schedule, setSchedule] = useState<Array<Array<ScheduleItem | null>>>(Array.from({ length: 14 }, () => Array(5).fill(null)));
   const [modalVisible, setModalVisible] = useState(false);
   const [cellIndex, setCellIndex] = useState<{ dayIndex: number; hourIndex: number } | null>(null);
   const [loading, setLoading] = useState(true);
@@ -278,12 +278,14 @@ const ScheduleTable: React.FC = () => {
   const optionsPeriodo = ['I', 'II'];
   const filteredCiclos = periodo ? optionsCiclo[periodo] : [];
   const days = ["LUNES", "MARTES", "MIÉRCOLES", "JUEVES", "VIERNES"];
+  
   const hours = [
-    "07:00 - 08:00 AM", "08:00 - 09:00 AM", "09:00 - 10:00 AM",
-    "10:00 - 11:00 AM", "11:00 - 12:00 PM", "12:00 - 01:00 PM",
-    "01:00 - 02:00 PM", "03:00 - 04:00 PM", "04:00 - 05:00 PM",
-    "05:00 - 06:00 PM", "06:00 - 07:00 PM", "07:00 - 08:00 PM",
-    "08:00 - 09:00 PM",
+    "07:00 AM a 08:00 AM", "08:00 AM a 09:00 AM", "09:00 AM a 10:00 AM", 
+    "10:00 AM a 11:00 AM", "11:00 AM a 12:00 PM", "12:00 PM a 01:00 PM", 
+    "01:00 PM a 02:00 PM", "02:00 PM a 03:00 PM",
+    "03:00 PM a 04:00 PM", "04:00 PM a 05:00 PM", 
+    "05:00 PM a 06:00 PM", "06:00 PM a 07:00 PM", 
+    "07:00 PM a 08:00 PM", "08:00 PM a 09:00 PM",
   ];
 
 
@@ -363,7 +365,7 @@ const ScheduleTable: React.FC = () => {
 
     const newSchedule = {
       _id: id, // Usar el ID encontrado
-      lunes: Array.from({ length: 13 }, () => ({
+      lunes: Array.from({ length: 14 }, () => ({
         available: 0,
         courses: [
           {
@@ -371,7 +373,7 @@ const ScheduleTable: React.FC = () => {
           },
         ],
       })),
-      martes: Array.from({ length: 13 }, () => ({
+      martes: Array.from({ length: 14 }, () => ({
         available: 0,
         courses: [
           {
@@ -379,7 +381,7 @@ const ScheduleTable: React.FC = () => {
           },
         ],
       })),
-      miercoles: Array.from({ length: 13 }, () => ({
+      miercoles: Array.from({ length: 14 }, () => ({
         available: 0,
         courses: [
           {
@@ -387,7 +389,7 @@ const ScheduleTable: React.FC = () => {
           },
         ],
       })),
-      jueves: Array.from({ length: 13 }, () => ({
+      jueves: Array.from({ length: 14 }, () => ({
         available: 0,
         courses: [
           {
@@ -395,7 +397,7 @@ const ScheduleTable: React.FC = () => {
           },
         ],
       })),
-      viernes: Array.from({ length: 13 }, () => ({
+      viernes: Array.from({ length: 14 }, () => ({
         available: 0,
         courses: [
           {
@@ -408,7 +410,7 @@ const ScheduleTable: React.FC = () => {
 
     await axios.post('/api/scheduleadmin', newSchedule);
     setSchedule(
-      Array.from({ length: 13 }, () =>
+      Array.from({ length: 14 }, () =>
         Array(5).fill({
           courses: [
             {
@@ -792,6 +794,8 @@ const ScheduleTable: React.FC = () => {
                   );
                 })}
               </tbody>
+
+
             </table>
           </div>
         </div>
