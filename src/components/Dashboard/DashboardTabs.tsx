@@ -50,8 +50,8 @@ const DashboardTabs = () => {
                     Aulas
                 </Link>
                 <Link
-                    className={`tab-link ${path === '/dashboard/schedule' ? 'active' : ''}`}
-                    href="/dashboard/schedule"
+                    className={`tab-link ${path === '/dashboard/schedule-Docentes' ? 'active' : ''}`}
+                    href="/dashboard/schedule-Docentes"
                 >
                     Ver Horarios
                 </Link>
@@ -69,7 +69,7 @@ const DashboardTabs = () => {
                     className={`tab-link ${path === '/dashboard/schedule' ? 'active' : ''}`}
                     href="/dashboard/schedule"
                 >
-                    Registrar Horario
+                    Registrar mi Horario
                 </Link>
             </>
             )}
@@ -85,17 +85,17 @@ const DashboardTabs = () => {
                     className={`tab-link ${path === '/dashboard/schedule' ? 'active' : ''}`}
                     href="/dashboard/schedule"
                 >
-                    Registrar Horario
+                    Registrar mi Horario
                 </Link>
                 <Link
-                    className={`tab-link ${path === '/dashboard/schedule' ? 'active' : ''}`}
-                    href="/dashboard/schedule"
+                    className={`tab-link ${path === '/dashboard/schedule-Docentes' ? 'active' : ''}`}
+                    href="/dashboard/schedule-Docentes"
                 >
                     Ver Horarios
                 </Link>
                 <Link
-                    className={`tab-link ${path === '/dashboard/schedule' ? 'active' : ''}`}
-                    href="/dashboard/schedule"
+                    className={`tab-link ${path === '/dashboard/schedule-admin' ? 'active' : ''}`}
+                    href="/dashboard/schedule-admin"
                 >
                     Horario General
                 </Link>
@@ -113,7 +113,7 @@ const DashboardTabs = () => {
                     className={`tab-link ${path === '/dashboard/schedule' ? 'active' : ''}`}
                     href="/dashboard/schedule"
                 >
-                    Registrar Horario
+                    Registrar mi Horario
                 </Link>
                 <Link
                     className={`tab-link ${path === '/dashboard/docentes' ? 'active' : ''}`}

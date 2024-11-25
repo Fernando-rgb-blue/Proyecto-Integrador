@@ -319,7 +319,7 @@ const CoursesList = () => {
                 {isError ? "✕" : "✓"}
               </text>
             </svg>
-            <p className="text-lg">{modalMessage}</p>
+            <p className="text-lg dark:text-black">{modalMessage}</p>
             <button
               onClick={closeModal}
               className={`mt-4 px-4 py-2 rounded-lg text-white ${isError ? "bg-red-500" : "bg-green-500"}`}
