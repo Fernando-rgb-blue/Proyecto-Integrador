@@ -171,7 +171,9 @@ const ScheduleModal: React.FC<{
               >
                 <option value="">Seleccione una Actividad</option>
                 <option value="Práctica">Práctica</option>
-                <option value="Laboratorio">Laboratorio</option>
+                <option value="Laboratorio 1">Laboratorio 1</option>
+                <option value="Laboratorio 2">Laboratorio 2</option>
+                <option value="Laboratorio 3">Laboratorio 3</option>
                 <option value="Teoría">Teoría</option>
               </select>
             </div>
@@ -254,7 +256,7 @@ const ScheduleModal: React.FC<{
 
 
 const ScheduleTable: React.FC = () => {
-  const [schedule, setSchedule] = useState<Array<Array<ScheduleItem | null>>>(Array.from({ length: 14 }, () => Array(5).fill(null)));
+  const [schedule, setSchedule] = useState<Array<Array<ScheduleItem | null>>>(Array.from({length: 14}, () => Array(5).fill(null)));
   const [modalVisible, setModalVisible] = useState(false);
   const [cellIndex, setCellIndex] = useState<{ dayIndex: number; hourIndex: number } | null>(null);
   const [loading, setLoading] = useState(true);
@@ -336,7 +338,7 @@ const ScheduleTable: React.FC = () => {
           console.log('Datos incompletos. Creando un nuevo horario...');
           await createNewSchedule(horarioID);
         } else {
-          const updatedSchedule = mapScheduleData(data, 13); // 13 slots por día
+          const updatedSchedule = mapScheduleData(data, 14); // 14 slots por día
           setSchedule(updatedSchedule);
           console.log("Horario cargado:", updatedSchedule);
         }
@@ -467,10 +469,7 @@ const ScheduleTable: React.FC = () => {
       const updatedSchedule = [...schedule];
 
 
-
-
       updatedSchedule[hourIndex][dayIndex] = { available: 1, ...data };
-
 
       // Actualizar la celda directamente debajo de la seleccionada (si existe)
       if (hourIndex + 1 < updatedSchedule.length) {
