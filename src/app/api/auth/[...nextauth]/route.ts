@@ -8,9 +8,18 @@ import { connectDB } from "@/libs/mongodb";
 import bcrypt from "bcryptjs"
 import { pages } from "next/dist/build/templates/app-page";
 import { signIn } from "next-auth/react";
+import GoogleProvider from "next-auth/providers/google"
+import { MongoDBAdapter } from "@auth/mongodb-adapter"
+import client from "@/libs/mongoForGoogle"
+
 // Configuración de NextAuth
 const authOptions = {
+  addapter: MongoDBAdapter(client),
   providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET
+    }),
     CredentialsProvider({
       name: "credentials",
       credentials: {
