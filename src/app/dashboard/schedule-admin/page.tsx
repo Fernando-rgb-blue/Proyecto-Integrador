@@ -267,6 +267,34 @@ const ScheduleTable: React.FC = () => {
   const [horarioID, setHorarioID] = useState(null);
   const [courses, setCourses] = useState<string[]>([]); // Nueva lista de cursos
   const [error, setError] = useState('');
+  //colores
+  const colors = [
+  "bg-gray-200",
+  "bg-green-200",
+  "bg-blue-200",
+  "bg-orange-200",
+  "bg-pink-200",
+  "bg-red-200",
+  "bg-purple-200",
+  ];
+
+  // Objeto para almacenar el mapeo curso -> color
+  const courseColorMap: { [key: string]: string } = {};
+
+  // Función para obtener un color basado en el curso
+  const getCourseColor = (courseName: string) => {
+    // Extraer la parte antes del '/'
+    const baseCourseName = courseName.split('/')[0].trim();
+  
+    // Si no existe un color asignado para el nombre base, asignar uno
+    if (!courseColorMap[baseCourseName]) {
+      const colorIndex = Object.keys(courseColorMap).length % colors.length; // Ciclar colores si se acaban
+      courseColorMap[baseCourseName] = colors[colorIndex];
+    }
+  
+    // Retornar el color correspondiente
+    return courseColorMap[baseCourseName];
+  };
 
 
   const optionsCiclo = {
@@ -771,16 +799,16 @@ const ScheduleTable: React.FC = () => {
                         return (
                           <td
                             key={`${hourIndex}-${dayIndex}`}
-                            className="p-2 text-center border border-gray-300 text-sm whitespace-normal align-top"
+                            className=" text-center align-middle border border-gray-300 text-sm whitespace-normal"
                             rowSpan={rowSpan}
                             onClick={() => toggleCellSelection(dayIndex, hourIndex)}
                           >
                             {currentCell && currentCell.courses.length > 0 ? (
                               currentCell.courses.map((course, index) => (
                                 <div key={index} className="text-xs">
-                                  <p>{course.course}</p>
-                                  <p>{course.activity}</p>
-                                  <p>{course.classroom}</p>
+                                  <p className={course.course ? getCourseColor(course.course) : ""}>{course.course}</p>
+                                  <p className={course.course ? getCourseColor(course.course) : ""}>{course.activity}</p>
+                                  <p className={course.course ? getCourseColor(course.course) : ""}>{course.classroom}</p>
                                 </div>
                               ))
                             ) : (
