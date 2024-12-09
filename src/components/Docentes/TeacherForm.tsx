@@ -29,17 +29,17 @@ const TeacherForm = ({ onSubmit, teacher, setShowPopup }: TeacherFormProps) => {
     }
 
     useEffect(() => {
-    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-    document.body.style.overflow = "hidden"; // Deshabilita el scroll
-    
-    if (scrollbarWidth > 0) {
-        document.body.style.paddingRight = `${scrollbarWidth}px`; // Ajusta el espacio solo si la barra existe
-    }
+        const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+        document.body.style.overflow = "hidden"; // Deshabilita el scroll
+        
+        if (scrollbarWidth > 0) {
+            document.body.style.paddingRight = `${scrollbarWidth}px`; // Ajusta el espacio solo si la barra existe
+        }
 
-    return () => {
-        document.body.style.overflow = ""; // Restaura el scroll al cerrar el modal
-        document.body.style.paddingRight = ""; // Remueve el padding adicional al cerrar el modal
-    };
+        return () => {
+            document.body.style.overflow = ""; // Restaura el scroll al cerrar el modal
+            document.body.style.paddingRight = ""; // Remueve el padding adicional al cerrar el modal
+        };
     }, []);
 
     const handleInputValidation = () => {
