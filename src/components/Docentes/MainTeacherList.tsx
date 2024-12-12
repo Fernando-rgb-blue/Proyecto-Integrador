@@ -18,7 +18,7 @@ const MainTeacherList = () => {
         <div className="flex flex-wrap justify-center gap-9 py-3 md:py-2 lg:py-2">
             {docentes?.length > 0 ? (
                 <ul className="md:grid md:grid-cols-2 lg:grid-cols-4 gap-x-12 gap-y-16 items-center">
-                    {docentes.filter(docente => (docente.role === "profesor" && docente.status === "activo")).map(docente => (
+                    {docentes.filter(docente => (docente.role === "profeN" && docente.status === "activo")).map(docente => (
                         <li key={docente._id} className="flex justify-center my-10 md:my-0 items-center w-full">
                             <TeacherCard docente={docente} />
                         </li>

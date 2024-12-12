@@ -35,7 +35,7 @@ export async function PUT(request: Request) {
 
     // Validación roles xD
     if (role) {
-      const validRoles = ["profesor", "admin", "docenteE", "docenteD"]; 
+      const validRoles = ["profeC", "profeN", "admin", "docenteE", "docenteD"]; 
       if (!validRoles.includes(role)) {
         return NextResponse.json({ message: "Rol no válido" }, { status: 400 });
       }

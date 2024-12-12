@@ -5,24 +5,26 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
     title: "Currícula | Escuela de Informática",
-    description: "Esta es la página de Nosotros",
-  };
+    description: "La malla curricular de la escuela de informática UNT.",
+};
 
 const CurriculosPage = () => {
     return (
         <>
             <Breadcrumb
-            pageName="Currícula actual (2017)"
-            description="ya aquí ponen algo decente ekis de"
+            pageName="Currícula actual (2018)"
+            description="Una vista interactiva de la malla curricular vigente en la escuela de informática. Selecciona un 
+            curso para activarlo. Si ese curso abre otro, se volverá disponible. Para activar todos los cursos disponibles 
+            de un ciclo, selecciona el número del ciclo a la izquierda."
             />
-            <div className="flex justify-between items-center max-w-6xl mx-auto px-[1rem]">
+            <div className="flex justify-between items-center max-w-6xl mx-auto px-[1rem] mt-10 lg:mt-0 mb-5">
                 <Link
                     href={"https://drive.google.com/file/d/1Aasz5wfCK_X1PfbDB1_jbDO71ruv_wVZ/view?usp=sharing"}
                     className="bg-primary p-2 text-white rounded-sm font-semibold duration-300 ease-in-out hover:bg-primary/80"
                     target="_blank"
                     rel="noopener noreferrer"
                 >
-                    Descarga el plan de estudios 2017
+                    Descarga el plan de estudios 2018
                 </Link>
                 <Link
                     href={"/curriculos-97"}
@@ -31,9 +33,6 @@ const CurriculosPage = () => {
                     Ver currícula antigua (1997)
                 </Link>
             </div>
-            <p className="max-w-7xl mx-auto mt-5">
-                Haga clic en un recuadro para activar un curso.
-            </p>
             <CurriculosSVG />
         </>
     );
