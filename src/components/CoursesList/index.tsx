@@ -166,170 +166,217 @@ const Courses = () => {
             {/* Campo de búsqueda */}
             <div className="w-full mx-auto text-center pt-10">
                 <input
-                type="text"
-                placeholder="Buscar curso por nombre..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="mb-4 w-full max-w-lg px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary dark:bg-slate-800 dark:text-white"
+                    type="text"
+                    placeholder="Buscar curso por nombre..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="mb-4 w-full max-w-lg px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary dark:bg-slate-800 dark:text-white"
                 />
             </div>
 
             <div className="max-w-52 mx-auto text-center">
                 <div
-                onClick={() => {
-                    setShowAddPopup(true);
-                    disableScroll();
-                }}
-                className="rounded-sm bg-primary px-8 py-4 text-base font-semibold text-white duration-300 ease-in-out hover:bg-primary/60 cursor-pointer mb-8"
+                    onClick={() => {
+                        setShowAddPopup(true);
+                        disableScroll();
+                    }}
+                    className="rounded-sm bg-primary px-8 py-4 text-base font-semibold text-white duration-300 ease-in-out hover:bg-primary/60 cursor-pointer mb-8"
                 >
-                Agregar Curso
+                    Agregar Curso
                 </div>
             </div>
-            
+
 
             {/* Lista de cursos */}
             <div className="max-w-3xl sm:mx-auto mx-4">
                 {loading ? (
-                <div className="flex justify-center items-center mt-10 mb-10">
-                    <div className="animate-spin rounded-full h-10 w-10 border-t-4 border-blue-500 border-solid border-opacity-50"></div>
-                </div>
+                    <div className="flex justify-center items-center mt-10 mb-10">
+                        <div className="animate-spin rounded-full h-10 w-10 border-t-4 border-blue-500 border-solid border-opacity-50"></div>
+                    </div>
                 ) : error ? (
-                <p style={{ color: "red" }}>{error}</p>
+                    <p style={{ color: "red" }}>{error}</p>
                 ) : (
-                <>
-                    {filteredCourses.length > 0 ? (
-                    <ul>
-                        {filteredCourses.map((course) => (
-                        <li
-                            key={course._id}
-                            className="bg-primary/30 dark:bg-slate-800 p-4 my-2 rounded-md text-center flex flex-col dark:text-white transition-all"
-                        >
-                            <div className="flex flex-col md:flex-row md:gap-4 w-full">
-                            <div className="grow text-center md:text-left md:w-1/3 flex flex-col justify-center items-center md:items-start">
-                                <h4 className="font-bold text-xl md:text-2xl pb-3">{course.nombre}</h4>
-                                <div className="flex flex-col gap-y-3 text-start">
-                                <p>Ciclo: {course.ciclo}</p>
-                                </div>
-                            </div>
-                            <div className="flex flex-col justify-center gap-4 mt-4 md:mt-0 md:w-1/3">
-                                <div
-                                onClick={() => openEditPopup(course)}
-                                className="rounded-sm bg-primary px-8 py-4 text-base font-semibold text-white duration-300 ease-in-out hover:bg-primary/60 cursor-pointer"
-                                >
-                                Editar
-                                </div>
-                                <div
-                                onClick={() => openDeletePopup(course)}
-                                className="rounded-sm border-2 border-primary px-8 py-4 text-base font-semibold text-primary duration-300 ease-in-out hover:bg-primary/30 cursor-pointer"
-                                >
-                                Eliminar
-                                </div>
-                            </div>
-                            </div>
-                        </li>
-                        ))}
-                    </ul>
-                    ) : (
-                    <p className="text-center text-gray-500 mt-4">No se encontraron cursos con ese nombre.</p>
-                    )}
-                </>
+                    <>
+                        {filteredCourses.length > 0 ? (
+                            <ul>
+                                {filteredCourses.map((course) => (
+                                    <li
+                                        key={course._id}
+                                        className="bg-primary/30 dark:bg-slate-800 p-4 my-2 rounded-md text-center flex flex-col dark:text-white transition-all"
+                                    >
+                                        <div className="flex flex-col md:flex-row md:gap-4 w-full">
+                                            <div className="grow text-center md:text-left md:w-1/3 flex flex-col justify-center items-center md:items-start">
+                                                <h4 className="font-bold text-xl md:text-2xl pb-3">{course.nombre}</h4>
+                                                <div className="flex flex-col gap-y-3 text-start">
+                                                    <p>Ciclo: {course.ciclo}</p>
+                                                </div>
+                                            </div>
+                                            <div className="flex flex-col justify-center gap-4 mt-4 md:mt-0 md:w-1/3">
+                                                <div
+                                                    onClick={() => openEditPopup(course)}
+                                                    className="rounded-sm bg-primary px-8 py-4 text-base font-semibold text-white duration-300 ease-in-out hover:bg-primary/60 cursor-pointer"
+                                                >
+                                                    Editar
+                                                </div>
+                                                <div
+                                                    onClick={() => openDeletePopup(course)}
+                                                    className="rounded-sm border-2 border-primary px-8 py-4 text-base font-semibold text-primary duration-300 ease-in-out hover:bg-primary/30 cursor-pointer"
+                                                >
+                                                    Eliminar
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <p className="text-center text-gray-500 mt-4">No se encontraron cursos con ese nombre.</p>
+                        )}
+                    </>
                 )}
             </div>
 
             {/* Modal Agregar Curso */}
             {showAddPopup && (
                 <div className="fixed inset-0 bg-black/80 flex justify-center items-center z-50 transition-opacity duration-150" onClick={closeModals}>
-                <div onClick={(e) => e.stopPropagation()} className="p-6 rounded-lg max-w-sm w-full bg-white dark:bg-dark overflow-hidden">
-                    <label>Nombre del Curso</label>
-                    <input type="text" placeholder="Nombre del curso" id="name" className="w-full mt-1 mb-5 border rounded" />
+                    <div onClick={(e) => e.stopPropagation()} className="p-6 rounded-lg max-w-sm w-full bg-white dark:bg-dark overflow-hidden">
+                        <label>Nombre del Curso</label>
+                        <input
+                            type="text"
+                            placeholder="Nombre del curso"
+                            id="name"
+                            className="w-full mt-1 mb-5 border rounded"
+                        />
 
-                    <label>Ciclo</label>
-                    <select id="cycle" className="w-full mt-1 mb-5 border rounded">
-                    <option value="I">I</option>
-                    <option value="II">II</option>
-                    <option value="III">III</option>
-                    <option value="IV">IV</option>
-                    <option value="V">V</option>
-                    <option value="VI">VI</option>
-                    <option value="VII">VII</option>
-                    <option value="VIII">VIII</option>
-                    <option value="IX">IX</option>
-                    <option value="X">X</option>
-                    </select>
+                        <label>Ciclo</label>
+                        <select
+                            id="cycle"
+                            className="w-full mt-1 mb-5 border rounded"
+                        >
+                            <option value="I">I</option>
+                            <option value="II">II</option>
+                            <option value="III">III</option>
+                            <option value="IV">IV</option>
+                            <option value="V">V</option>
+                            <option value="VI">VI</option>
+                            <option value="VII">VII</option>
+                            <option value="VIII">VIII</option>
+                            <option value="IX">IX</option>
+                            <option value="X">X</option>
+                        </select>
 
-                    <div className="flex justify-between">
-                    <button
-                        onClick={(e) => {
-                        const name = (document.getElementById("name") as HTMLInputElement).value;
-                        const cycle = (document.getElementById("cycle") as HTMLSelectElement).value;
-                        createCourse(name, cycle, e);
-                        }}
-                        className="px-8 py-4 bg-primary text-white rounded hover:bg-primary/60 cursor-pointer"
-                    >
-                        Guardar
-                    </button>
-                    <button onClick={closeModals} className="secondary px-8 py-4 bg-gray-200 rounded">
-                        Cancelar
-                    </button>
+                        {/* Mensaje de error si el nombre está vacío */}
+                        <div id="error-message" className="text-red-500 text-sm hidden mb-4">
+                            El nombre del curso es obligatorio.
+                        </div>
+
+                        <div className="flex justify-between">
+                            <button
+                                onClick={(e) => {
+                                    const name = (document.getElementById("name") as HTMLInputElement).value;
+                                    const cycle = (document.getElementById("cycle") as HTMLSelectElement).value;
+
+                                    // Validación para que el campo 'name' no esté vacío
+                                    if (!name.trim()) {
+                                        document.getElementById("error-message")?.classList.remove("hidden");
+                                    } else {
+                                        // Si el nombre no está vacío, ocultamos el mensaje de error
+                                        document.getElementById("error-message")?.classList.add("hidden");
+                                        createCourse(name, cycle, e);
+                                    }
+                                }}
+                                className="px-8 py-4 bg-primary text-white rounded hover:bg-primary/60 cursor-pointer"
+                            >
+                                Guardar
+                            </button>
+                            <button onClick={closeModals} className="secondary px-8 py-4 bg-gray-200 rounded">
+                                Cancelar
+                            </button>
+                        </div>
                     </div>
                 </div>
-                </div>
             )}
+
 
             {/* Modal Editar Curso */}
             {showEditPopup && currentCourse && (
                 <div className="fixed inset-0 bg-black/80 flex justify-center items-center z-50 transition-opacity duration-150" onClick={closeModals}>
-                <div onClick={(e) => e.stopPropagation()} className="p-6 rounded-lg max-w-sm w-full bg-white dark:bg-dark">
-                    <label>Nombre del Curso</label>
-                    <input type="text" placeholder="Nombre del curso" id="name" defaultValue={currentCourse.nombre} className="w-full mt-1 mb-5 border rounded" />
+                    <div onClick={(e) => e.stopPropagation()} className="p-6 rounded-lg max-w-sm w-full bg-white dark:bg-dark">
+                        <label>Nombre del Curso</label>
+                        <input
+                            type="text"
+                            placeholder="Nombre del curso"
+                            id="name"
+                            defaultValue={currentCourse.nombre}
+                            className="w-full mt-1 mb-5 border rounded"
+                        />
 
-                    <label>Ciclo</label>
-                    <select id="cycle" className="w-full mt-1 mb-5 border rounded" defaultValue={currentCourse.ciclo}>
-                    <option value="I">I</option>
-                    <option value="II">II</option>
-                    <option value="III">III</option>
-                    <option value="IV">IV</option>
-                    <option value="V">V</option>
-                    <option value="VI">VI</option>
-                    <option value="VII">VII</option>
-                    <option value="VIII">VIII</option>
-                    <option value="IX">IX</option>
-                    <option value="X">X</option>
-                    </select>
+                        <label>Ciclo</label>
+                        <select
+                            id="cycle"
+                            className="w-full mt-1 mb-5 border rounded"
+                            defaultValue={currentCourse.ciclo}
+                        >
+                            <option value="I">I</option>
+                            <option value="II">II</option>
+                            <option value="III">III</option>
+                            <option value="IV">IV</option>
+                            <option value="V">V</option>
+                            <option value="VI">VI</option>
+                            <option value="VII">VII</option>
+                            <option value="VIII">VIII</option>
+                            <option value="IX">IX</option>
+                            <option value="X">X</option>
+                        </select>
 
-                    <div className="flex justify-between">
-                    <button
-                        onClick={(e) => {
-                        const name = (document.getElementById("name") as HTMLInputElement).value;
-                        const cycle = (document.getElementById("cycle") as HTMLSelectElement).value;
-                        updateCourse(currentCourse._id, name, cycle, e);
-                        }}
-                        className="px-8 py-4 bg-primary text-white rounded hover:bg-primary/60 cursor-pointer"
-                    >
-                        Guardar
-                    </button>
-                    <button onClick={closeModals} className="secondary px-8 py-4 bg-gray-200 rounded">
-                        Cancelar
-                    </button>
+                        {/* Mensaje de error si el nombre está vacío */}
+                        <div id="error-message" className="text-red-500 text-sm hidden mb-4">
+                            El nombre del curso es obligatorio.
+                        </div>
+
+                        <div className="flex justify-between">
+                            <button
+                                onClick={(e) => {
+                                    const name = (document.getElementById("name") as HTMLInputElement).value;
+                                    const cycle = (document.getElementById("cycle") as HTMLSelectElement).value;
+
+                                    // Validación para que el campo 'name' no esté vacío
+                                    if (!name.trim()) {
+                                        document.getElementById("error-message")?.classList.remove("hidden");
+                                    } else {
+                                        // Si el nombre no está vacío, ocultamos el mensaje de error
+                                        document.getElementById("error-message")?.classList.add("hidden");
+                                        updateCourse(currentCourse._id, name, cycle, e);
+                                    }
+                                }}
+                                className="px-8 py-4 bg-primary text-white rounded hover:bg-primary/60 cursor-pointer"
+                            >
+                                Guardar
+                            </button>
+                            <button onClick={closeModals} className="secondary px-8 py-4 bg-gray-200 rounded">
+                                Cancelar
+                            </button>
+                        </div>
                     </div>
                 </div>
-                </div>
             )}
+
+
 
             {/* Modal Eliminar Curso */}
             {showDeletePopup && currentCourse && (
                 <div className="fixed inset-0 bg-black/80 flex justify-center items-center z-50 transition-opacity duration-150" onClick={closeModals}>
-                <div onClick={(e) => e.stopPropagation()} className="p-6 rounded-lg max-w-sm w-full bg-white dark:bg-dark">
-                    <p>¿Estás seguro de eliminar el curso <b>{currentCourse.nombre}</b>?</p>
-                    <div className="flex justify-between mt-4">
-                    <button onClick={(e) => deleteCourse(currentCourse._id, e)} className="px-8 py-4 bg-primary text-white rounded hover:bg-primary/60 cursor-pointer">
-                        Eliminar
-                    </button>
-                    <button onClick={closeModals} className="secondary px-8 py-4 bg-gray-200 rounded">
-                        Cancelar
-                    </button>
+                    <div onClick={(e) => e.stopPropagation()} className="p-6 rounded-lg max-w-sm w-full bg-white dark:bg-dark">
+                        <p>¿Estás seguro de eliminar el curso <b>{currentCourse.nombre}</b>?</p>
+                        <div className="flex justify-between mt-4">
+                            <button onClick={(e) => deleteCourse(currentCourse._id, e)} className="px-8 py-4 bg-primary text-white rounded hover:bg-primary/60 cursor-pointer">
+                                Eliminar
+                            </button>
+                            <button onClick={closeModals} className="secondary px-8 py-4 bg-gray-200 rounded">
+                                Cancelar
+                            </button>
+                        </div>
                     </div>
-                </div>
                 </div>
             )}
         </>

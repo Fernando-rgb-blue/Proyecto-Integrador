@@ -205,21 +205,52 @@ const Classrooms = () => {
                 <div className="fixed inset-0 bg-black/80 flex justify-center items-center z-50 transition-opacity duration-150" onClick={closeModals}>
                     <div onClick={(e) => e.stopPropagation()} className="p-6 rounded-lg max-w-sm w-full bg-white dark:bg-dark overflow-hidden">
                         <label>Nombre del Aula</label>
-                        <input type="text" placeholder="Nombre del aula" id="name" className="w-full mt-1 mb-5 border rounded" />
+                        <input
+                            type="text"
+                            placeholder="Nombre del aula"
+                            id="name"
+                            className="w-full mt-1 mb-5 border rounded"
+                        />
 
                         <label>Capacidad</label>
-                        <input type="number" placeholder="Capacidad" id="capacity" className="w-full mt-1 mb-5 border rounded" />
+                        <input
+                            type="number"
+                            placeholder="Capacidad"
+                            id="capacity"
+                            className="w-full mt-1 mb-5 border rounded"
+                        />
 
                         <label>Descripción</label>
-                        <textarea placeholder="Descripción del aula" id="description" className="w-full mt-1 mb-5 border rounded" />
+                        <textarea
+                            placeholder="Descripción del aula"
+                            id="description"
+                            className="w-full mt-1 mb-5 border rounded"
+                        />
+
+                        {/* Mensaje de error */}
+                        <div id="error-message" className="text-red-500 text-sm hidden mb-4">
+                            Todos los campos son obligatorios y la capacidad debe ser mayor que 0.
+                        </div>
 
                         <div className="flex justify-between">
-                            <button onClick={(e) => createClassroom(
-                                (document.getElementById("name") as HTMLInputElement).value,
-                                parseInt((document.getElementById("capacity") as HTMLInputElement).value),
-                                (document.getElementById("description") as HTMLTextAreaElement).value,
-                                e
-                            )} className="px-8 py-4 bg-primary text-white rounded-md">
+                            <button
+                                onClick={(e) => {
+                                    const name = (document.getElementById("name") as HTMLInputElement).value;
+                                    const capacity = parseInt((document.getElementById("capacity") as HTMLInputElement).value);
+                                    const description = (document.getElementById("description") as HTMLTextAreaElement).value;
+
+                                    // Validación de los campos
+                                    if (!name.trim() || !description.trim() || capacity <= 0) {
+                                        // Mostrar mensaje de error si los campos están vacíos o la capacidad no es válida
+                                        document.getElementById("error-message")?.classList.remove("hidden");
+                                    } else {
+                                        // Ocultar mensaje de error y continuar con la creación
+                                        document.getElementById("error-message")?.classList.add("hidden");
+                                        createClassroom(name, capacity, description, e);
+                                    }
+                                }}
+                                className="px-8 py-4 bg-primary text-white rounded-md"
+                            >
                                 Guardar
                             </button>
                             <button onClick={closeModals} className="px-8 py-4 border-2 border-primary text-primary rounded-md">
@@ -235,22 +266,58 @@ const Classrooms = () => {
                 <div className="fixed inset-0 bg-black/80 flex justify-center items-center z-50 transition-opacity duration-150" onClick={closeModals}>
                     <div onClick={(e) => e.stopPropagation()} className="p-6 rounded-lg max-w-sm w-full bg-white dark:bg-dark overflow-hidden">
                         <label>Nombre del Aula</label>
-                        <input type="text" defaultValue={currentClassroom.name} id="name" className="w-full mt-1 mb-5 border rounded" />
+                        <input
+                            type="text"
+                            defaultValue={currentClassroom.name}
+                            id="name"
+                            className="w-full mt-1 mb-5 border rounded"
+                        />
 
                         <label>Capacidad</label>
-                        <input type="number" defaultValue={currentClassroom.capacity} id="capacity" className="w-full mt-1 mb-5 border rounded" />
+                        <input
+                            type="number"
+                            defaultValue={currentClassroom.capacity}
+                            id="capacity"
+                            className="w-full mt-1 mb-5 border rounded"
+                        />
 
                         <label>Descripción</label>
-                        <textarea defaultValue={currentClassroom.description} id="description" className="w-full mt-1 mb-5 border rounded" />
+                        <textarea
+                            defaultValue={currentClassroom.description}
+                            id="description"
+                            className="w-full mt-1 mb-5 border rounded"
+                        />
+
+                        {/* Mensaje de error */}
+                        <div id="error-message" className="text-red-500 text-sm hidden mb-4">
+                            Todos los campos son obligatorios y la capacidad debe ser mayor que 0.
+                        </div>
 
                         <div className="flex justify-between">
-                            <button onClick={(e) => updateClassroom(
-                                currentClassroom._id,
-                                (document.getElementById("name") as HTMLInputElement).value,
-                                parseInt((document.getElementById("capacity") as HTMLInputElement).value),
-                                (document.getElementById("description") as HTMLTextAreaElement).value,
-                                e
-                            )} className="px-8 py-4 bg-primary text-white rounded-md">
+                            <button
+                                onClick={(e) => {
+                                    const name = (document.getElementById("name") as HTMLInputElement).value;
+                                    const capacity = parseInt((document.getElementById("capacity") as HTMLInputElement).value);
+                                    const description = (document.getElementById("description") as HTMLTextAreaElement).value;
+
+                                    // Validación de los campos
+                                    if (!name.trim() || !description.trim() || capacity <= 0) {
+                                        // Mostrar mensaje de error si los campos están vacíos o la capacidad no es válida
+                                        document.getElementById("error-message")?.classList.remove("hidden");
+                                    } else {
+                                        // Ocultar mensaje de error y continuar con la actualización
+                                        document.getElementById("error-message")?.classList.add("hidden");
+                                        updateClassroom(
+                                            currentClassroom._id,
+                                            name,
+                                            capacity,
+                                            description,
+                                            e
+                                        );
+                                    }
+                                }}
+                                className="px-8 py-4 bg-primary text-white rounded-md"
+                            >
                                 Guardar
                             </button>
                             <button onClick={closeModals} className="px-8 py-4 border-2 border-primary text-primary rounded-md">
@@ -260,6 +327,8 @@ const Classrooms = () => {
                     </div>
                 </div>
             )}
+
+
 
             {/* Modal Eliminar Aula */}
             {showDeletePopup && currentClassroom && (
