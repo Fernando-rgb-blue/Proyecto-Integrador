@@ -29,18 +29,26 @@ const TeacherForm = ({ onSubmit, teacher, setShowPopup }: TeacherFormProps) => {
     }
 
     useEffect(() => {
-    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-    document.body.style.overflow = "hidden"; // Deshabilita el scroll
-    
-    if (scrollbarWidth > 0) {
-        document.body.style.paddingRight = `${scrollbarWidth}px`; // Ajusta el espacio solo si la barra existe
-    }
+        const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+        document.body.style.overflow = "hidden"; // Deshabilita el scroll
+        
+        if (scrollbarWidth > 0) {
+            document.body.style.paddingRight = `${scrollbarWidth}px`; // Ajusta el espacio solo si la barra existe
+        }
 
-    return () => {
-        document.body.style.overflow = ""; // Restaura el scroll al cerrar el modal
-        document.body.style.paddingRight = ""; // Remueve el padding adicional al cerrar el modal
-    };
-}, []);
+        return () => {
+            document.body.style.overflow = ""; // Restaura el scroll al cerrar el modal
+            document.body.style.paddingRight = ""; // Remueve el padding adicional al cerrar el modal
+        };
+    }, []);
+
+    const handleInputValidation = () => {
+        if(!formData.fullname || !formData.email) {
+            setErrorMessage("Se requiere al menos nombre y apellidos, y correo electrónico.");
+            return false;
+        }
+        return true;
+    }
 
     const handleInputChange = (ev: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { id, value } = ev.target;
@@ -70,12 +78,19 @@ const TeacherForm = ({ onSubmit, teacher, setShowPopup }: TeacherFormProps) => {
         }
     };
 
+    async function handleSubmit(ev: FormEvent<HTMLFormElement>, teacher: User) {
+        ev.preventDefault();
+        if (handleInputValidation()) {
+            onSubmit(ev, teacher);
+        }
+    }
+
     return (
         <div 
             className="fixed inset-0 mt-9 z-50 flex items-center justify-center bg-black bg-opacity-50" 
             onClick={handleClickOutside} // Llamada al controlador de clics
         >
-            <form onSubmit={(ev) => onSubmit(ev, formData)} className="max-w-3xl w-full mx-4 p-4 bg-white dark:bg-dark rounded shadow-lg">
+            <form onSubmit={(ev) => handleSubmit(ev, formData)} className="max-w-3xl w-full mx-4 p-4 bg-white dark:bg-dark rounded shadow-lg">
                 <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-[.3fr_.7fr]">
                     <div>
                         <EditableImage
@@ -167,7 +182,8 @@ const TeacherForm = ({ onSubmit, teacher, setShowPopup }: TeacherFormProps) => {
                                 onChange={handleInputChange}
                                 value={formData.role}
                             >
-                                <option value="profesor" className="selected">Profesor</option>
+                                <option value="profeC" className="selected">Profesor contratado</option>
+                                <option value="profeN">Profesor nombrado</option>
                                 <option value="admin">Administrador</option>
                                 <option value="directorE">Director de escuela</option>
                                 <option value="directorD">Director de departamento</option>
