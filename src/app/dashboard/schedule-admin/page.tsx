@@ -257,15 +257,7 @@ const ScheduleModal: React.FC<{
 
 const ScheduleTable: React.FC = () => {
 
-  interface Docente {
-    _id: string;
-    fullname: string;
-  }
 
-  interface Aula {
-    _id: string;
-    name: string;
-  }
 
   const [schedule, setSchedule] = useState<Array<Array<ScheduleItem | null>>>(Array.from({ length: 14 }, () => Array(5).fill(null)));
   const [modalVisible, setModalVisible] = useState(false);
@@ -278,8 +270,6 @@ const ScheduleTable: React.FC = () => {
   const [horarioID, setHorarioID] = useState(null);
   const [courses, setCourses] = useState<string[]>([]); // Nueva lista de cursos
   const [error, setError] = useState('');
-  const [docentes, setDocentes] = useState<Docente[]>([]);
-  const [aula, setAula] = useState<Aula[]>([]);
   const [selectedDocente, setSelectedDocente] = useState<string>("");
   const [selectedAula, setSelectedAula] = useState<string>("");
 
@@ -400,38 +390,7 @@ const ScheduleTable: React.FC = () => {
         setLoading(false);
       }
     };
-
-    const fetchDocentes = async () => {
-      try {
-        const response = await fetch("http://localhost:3000/api/auth/signup/");
-        if (!response.ok) throw new Error("Error al obtener los docentes");
-        const data = await response.json();
-
-        const filteredDocentes = data.filter(
-          (docente: any) => docente.role !== "admin" && docente.status === "activo"
-        );
-
-        setDocentes(filteredDocentes);
-      } catch (error: any) {
-        setError(error.message);
-      }
-    };
-
-    const fetchAula = async () => {
-      try {
-        const response = await fetch("http://localhost:3000/api/classroom/");
-        if (!response.ok) throw new Error("Error al obtener las aulas");
-        const data = await response.json();
-        setAula(data);  // Aquí usamos 'data' en lugar de 'response'
-      } catch (error: any) {
-        setError(error.message);
-      }
-    };
-    
-    fetchAula();
     fetchSchedule();
-    fetchDocentes();
-
   }, [horarioID]);
 
 
@@ -691,50 +650,6 @@ const ScheduleTable: React.FC = () => {
       <DashboardTabs />
   
       <div className="container mx-auto p-4 pt-10">
-
-
-        {/* <h1 className="text-2xl font-bold mb-4">Buscar Horario</h1>
-        <div className="mb-6">
-          <label htmlFor="docentes" className="block text-lg font-medium mb-2">
-            Docente
-          </label>
-          <div className="flex flex-wrap items-center gap-4">
-            <select
-              id="docentes"
-              value={selectedDocente}
-              onChange={handleDocenteChange}
-              className="p-2 border border-gray-300 rounded-lg w-full sm:w-auto dark:bg-dark"
-            >
-              <option value="">Seleccionar Docente</option>
-              {docentes.map((user) => (
-                <option key={user._id} value={user.fullname}>
-                  {user.fullname}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div> */}
-  
-
-        {/* <label htmlFor="aula" className="block text-lg font-medium mb-2">
-          Aula
-        </label>
-        <div className="flex flex-wrap items-center gap-4">
-          <select
-            id="aula"
-            value={selectedAula}
-            onChange={handleDocenteAula}
-            className="p-2 border border-gray-300 rounded-lg w-full sm:w-auto dark:bg-dark"
-          >
-            <option value="">Seleccionar Aula</option>
-            {aula.map((classroom) => (
-              <option key={classroom._id} value={classroom.name}>
-                {classroom.name}
-              </option>
-            ))}
-          </select>
-        </div> */}
-  
 
         {/* Fila de busqueda por ciclo */}
         <div className="flex space-x-4 mb-4">
