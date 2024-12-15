@@ -49,15 +49,9 @@ const menuData: Menu[] = [
         newTab: true,
       },
       {
-        id: 54,
-        title: "Cronograma académico",
-        path: "/error",
-        newTab: false,
-      },
-      {
         id: 55,
         title: "Horarios",
-        path: "/horarios",
+        path: "/dashboard/schedule-ad",
         newTab: false,
       },
       {

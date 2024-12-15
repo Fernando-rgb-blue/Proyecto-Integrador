@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import BreadDash from "@/components/Common/BreadDash";
 import DashboardTabs from "@/components/Dashboard/DashboardTabs";
-
+import ProtectedRoute from "@/components/Proteccion"
 
 interface ScheduleItem {
   _id?: string;
@@ -646,6 +646,7 @@ const ScheduleTable: React.FC = () => {
   return (
 
     <>
+      <ProtectedRoute />
       <BreadDash />
       <DashboardTabs />
   
@@ -815,7 +816,7 @@ const ScheduleTable: React.FC = () => {
                         >
                           {currentCell && currentCell.courses.length > 0 ? (
                             currentCell.courses.map((course, index) => (
-                              <div key={index} className="text-xs">
+                              <div key={index} className="text-xs dark:text-dark">
                                 <p className={course.course ? getCourseColor(course.course) : ""}>{course.course}</p>
                                 <p className={course.course ? getCourseColor(course.course) : ""}>{course.activity}</p>
                                 <p className={course.course ? getCourseColor(course.course) : ""}>{course.classroom}</p>

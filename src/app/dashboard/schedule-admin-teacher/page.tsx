@@ -4,6 +4,7 @@ import axios from "axios";
 import BreadDash from "@/components/Common/BreadDash";
 import DashboardTabs from "@/components/Dashboard/DashboardTabs";
 
+
 interface ScheduleItem {
   _id?: string;
   available: number;
@@ -78,6 +79,7 @@ const ScheduleTable: React.FC = () => {
       setSchedule(mapScheduleData(data, 14));
       setError('');
     } catch (err: any) {
+      setSchedule(Array.from({ length: 14 }, () => Array(5).fill(null))); 
       setError(err.message || 'Error al buscar el horario');
     } finally {
       setLoading(false);
@@ -139,11 +141,11 @@ const ScheduleTable: React.FC = () => {
 
   return (
     <>
+  
       <BreadDash />
       <DashboardTabs />
-      <div className="container mx-auto p-4 pt-10">
-        <h1 className="text-2xl font-bold mb-4">Buscar Horario</h1>
-        <div className="mb-6">
+      
+      <div className="container mx-auto px-4 pb-1 sm:px-6 lg:px-8 mt-4">
           <label htmlFor="docentes" className="block text-lg font-medium mb-2">
             Docente
           </label>
@@ -161,24 +163,21 @@ const ScheduleTable: React.FC = () => {
                 </option>
               ))}
             </select>
+            <button
+              onClick={handleSearch}
+              className="bg-blue-500 text-white px-4 py-2 rounded w-full md:w-auto"
+            >
+              Buscar
+            </button>
           </div>
-        </div>
-
-        <div className="flex justify-center mb-4">
-          <button
-            onClick={handleSearch}
-            className="bg-blue-500 text-white px-4 py-2 rounded w-full md:w-auto"
-          >
-            Buscar
-          </button>
-        </div>
+        </div>        
 
         {loading && <p className="text-blue-500">Cargando horarios...</p>}
         {error && <p className="mt-4 text-red-500">{error}</p>}
 
         <div className="container mx-auto mt-10 mb-10 p-4">
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[800px] sm:min-w-[600px] table-auto border-collapse border border-gray-300 dark:bg-dark">
+            <table className="w-full min-w-[800px] sm:min-w-[600px] table-auto border-collapse border border-gray-300 dark:bg-dark " >
               <thead>
                 <tr>
                   <th className="bg-blue-800 text-white p-3 text-xs sm:text-base border border-gray-300 w-[120px] sm:w-[150px] text-center">
@@ -195,43 +194,81 @@ const ScheduleTable: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {hours.map((hour, hourIndex) => (
-                  <tr key={hourIndex}>
-                    <td className="p-2 text-center border border-gray-300 text-sm">
-                      {hour}
-                    </td>
-                    {days.map((_, dayIndex) => {
-                      const currentCell = schedule[hourIndex][dayIndex];
-                      if (!currentCell || currentCell.courses.length === 0) {
-                        return (
-                          <td key={`${hourIndex}-${dayIndex}`} className="border border-gray-300 text-center text-gray-500">
-                            Vacío
-                          </td>
-                        );
+              {hours.map((hour, hourIndex) => (
+              <tr key={hourIndex}>
+                <td className="p-2 text-center border-2  border-gray-300 text-sm">
+                  {hour}
+                </td>
+                {days.map((_, dayIndex) => {
+                  const currentCell = schedule[hourIndex][dayIndex];
+
+                  // Lógica para evitar combinar celdas vacías
+                  if (
+                    hourIndex > 0 &&
+                    schedule[hourIndex - 1][dayIndex] &&
+                    JSON.stringify(schedule[hourIndex - 1][dayIndex]) === JSON.stringify(currentCell) &&
+                    currentCell && currentCell.courses.length > 0
+                  ) {
+                    return null; // No renderizar la celda repetida si tiene contenido igual
+                  }
+
+                  // Calcular rowSpan solo si la celda actual tiene contenido
+                  let rowSpan = 1;
+                  if (currentCell && currentCell.courses.length > 0) {
+                    for (let i = hourIndex + 1; i < hours.length; i++) {
+                      if (
+                        schedule[i][dayIndex] &&
+                        JSON.stringify(schedule[i][dayIndex]) === JSON.stringify(currentCell) &&
+                        schedule[i][dayIndex].courses.length > 0
+                      ) {
+                        rowSpan++;
+                      } else {
+                        break;
                       }
-                      return (
-                        <td
-                          key={`${hourIndex}-${dayIndex}`}
-                          className="text-center align-middle border border-gray-300 text-sm whitespace-normal"
-                          onClick={() => toggleCellSelection(dayIndex, hourIndex)}
-                        >
-                          {currentCell.courses.map((course, index) => (
-                            <div key={index} className="text-xs">
-                              <p className={getCourseColor(course.course)}>{course.course}</p>
-                              <p>{course.activity}</p>
-                              <p>{course.classroom}</p>
-                            </div>
-                          ))}
-                        </td>
-                      );
-                    })}
-                  </tr>
-                ))}
+                    }
+                  }
+
+                  // Mostrar celda vacía si no tiene contenido
+                  if (!currentCell || currentCell.courses.length === 0) {
+                    return (
+                      <td
+                        key={`${hourIndex}-${dayIndex}`}
+                        className="border-2  border-gray-300 text-center"
+                      >
+                        {/* Celda vacía sin contenido xdd */}
+                      </td>
+                    );
+                  }
+
+                  return (
+                    <td
+                      key={`${hourIndex}-${dayIndex}`}
+                      className={`text-center align-middle border-2  border-gray-300 text-sm whitespace-normal ${
+                        currentCell && currentCell.available === 1 && currentCell.courses[0]?.course
+                          ? getCourseColor(currentCell.courses[0].course)
+                          : ""
+                      }`}
+                      
+                      rowSpan={rowSpan}
+                      onClick={() => toggleCellSelection(dayIndex, hourIndex)}
+                    >
+                      {currentCell.courses.map((course, index) => (
+                        <div key={index} className="text-xs dark:text-dark">
+                          <p>{course.course}</p>
+                          <p>{course.activity}</p>
+                          <p>{course.classroom}</p>
+                        </div>
+                      ))}
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
               </tbody>
             </table>
           </div>
         </div>
-      </div>
+      
     </>
   );
 };

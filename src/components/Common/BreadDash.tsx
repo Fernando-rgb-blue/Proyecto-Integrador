@@ -5,7 +5,8 @@ import { useSession, signOut } from "next-auth/react";
 const BreadDash = () => {
     const { data: session, status } = useSession();
     const isAdmin = session?.user?.role === "admin";
-    const isDocente = session?.user?.role === "profesor";
+    const isDocente = session?.user?.role === "profeC";
+    const isDocenteC = session?.user?.role === "profeN";
     const isDirectorE = session?.user?.role === "directorE";
     const isDirectorD = session?.user?.role === "directorD";
     
@@ -16,13 +17,17 @@ const BreadDash = () => {
             <div className="-mx-4 flex flex-wrap items-center">
                 <div className="w-full px-4 md:w-8/12 lg:w-7/12">
                 <div className="mb-8 max-w-[570px] md:mb-0 lg:mb-12">
-                    <h1 className="mb-5 text-2xl font-bold text-black dark:text-white sm:text-3xl">
-                    Bienvenido {(isDocente || isDirectorD ||  isDirectorE) ? "Docente" : "Administrador"}: {session?.user?.fullname}
+                <h1 className="mb-5 text-2xl font-bold text-black dark:text-white sm:text-3xl">
+                    {isAdmin || isDocente || isDirectorE || isDirectorD || isDocenteC 
+                        ? `Bienvenido ${(isDocente || isDirectorD ||  isDirectorE || isDocenteC) ? "Docente" : "Administrador"}: ${session?.user?.fullname}` 
+                        : `Bienvenido Usuario: ${session?.user?.email}`}
                     </h1>
                     <p className="text-base font-medium leading-relaxed text-body-color">
-                        {isDocente
-                    ? "Cambia tu contraseña/Registre su horario."
-                    : "Administra el sistema accediendo a las opciones de gestión."}
+                        {isAdmin || isDocente || isDirectorE || isDirectorD || isDocenteC
+                            ? (isDocente || isDocenteC
+                                ? "Cambia tu contraseña/Registra su horario."
+                                : "Administra el sistema accediendo a las opciones de gestión.")
+                            : "Revise los horarios según la opción que desee"}
                     </p>
                 </div>
                 </div>

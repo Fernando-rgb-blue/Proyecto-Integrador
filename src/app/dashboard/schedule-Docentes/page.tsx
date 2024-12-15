@@ -3,6 +3,7 @@ import DashboardTabs from "@/components/Dashboard/DashboardTabs";
 import DisDos from "@/components/dispoDocentes/disDos";
 import { Metadata } from "next";
 import BreadDash from "@/components/Common/BreadDash";
+import ProtectedRoute from "@/components/Proteccion"
 
 export const metadata: Metadata = {
     title: "Disponibilidad Docentes | Escuela de Informática",
@@ -12,6 +13,7 @@ export const metadata: Metadata = {
 const DisDocentesPage = () => {
     return (
         <section >
+            <ProtectedRoute />
             <BreadDash/>
             <DashboardTabs/>
             <DisDos />

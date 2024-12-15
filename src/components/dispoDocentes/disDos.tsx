@@ -86,7 +86,8 @@ const ScheduleDisDos: React.FC = () => {
             ]);
         }
         } catch (error) {
-        console.error("Error al obtener los datos:", error);
+            setSchedule(Array.from({ length: 14 }, () => Array(5).fill(null))); 
+            console.error("Error al obtener los datos:", error);
         // para restingir setMessage("Error al obtener los datos.");
         }
     };

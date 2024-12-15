@@ -1,6 +1,7 @@
 import UserProfile from '@/components/Profile/UserProfile';
 import DashboardTabs from "@/components/Dashboard/DashboardTabs";
 import BreadDash from "@/components/Common/BreadDash";
+import ProtectedRoute from "@/components/Proteccion"
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -12,6 +13,7 @@ function ProfilePage() {
   return (
 
     <section>
+      <ProtectedRoute />
       {/* pa lo del name del usuario*/}
       <BreadDash/>
 

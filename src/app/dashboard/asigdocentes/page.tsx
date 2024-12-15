@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import DashboardTabs from "@/components/Dashboard/DashboardTabs";
 import BreadDash from "@/components/Common/BreadDash";
+import ProtectedRoute from "@/components/Proteccion"
 
 interface Course {
   _id: string;
@@ -219,6 +220,7 @@ const CoursesList = () => {
 
   return (
     <>
+      <ProtectedRoute /> 
       <BreadDash />
       <DashboardTabs />
       <div className="container mx-auto px-4 pb-9 sm:px-6 lg:px-8 mt-4">

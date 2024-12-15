@@ -164,7 +164,9 @@ const Classrooms = () => {
 
             <div className="max-w-3xl sm:mx-auto mx-4">
                 {loading ? (
-                    <p>Cargando aulas...</p>
+                    <div className="flex justify-center items-center mt-10 mb-10">
+                        <div className="animate-spin rounded-full h-10 w-10 border-t-4 border-blue-500 border-solid border-opacity-50"></div>
+                    </div>
                 ) : error ? (
                     <p style={{ color: "red" }}>{error}</p>
                 ) : (
