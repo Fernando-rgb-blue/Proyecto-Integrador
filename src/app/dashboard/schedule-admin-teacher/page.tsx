@@ -70,7 +70,7 @@ const ScheduleTable: React.FC = () => {
       }
       setLoading(true);
       const response = await axios.get(
-        `http://localhost:3000/api/scheduleteacher?professor=${selectedDocente}`
+        `/api/scheduleteacher?professor=${selectedDocente}`
       );
       if (response.status !== 200) {
         throw new Error('Error al buscar el horario');
@@ -79,17 +79,22 @@ const ScheduleTable: React.FC = () => {
       setSchedule(mapScheduleData(data, 14));
       setError('');
     } catch (err: any) {
-      setSchedule(Array.from({ length: 14 }, () => Array(5).fill(null))); 
-      setError(err.message || 'Error al buscar el horario');
+      if (err.response && err.response.status === 404) {
+        setError('Error al buscar el horario');
+      } else {
+        setError(err.message || 'Error al buscar el horario');
+      }
+      setSchedule(Array.from({ length: 14 }, () => Array(5).fill(null)));
     } finally {
       setLoading(false);
     }
   };
 
+
   useEffect(() => {
     const fetchDocentes = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/auth/signup/");
+        const response = await axios.get("/api/auth/signup/");
         if (response.status !== 200) throw new Error("Error al obtener los docentes");
         const data = response.data;
         const filteredDocentes = data.filter(
@@ -141,134 +146,137 @@ const ScheduleTable: React.FC = () => {
 
   return (
     <>
-  
+
       <BreadDash />
       <DashboardTabs />
-      
+
       <div className="container mx-auto px-4 pb-1 sm:px-6 lg:px-8 mt-4">
-          <label htmlFor="docentes" className="block text-lg font-medium mb-2">
-            Docente
-          </label>
-          <div className="flex flex-wrap items-center gap-4">
-            <select
-              id="docentes"
-              value={selectedDocente}
-              onChange={(e) => setSelectedDocente(e.target.value)}
-              className="p-2 border border-gray-300 rounded-lg w-full sm:w-auto dark:bg-dark"
-            >
-              <option value="">Seleccionar Docente</option>
-              {docentes.map((user) => (
-                <option key={user._id} value={user.fullname}>
-                  {user.fullname}
-                </option>
-              ))}
-            </select>
-            <button
-              onClick={handleSearch}
-              className="bg-blue-500 text-white px-4 py-2 rounded w-full md:w-auto"
-            >
-              Buscar
-            </button>
-          </div>
-        </div>        
+        <label htmlFor="docentes" className="block text-lg font-medium mb-2">
+          Docente
+        </label>
+        <div className="flex flex-wrap items-center gap-4">
+          <select
+            id="docentes"
+            value={selectedDocente}
+            onChange={(e) => setSelectedDocente(e.target.value)}
+            className="p-2 border border-gray-300 rounded-lg w-full sm:w-auto dark:bg-dark"
+          >
+            <option value="">Seleccionar Docente</option>
+            {docentes.map((user) => (
+              <option key={user._id} value={user.fullname}>
+                {user.fullname}
+              </option>
+            ))}
+          </select>
+          <button
+            onClick={handleSearch}
+            className="bg-blue-500 text-white px-4 py-2 rounded w-full md:w-auto"
+          >
+            Buscar
+          </button>
+        </div>
+      </div>
 
-        {loading && <p className="text-blue-500">Cargando horarios...</p>}
-        {error && <p className="mt-4 text-red-500">{error}</p>}
 
-        <div className="container mx-auto mt-10 mb-10 p-4">
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[800px] sm:min-w-[600px] table-auto border-collapse border border-gray-300 dark:bg-dark " >
-              <thead>
-                <tr>
-                  <th className="bg-blue-800 text-white p-3 text-xs sm:text-base border border-gray-300 w-[120px] sm:w-[150px] text-center">
-                    HORAS
+      {loading && <p className="text-blue-500">Cargando horarios...</p>}
+      <div style={{ textAlign: 'center', marginTop: '20px', color: 'red' }}>
+        {error && <p>{error}</p>}
+      </div>
+
+
+      <div className="container mx-auto mt-10 mb-10 p-4">
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[800px] sm:min-w-[600px] table-auto border-collapse border border-gray-300 dark:bg-dark " >
+            <thead>
+              <tr>
+                <th className="bg-blue-800 text-white p-3 text-xs sm:text-base border border-gray-300 w-[120px] sm:w-[150px] text-center">
+                  HORAS
+                </th>
+                {days.map((day, index) => (
+                  <th
+                    key={index}
+                    className="bg-blue-800 text-white p-3 text-xs sm:text-base border border-gray-300 w-[120px] sm:w-[150px] text-center"
+                  >
+                    {day}
                   </th>
-                  {days.map((day, index) => (
-                    <th
-                      key={index}
-                      className="bg-blue-800 text-white p-3 text-xs sm:text-base border border-gray-300 w-[120px] sm:w-[150px] text-center"
-                    >
-                      {day}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
               {hours.map((hour, hourIndex) => (
-              <tr key={hourIndex}>
-                <td className="p-2 text-center border-2  border-gray-300 text-sm">
-                  {hour}
-                </td>
-                {days.map((_, dayIndex) => {
-                  const currentCell = schedule[hourIndex][dayIndex];
+                <tr key={hourIndex}>
+                  <td className="p-2 text-center border-2  border-gray-300 text-sm">
+                    {hour}
+                  </td>
+                  {days.map((_, dayIndex) => {
+                    const currentCell = schedule[hourIndex][dayIndex];
 
-                  // Lógica para evitar combinar celdas vacías
-                  if (
-                    hourIndex > 0 &&
-                    schedule[hourIndex - 1][dayIndex] &&
-                    JSON.stringify(schedule[hourIndex - 1][dayIndex]) === JSON.stringify(currentCell) &&
-                    currentCell && currentCell.courses.length > 0
-                  ) {
-                    return null; // No renderizar la celda repetida si tiene contenido igual
-                  }
+                    // Lógica para evitar combinar celdas vacías
+                    if (
+                      hourIndex > 0 &&
+                      schedule[hourIndex - 1][dayIndex] &&
+                      JSON.stringify(schedule[hourIndex - 1][dayIndex]) === JSON.stringify(currentCell) &&
+                      currentCell && currentCell.courses.length > 0
+                    ) {
+                      return null; // No renderizar la celda repetida si tiene contenido igual
+                    }
 
-                  // Calcular rowSpan solo si la celda actual tiene contenido
-                  let rowSpan = 1;
-                  if (currentCell && currentCell.courses.length > 0) {
-                    for (let i = hourIndex + 1; i < hours.length; i++) {
-                      if (
-                        schedule[i][dayIndex] &&
-                        JSON.stringify(schedule[i][dayIndex]) === JSON.stringify(currentCell) &&
-                        schedule[i][dayIndex].courses.length > 0
-                      ) {
-                        rowSpan++;
-                      } else {
-                        break;
+                    // Calcular rowSpan solo si la celda actual tiene contenido
+                    let rowSpan = 1;
+                    if (currentCell && currentCell.courses.length > 0) {
+                      for (let i = hourIndex + 1; i < hours.length; i++) {
+                        if (
+                          schedule[i][dayIndex] &&
+                          JSON.stringify(schedule[i][dayIndex]) === JSON.stringify(currentCell) &&
+                          schedule[i][dayIndex].courses.length > 0
+                        ) {
+                          rowSpan++;
+                        } else {
+                          break;
+                        }
                       }
                     }
-                  }
 
-                  // Mostrar celda vacía si no tiene contenido
-                  if (!currentCell || currentCell.courses.length === 0) {
+                    // Mostrar celda vacía si no tiene contenido
+                    if (!currentCell || currentCell.courses.length === 0) {
+                      return (
+                        <td
+                          key={`${hourIndex}-${dayIndex}`}
+                          className="border-2  border-gray-300 text-center"
+                        >
+                          {/* Celda vacía sin contenido xdd */}
+                        </td>
+                      );
+                    }
+
                     return (
                       <td
                         key={`${hourIndex}-${dayIndex}`}
-                        className="border-2  border-gray-300 text-center"
-                      >
-                        {/* Celda vacía sin contenido xdd */}
-                      </td>
-                    );
-                  }
-
-                  return (
-                    <td
-                      key={`${hourIndex}-${dayIndex}`}
-                      className={`text-center align-middle border-2  border-gray-300 text-sm whitespace-normal ${
-                        currentCell && currentCell.available === 1 && currentCell.courses[0]?.course
+                        className={`text-center align-middle border-2  border-gray-300 text-sm whitespace-normal ${currentCell && currentCell.available === 1 && currentCell.courses[0]?.course
                           ? getCourseColor(currentCell.courses[0].course)
                           : ""
-                      }`}
-                      
-                      rowSpan={rowSpan}
-                      onClick={() => toggleCellSelection(dayIndex, hourIndex)}
-                    >
-                      {currentCell.courses.map((course, index) => (
-                        <div key={index} className="text-xs dark:text-dark">
-                          <p>{course.course}</p>
-                          <p>{course.activity}</p>
-                          <p>{course.classroom}</p>
-                        </div>
-                      ))}
-                    </td>
-                  );
-                })}
-              </tr>
-            ))}
-              </tbody>
-            </table>
-          </div>
+                          }`}
+
+                        rowSpan={rowSpan}
+                        onClick={() => toggleCellSelection(dayIndex, hourIndex)}
+                      >
+                        {currentCell.courses.map((course, index) => (
+                          <div key={index} className="text-xs dark:text-dark">
+                            <p>{course.course}</p>
+                            <p>{course.activity}</p>
+                            <p>{course.classroom}</p>
+                          </div>
+                        ))}
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-      
+      </div>
+
     </>
   );
 };

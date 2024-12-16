@@ -105,7 +105,7 @@ const ScheduleTable: React.FC = () => {
         if (!anio || !periodo || !ciclo || !seccion) {
             throw new Error('Por favor complete todos los campos');
         }
-        const response = await fetch('http://localhost:3000/api/cicloperiodo/search?' + new URLSearchParams({
+        const response = await fetch('/api/cicloperiodo/search?' + new URLSearchParams({
             anio,
             periodo,
             ciclo,
@@ -468,7 +468,7 @@ const ScheduleTable: React.FC = () => {
                     setCiclo(selectedCiclo);
                     setSeccion(selectedSeccion);
                     axios
-                    .get(`http://localhost:3000/api/course/search?ciclo=${selectedCiclo}`)
+                    .get(`/api/course/search?ciclo=${selectedCiclo}`)
                     .then((response) => {
                         const coursesWithProfessors = response.data.flatMap(
                         (course: { nombre: string; profesores: string[] }) =>

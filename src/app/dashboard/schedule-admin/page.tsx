@@ -68,7 +68,7 @@ const ScheduleModal: React.FC<{
   useEffect(() => {
     const fetchClassrooms = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/classroom/");
+        const response = await axios.get("/api/classroom/");
         const classroomNames = response.data.map((room: { name: string }) => room.name);
         setClassrooms(classroomNames);
       } catch (error) {
@@ -340,7 +340,7 @@ const ScheduleTable: React.FC = () => {
       if (!anio || !periodo || !ciclo || !seccion) {
         throw new Error('Por favor complete todos los campos');
       }
-      const response = await fetch('http://localhost:3000/api/cicloperiodo/search?' + new URLSearchParams({
+      const response = await fetch('/api/cicloperiodo/search?' + new URLSearchParams({
         anio,
         periodo,
         ciclo,
@@ -704,7 +704,7 @@ const ScheduleTable: React.FC = () => {
                 setCiclo(selectedCiclo);
                 setSeccion(selectedSeccion);
                 axios
-                  .get(`http://localhost:3000/api/course/search?ciclo=${selectedCiclo}`)
+                  .get(`/api/course/search?ciclo=${selectedCiclo}`)
                   .then((response) => {
                     const coursesWithProfessors = response.data.flatMap(
                       (course: { nombre: string; profesores: string[] }) =>

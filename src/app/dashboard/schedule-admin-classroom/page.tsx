@@ -71,7 +71,7 @@ const ScheduleTable: React.FC = () => {
       }
       setLoading(true);
       const response = await axios.get(
-        `http://localhost:3000/api/scheduleclassroom?classroom=${selectedAula}`
+        `/api/scheduleclassroom?classroom=${selectedAula}`
       );
       if (response.status !== 200) {
         throw new Error('Error al buscar el horario');
@@ -90,7 +90,7 @@ const ScheduleTable: React.FC = () => {
   useEffect(() => {
     const fetchAula = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/classroom/");
+        const response = await fetch("/api/classroom/");
         if (!response.ok) throw new Error("Error al obtener las aulas");
         const data = await response.json();
         setAula(data);  // Aquí usamos 'data' en lugar de 'response'

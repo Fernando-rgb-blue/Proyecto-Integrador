@@ -33,7 +33,7 @@ const ScheduleDisDos: React.FC = () => {
     useEffect(() => {
         const fetchDocentes = async () => {
         try {
-            const response = await fetch("http://localhost:3000/api/auth/signup/");
+            const response = await fetch("/api/auth/signup/");
             if (!response.ok) throw new Error("Error al obtener los docentes");
             const data = await response.json();
 
@@ -60,7 +60,7 @@ const ScheduleDisDos: React.FC = () => {
 
         try {
         // Obtener los cursos asignados al docente
-        const responseCursos = await fetch(`http://localhost:3000/api/course/searcht?profesores=${selectedDocenteName}`);
+        const responseCursos = await fetch(`/api/course/searcht?profesores=${selectedDocenteName}`);
         if (!responseCursos.ok) throw new Error("Error al obtener los cursos del docente");
 
         const cursosData: Curso[] = await responseCursos.json();

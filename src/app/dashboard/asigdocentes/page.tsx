@@ -60,7 +60,7 @@ const CoursesList = () => {
 
     const fetchDocentes = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/auth/signup/");
+        const response = await fetch("/api/auth/signup/");
         if (!response.ok) throw new Error("Error al obtener los docentes");
         const data = await response.json();
 
@@ -121,7 +121,7 @@ const CoursesList = () => {
 
     for (const course of coursesToAddDocente) {
       try {
-        const response = await fetch(`http://localhost:3000/api/course/${course._id}`, {
+        const response = await fetch(`/api/course/${course._id}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -151,7 +151,7 @@ const CoursesList = () => {
 
     for (const course of coursesToRemoveDocente) {
       try {
-        const response = await fetch(`http://localhost:3000/api/course/${course._id}`, {
+        const response = await fetch(`/api/course/${course._id}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
