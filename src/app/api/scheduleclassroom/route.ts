@@ -5,17 +5,30 @@ import { connectDB } from '@/libs/mongodb';
 // Conectar a la base de datos
 connectDB();
 
+// Función para filtrar los slots de un día
+const filterDaySlots = (daySlots, classroom) => {
+  return daySlots.map((slot) => {
+    if (slot.available === 0) {
+      return { available: 0, courses: [] }; // Slot no disponible
+    }
+    return {
+      available: 1,
+      courses: slot.courses.filter(course => course.classroom === classroom) // Filtrar por aula
+    };
+  });
+};
 
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const classroom = searchParams.get('classroom');
 
-  
     if (!classroom) {
-      return NextResponse.json({ message: 'El parámetro "classroom" es obligatorio.' }, { status: 400 });
+      return NextResponse.json(
+        { message: 'El parámetro "classroom" es obligatorio.' },
+        { status: 400 }
+      );
     }
-
 
     const schedules = await Schedule.find({
       $or: [
@@ -25,72 +38,36 @@ export async function GET(request: Request) {
         { "jueves.courses.classroom": classroom },
         { "viernes.courses.classroom": classroom }
       ]
-    }).select('lunes martes miercoles jueves viernes'); 
+    }).select('lunes martes miercoles jueves viernes'); // Seleccionar solo los campos necesarios
 
     const filteredSchedules = schedules.map((schedule) => {
-      return {
-        lunes: schedule.lunes.map((slot) => {
-          if (slot.available === 0) {
-            return { available: 0, courses: [] }; 
-          }
-          return {
-            available: 1,
-            courses: slot.courses.filter(course => course.classroom === classroom) 
-          };
-        }),
-        martes: schedule.martes.map((slot) => {
-          if (slot.available === 0) {
-            return { available: 0, courses: [] }; 
-          }
-          return {
-            available: 1,
-            courses: slot.courses.filter(course => course.classroom === classroom) 
-          };
-        }),
-        miercoles: schedule.miercoles.map((slot) => {
-          if (slot.available === 0) {
-            return { available: 0, courses: [] }; 
-          }
-          return {
-            available: 1,
-            courses: slot.courses.filter(course => course.classroom === classroom) 
-          };
-        }),
-        jueves: schedule.jueves.map((slot) => {
-          if (slot.available === 0) {
-            return { available: 0, courses: [] }; 
-          }
-          return {
-            available: 1,
-            courses: slot.courses.filter(course => course.classroom === classroom) 
-          };
-        }),
-        viernes: schedule.viernes.map((slot) => {
-          if (slot.available === 0) {
-            return { available: 0, courses: [] }; 
-          }
-          return {
-            available: 1,
-            courses: slot.courses.filter(course => course.classroom === classroom) 
-          };
-        })
-      };
-    }).filter(schedule => 
-      schedule.lunes.some(slot => slot.courses.length > 0) || 
-      schedule.martes.some(slot => slot.courses.length > 0) || 
-      schedule.miercoles.some(slot => slot.courses.length > 0) || 
-      schedule.jueves.some(slot => slot.courses.length > 0) || 
-      schedule.viernes.some(slot => slot.courses.length > 0)
+      const filtered = {};
+      // Iterar dinámicamente sobre los días
+      ['lunes', 'martes', 'miercoles', 'jueves', 'viernes'].forEach((day) => {
+        filtered[day] = filterDaySlots(schedule[day], classroom);
+      });
+
+      return filtered;
+    }).filter(schedule =>
+      // Verificar si algún día tiene cursos filtrados
+      Object.values(schedule).some(daySlots => 
+        daySlots.some(slot => slot.courses.length > 0)
+      )
     );
 
-
     if (filteredSchedules.length === 0) {
-      return NextResponse.json({ message: 'No se encontraron horarios para el aula especificada.' }, { status: 404 });
+      return NextResponse.json(
+        { message: 'No se encontraron horarios para el aula especificada.' },
+        { status: 404 }
+      );
     }
 
     return NextResponse.json(filteredSchedules, { status: 200 });
   } catch (error) {
     console.error("Error al buscar horarios por aula:", error);
-    return NextResponse.json({ message: 'Error al obtener los horarios', error: error.message }, { status: 500 });
+    return NextResponse.json(
+      { message: 'Error al obtener los horarios', error: error.message },
+      { status: 500 }
+    );
   }
 }
