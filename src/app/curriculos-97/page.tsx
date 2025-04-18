@@ -32,7 +32,7 @@ const Curriculos97Page = () => {
                 </Link>
             </div>
             <Image src={"/images/curriculos/currculo_ANTIGUO.png"} alt="Imagen de la malla curricular 1997" width={800} height={1200} className="mx-auto" />
-            <div className="text-center mt-8">
+            <div className="text-center mt-8 mb-3">
                 <Link
                     href={"https://informaticaunt.github.io/"}
                     className="underline text-base text-body-color duration-300 hover:text-primary dark:text-body-color-dark dark:hover:text-primary"

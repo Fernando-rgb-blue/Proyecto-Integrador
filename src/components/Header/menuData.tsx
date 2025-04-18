@@ -86,7 +86,7 @@ const menuData: Menu[] = [
       },
       {
         id: 61,
-        title: "Instrucciones Matrícula ",
+        title: "Indicaciones de Matrícula ",
         path: "/matricula",
         newTab: false,
       },

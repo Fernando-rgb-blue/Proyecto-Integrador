@@ -11,35 +11,35 @@ const Content = () => {
       <div className="container">
         <div className="grid grid-cols-1 gap-x-8 gap-y-10  md:grid-cols-2 lg:grid-cols-3 ">
           <Pasos
-            orden="1° Paso"
+            orden="1° Indicación"
             subtitle="Los alumnos, antes de ingresar a registrar matrícula deberán revisar los horarios que se encuentran publicados en la página web de esta Escuela."
           > </Pasos>
           <Pasos
-            orden="2° Paso"
+            orden="2° Indicación"
             subtitle="Luego ingresar al sistema S.G.A. (ingresantes hasta el 2017) o S.U.V. (ingresantes desde 2018) de la UNT según le corresponda, con su código y selecciona los cursos a matricularse e imprime la ORDEN DE PAGO."
           > </Pasos>
           <Pasos
-            orden="3° Paso"
+            orden="3° Indicación"
             subtitle="Con la orden de pago cancelará el monto en la entidad financiera y a la cuenta que se indica en la ORDEN DE PAGO."
           > </Pasos>
           <Pasos
-            orden="4° Paso"
+            orden="4° Indicación"
             subtitle="Después de cancelar en la entidad financiera, deberá colocar sus datos y N° de matrícula EN EL VOUCHER la cual dejará copia a fin de ser validado el pago realizado y finalizar la matrícula, dicho voucher deberá ser entregado junto con la constancia de evaluación docente (En secretaría)."
           > </Pasos>
           <Pasos
-            orden="5° Paso"
+            orden="5° Indicación"
             subtitle="Los alumnos deberán matricularse obligatoriamente en los cursos que tienen desaprobados (4°, 3° y 2° matrícula) respectivamente, en cumplimiento del Art. 30 del Reglamento de Evaluación del Aprendizaje."
           > </Pasos>
           <Pasos
-            orden="6° Paso"
+            orden="6° Indicación"
             subtitle="Los alumnos que se matriculen en cursos de: 3° y/o 4° matrícula, menos de 12 créditos (Matrícula especial por mínimo de créditos), Reinician Estudios y Exoneración de Pago, deben solicitar su Resolución vía mesa de partes virtual de la Facultad, con la debida anticipación."
           > </Pasos>
           <Pasos
-            orden="7° Paso"
+            orden="7° Indicación"
             subtitle="La matrícula EXCEPCIONAL (más de 22 créditos) es para estudiantes que en el semestre anterior (2024- I) hayan obtenido promedio ponderado igual o mayor de 16 y deben solicitar su AUTORIZACION en el Decanato. Art. 6° y 7° Normatividad Académica."
           > </Pasos>
           <Pasos
-            orden="8° Paso"
+            orden="8° Indicación"
             subtitle="Los alumnos para Retirar y Reservar Matrícula, deben de registrar primero matrícula y luego tienen hasta 30 días para solicitar el Retiro y Reserva de la matrícula efectuada."
           > </Pasos>
         </div>

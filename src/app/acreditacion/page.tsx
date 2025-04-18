@@ -6,7 +6,7 @@ import Breadcrumb from "@/components/Common/Breadcrumb";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Escuela de Informática | Acreditación",
+    title: "Acreditación | Escuela de Informática",
     description: "Esta es la página de Documentos de Acreditación",
     // other metadata
 };
@@ -43,7 +43,9 @@ const AcreditacionPage = () => {
                                     src="/images/icacit/ICACIT.webp"
                                     alt="imagen de acreditación ICACIT"
                                     fill
+                                    sizes="(max-width: 640px) 100vw, 800px"
                                     className="object-cover object-center"
+                                    priority 
                                 />
                                 </div>
                             </div>

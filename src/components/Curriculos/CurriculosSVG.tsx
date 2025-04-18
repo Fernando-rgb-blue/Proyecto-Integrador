@@ -29,7 +29,7 @@ const CurriculosSVG = () => {
             return "#ff8888";
         }
         if (getDependents(hoveredCourse).includes(courseId)) {
-            return "lightgreen"
+            return "#228B22"
         }
     }
 
@@ -141,6 +141,7 @@ const CurriculosSVG = () => {
 
     return (
         <>
+        <div className="overflow-x-auto pb-3">
             <svg width="1420" height="647" className="border border-gray-800 dark:border-gray-400 mx-auto mt-2 mb-5 select-none">
                 {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((value) => (
                     <g
@@ -625,12 +626,15 @@ const CurriculosSVG = () => {
                         </text>
                     </svg>
                 </div>
-                <div className="text-center xl:text-left mb-10 xl:mb-0">
-                    <h3 className="text-lg font-semibold mb-2">
-                        Leyenda
-                    </h3>
-                    <Image src={"/images/curriculos/curriculos_leyenda.png"} alt="Leyenda de currículos" width={500} height={200} className="mx-auto" />
-                </div>
+                <div className="relative w-full max-w-[500px] aspect-[5/2] mx-auto">
+  <Image
+    src="/images/curriculos/curriculos_leyenda.png"
+    alt="Leyenda de currículos"
+    fill
+    className="object-contain"
+    sizes="(max-width: 768px) 100vw, 500px"
+  />
+</div>
                 <div className="text-center xl:text-left">
                     <h3 className="text-lg font-semibold mb-2">
                         Total de créditos
@@ -708,6 +712,7 @@ const CurriculosSVG = () => {
                     </svg>
                 </div>
             </div>
+        </div>
         </>
     );
 }

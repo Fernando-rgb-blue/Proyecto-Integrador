@@ -1,15 +1,8 @@
 // Contenedor general de el home
-
-import AboutSectionOne from "@/components/About/AboutSectionOne";
-import AboutSectionTwo from "@/components/About/AboutSectionTwo";
-import Blog from "@/components/Blog";
-import Brands from "@/components/Brands";
 import ScrollUp from "@/components/Common/ScrollUp";
-import Contact from "@/components/Contact";
 import Features from "@/components/Features";
 import Hero from "@/components/Hero";
 import CarreraInfo from "@/components/CarreraInfo";
-import Testimonials from "@/components/Testimonials";
 import Video from "@/components/Video";
 import Conveniosf from "@/components/Convenios/Showcon";
 import { Metadata } from "next";
@@ -29,13 +22,6 @@ export default function Home() {
       <Features />
       <Video />
       <Conveniosf />
-      {/* <Brands />
-      <AboutSectionOne />
-      <AboutSectionTwo />
-      <Testimonials />
-      <Pricing />
-      <Blog />
-      <Contact /> */}
     </>
   );
 }

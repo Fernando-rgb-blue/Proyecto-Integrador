@@ -90,14 +90,16 @@ const BlogDetailsPage = () => {
                   </p>
                   
                   <div className="mb-10 w-full overflow-hidden rounded">
-                    <div className="relative aspect-[97/60] w-full sm:aspect-[97/44]">
-                      <Image
-                        src="/images/perfilEgresado/perfil.webp"
-                        alt="image"
-                        fill
-                        className="object-cover object-center"
-                      />
-                    </div>
+                      <div className="relative aspect-[97/60] w-full sm:aspect-[97/44]">
+                        <Image
+                          src="/images/perfilEgresado/perfil.webp"
+                          alt="image de perfil de egresado"
+                          fill
+                          sizes="(max-width: 640px) 100vw, 800px"
+                          className="object-cover object-center"
+                          priority 
+                        />
+                      </div>
                   </div>
                   
                 </div>
