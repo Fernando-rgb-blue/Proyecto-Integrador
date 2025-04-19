@@ -24,6 +24,7 @@
     "react-dom": "^18.2.0",
     "react-modal-video": "^2.0.1",
     "startup-nextjs-template": "file:",
+    "three": "^0.175.0",
     "uniqid": "^5.4.0"
   },
   "devDependencies": {

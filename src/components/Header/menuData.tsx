@@ -75,7 +75,7 @@ const menuData: Menu[] = [
       {
         id: 59,
         title: "Sustitutorio",
-        path: "/error",
+        path: "/sustitutorio",
         newTab: false,
       },
       {
