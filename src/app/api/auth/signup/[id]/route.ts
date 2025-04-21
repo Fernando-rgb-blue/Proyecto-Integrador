@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import User from "@/models/user";
 import { connectDB } from "@/libs/mongodb";
 import bcrypt from "bcryptjs";
-
+import Course from "@/models/course"; // Asegúrate de tener este import
 interface Params {
   id: string;
 }
@@ -83,20 +83,26 @@ export async function PUT(request: Request, { params }: { params: Params }) {
   }
 }
 
-// DELETE
 export async function DELETE(request: Request, { params }: { params: Params }) {
   const { id } = params;
 
   try {
     await connectDB();
 
+    // 1. Eliminar el usuario
     const user = await User.findByIdAndDelete(id);
 
     if (!user) {
       return NextResponse.json({ message: "Usuario no encontrado" }, { status: 404 });
     }
 
-    return NextResponse.json({ message: "Usuario eliminado exitosamente" });
+    // 2. Remover al docente eliminado del campo 'profesores' en todos los cursos
+    await Course.updateMany(
+      { profesores: id },
+      { $pull: { profesores: id } }
+    );
+
+    return NextResponse.json({ message: "Usuario eliminado exitosamente y removido de los cursos" });
 
   } catch (error) {
     console.error(error);
