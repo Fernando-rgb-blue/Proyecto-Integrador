@@ -17,12 +17,8 @@ interface ScheduleItem {
   }[];
 }
 
-
 //  Inicio del modal para agregar, editar, borrar
-
-
 // Componente ScheduleModal actualizado
-
 
 const ScheduleModal: React.FC<{
   visible: boolean;
@@ -35,12 +31,12 @@ const ScheduleModal: React.FC<{
 }> = ({ visible, onClose, onSubmit, onDelete, onDeleteCourse, initialData, courses }) => {
   const [courseData, setCourseData] = useState(
     initialData?.courses || [
-      { course: "", professor: "", activity: "", classroom: "", hours: 2  }
+      { course: "", professor: "", activity: "", classroom: "", hours: 2 }
     ]
   );
   const [classrooms, setClassrooms] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
-
+  const [docentes, setDocentes] = useState<any[]>([]);
 
   // Bloquear scroll en el fondo cuando el modal esté visible
   useEffect(() => {
@@ -77,22 +73,30 @@ const ScheduleModal: React.FC<{
       }
     };
 
+    const fetchDocentes = async () => {
+      try {
+        const response = await fetch("/api/auth/signup/");
+        if (!response.ok) throw new Error("Error al obtener los docentes");
+        const data = await response.json();
+
+        const filteredDocentes = data.filter(
+          (docente: any) => docente.role !== "admin" && docente.status === "activo"
+        );
+
+        setDocentes(filteredDocentes);
+      } catch (error) {
+        console.error("Error cargando docentes:", error);
+      }
+    };
+
+    fetchDocentes();
 
     fetchClassrooms();
   }, []);
 
 
-  const handleCourseChange = (index: number, field: string, value: string) => {
-    const updatedCourses = [...courseData];
-    updatedCourses[index] = { ...updatedCourses[index], [field]: value };
 
 
-    if (field === "course") {
-      const professorName = value.split(' / ')[1] || '';
-      updatedCourses[index].professor = professorName;
-    }
-    setCourseData(updatedCourses);
-  };
 
 
   const handleAddCourse = () => {
@@ -102,6 +106,18 @@ const ScheduleModal: React.FC<{
     ]);
   };
 
+  const handleCourseChange = (index: number, field: string, value: string) => {
+    const updatedCourses = [...courseData];
+    updatedCourses[index] = { ...updatedCourses[index], [field]: value };
+
+    if (field === "course") {
+      const [courseName, professorId] = value.split(" / ");
+      updatedCourses[index].course = courseName;
+      updatedCourses[index].professor = professorId;
+    }
+
+    setCourseData(updatedCourses);
+  };
 
   const handleSubmit = () => {
     if (courseData.some(course => !course.professor || !course.activity || !course.classroom || !course.course)) {
@@ -142,24 +158,36 @@ const ScheduleModal: React.FC<{
 
 
         {courseData.map((course, index) => (
+
           <div key={index} className="space-y-4 border-b pb-4">
             <h3 className="text-lg font-medium">Curso {index + 1}</h3>
 
 
             <div className="mb-4">
               <label className="block text-sm font-medium mb-1">Curso</label>
+
+
               <select
-                value={course.course}
+                value={`${course.course} / ${course.professor}`}
                 onChange={(e) => handleCourseChange(index, "course", e.target.value)}
                 className="border rounded w-full p-2"
               >
                 <option value="">Seleccione un curso</option>
-                {courses.map((courseWithProfessor, i) => (
-                  <option key={i} value={courseWithProfessor}>
-                    {courseWithProfessor}
-                  </option>
-                ))}
+                {courses.map((courseWithProfessor, i) => {
+                  const [courseName, professorId] = courseWithProfessor.split(" / ");
+                  const professor = docentes.find((d) => d._id === professorId);
+                  const professorName = professor ? professor.fullname : "Desconocido";
+
+                  return (
+                    <option key={i} value={courseWithProfessor}>
+                      {courseName} / {professorName}
+                    </option>
+                  );
+                })}
               </select>
+
+
+
             </div>
 
 
@@ -195,7 +223,7 @@ const ScheduleModal: React.FC<{
                 ))}
               </select>
             </div>
-            
+
             {/* //"nuevoooo" */}
             <div className="mb-4">
               <label className="block text-sm font-medium mb-1">Horas</label>
@@ -287,7 +315,7 @@ const ScheduleTable: React.FC = () => {
   const [error, setError] = useState('');
   const [selectedDocente, setSelectedDocente] = useState<string>("");
   const [selectedAula, setSelectedAula] = useState<string>("");
-
+  const [docentes, setDocentes] = useState<any[]>([]);
   //colores
 
   const colors = [
@@ -405,6 +433,22 @@ const ScheduleTable: React.FC = () => {
         setLoading(false);
       }
     };
+
+    const fetchDocentes = async () => {
+      try {
+        const res = await fetch("/api/auth/signup");
+        if (!res.ok) throw new Error("Error al obtener docentes");
+        const data = await res.json();
+
+        const activos = data.filter((u: any) => u.status === "activo" && u.role !== "admin");
+        setDocentes(activos);
+      } catch (err) {
+        console.error("Error cargando docentes:", err);
+      }
+    };
+
+    fetchDocentes();
+
     fetchSchedule();
   }, [horarioID]);
 
@@ -419,7 +463,10 @@ const ScheduleTable: React.FC = () => {
     setSelectedAula(neweAula);
   };
 
-
+  const getNombreDocente = (id: string) => {
+    const docente = docentes.find((d) => d._id === id);
+    return docente ? docente.fullname : id; // fallback por si aún no cargó
+  };
 
   // Función para crear un nuevo horario // En base a la estructura de la api
 
@@ -529,9 +576,9 @@ const ScheduleTable: React.FC = () => {
     if (cellIndex) {
       const { dayIndex, hourIndex } = cellIndex;
       const updatedSchedule = [...schedule];
-  
+
       const cantidadHoras = Number(data.courses[0]?.hours) || 1;
-  
+
       for (let i = 0; i < cantidadHoras; i++) {
         if (hourIndex + i >= updatedSchedule.length) break;
         updatedSchedule[hourIndex + i][dayIndex] = {
@@ -539,7 +586,7 @@ const ScheduleTable: React.FC = () => {
           courses: [...data.courses],
         };
       }
-  
+
       // Limpia celdas sobrantes si antes había más horas
       if (hourIndex + cantidadHoras < updatedSchedule.length) {
         for (
@@ -550,9 +597,9 @@ const ScheduleTable: React.FC = () => {
           if (
             updatedSchedule[i][dayIndex] &&
             updatedSchedule[i][dayIndex].courses[0].course ===
-              data.courses[0].course &&
+            data.courses[0].course &&
             updatedSchedule[i][dayIndex].courses[0].activity ===
-              data.courses[0].activity &&
+            data.courses[0].activity &&
             updatedSchedule[i][dayIndex].available === 1
           ) {
             updatedSchedule[i][dayIndex] = {
@@ -572,7 +619,7 @@ const ScheduleTable: React.FC = () => {
           }
         }
       }
-  
+
       setSchedule(updatedSchedule);
     }
   };
@@ -698,7 +745,7 @@ const ScheduleTable: React.FC = () => {
       <ProtectedRoute />
       <BreadDash />
       <DashboardTabs />
-  
+
       <div className="container mx-auto p-4 pt-10">
 
         {/* Fila de busqueda por ciclo */}
@@ -721,7 +768,7 @@ const ScheduleTable: React.FC = () => {
               ))}
             </select>
           </div>
-  
+
           <div className="flex-1">
             <label className="block mb-2" htmlFor="periodo">
               Periodo
@@ -740,7 +787,7 @@ const ScheduleTable: React.FC = () => {
               ))}
             </select>
           </div>
-  
+
           <div className="flex-1">
             <label className="block mb-2" htmlFor="ciclo-seccion">
               Ciclo
@@ -778,7 +825,7 @@ const ScheduleTable: React.FC = () => {
             </select>
           </div>
         </div>
-  
+
         <div className="flex justify-center mb-4">
           <button
             onClick={handleSearch}
@@ -787,9 +834,9 @@ const ScheduleTable: React.FC = () => {
             Buscar
           </button>
         </div>
-  
+
         {error && <p className="mt-4 text-red-500">{error}</p>}
-  
+
         {/* Cuadro de horario */}
         <div className="container mx-auto mt-10 mb-10 p-4" style={{ marginTop: '1cm' }}>
           <div className="overflow-x-auto">
@@ -809,7 +856,7 @@ const ScheduleTable: React.FC = () => {
                   ))}
                 </tr>
               </thead>
-  
+
               <tbody>
                 {hours.map((hour, hourIndex) => (
                   <tr key={hourIndex}>
@@ -820,7 +867,7 @@ const ScheduleTable: React.FC = () => {
                       const currentCell = schedule[hourIndex][dayIndex];
                       let isMasterCell = true;
                       let rowSpan = 1;
-  
+
                       // Verificar si es parte de un grupo de celdas
                       if (hourIndex > 0) {
                         const previousCell = schedule[hourIndex - 1][dayIndex];
@@ -834,7 +881,7 @@ const ScheduleTable: React.FC = () => {
                           isMasterCell = false; // No renderizar esta celda
                         }
                       }
-  
+
                       // Calcular cuántas filas debe abarcar esta celda
                       if (isMasterCell) {
                         for (let i = hourIndex + 1; i < schedule.length; i++) {
@@ -852,10 +899,10 @@ const ScheduleTable: React.FC = () => {
                           }
                         }
                       }
-  
+
                       // Si no es la celda principal, no renderizar nada
                       if (!isMasterCell) return null;
-  
+
                       return (
                         <td
                           key={`${hourIndex}-${dayIndex}`}
@@ -867,6 +914,9 @@ const ScheduleTable: React.FC = () => {
                             currentCell.courses.map((course, index) => (
                               <div key={index} className="text-xs dark:text-dark">
                                 <p className={course.course ? getCourseColor(course.course) : ""}>{course.course}</p>
+                                <p className={course.course ? getCourseColor(course.course) : ""}>
+                                  {getNombreDocente(course.professor)}
+                                </p>
                                 <p className={course.course ? getCourseColor(course.course) : ""}>{course.activity}</p>
                                 <p className={course.course ? getCourseColor(course.course) : ""}>{course.classroom}</p>
                               </div>
@@ -883,7 +933,7 @@ const ScheduleTable: React.FC = () => {
             </table>
           </div>
         </div>
-  
+
         {/* Boton de guardado */}
         <div className="mt-4 flex justify-center">
           <button
@@ -898,7 +948,7 @@ const ScheduleTable: React.FC = () => {
             )}
           </button>
         </div>
-  
+
         {/* Fin cuadro de horario */}
         <ScheduleModal
           visible={modalVisible}
@@ -912,7 +962,7 @@ const ScheduleTable: React.FC = () => {
       </div>
     </>
   );
-  
+
 };
 
 

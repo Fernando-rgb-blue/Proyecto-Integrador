@@ -32,65 +32,64 @@ const ScheduleDisDos: React.FC = () => {
 
     useEffect(() => {
         const fetchDocentes = async () => {
-        try {
+          try {
             const response = await fetch("/api/auth/signup/");
             if (!response.ok) throw new Error("Error al obtener los docentes");
             const data = await response.json();
-
+      
             const filteredDocentes = data.filter(
-            (docente: any) => docente.role !== "admin" && docente.status === "activo"
+              (docente: any) => docente.role !== "admin" && docente.status === "activo"
             );
-
+      
             setDocentes(filteredDocentes);
-        } catch (error) {
+          } catch (error) {
             console.error("Error al obtener los docentes:", error);
-        }
+          }
         };
-
+      
         fetchDocentes();
-    }, []);
-
-    const handleDocenteChange = async (docenteId: string) => {
+      }, []);
+      
+      const handleDocenteChange = async (docenteId: string) => {
         setSelectedDocenteId(docenteId);
-
+      
         const selectedDocente = docentes.find((d) => d._id === docenteId);
         if (!selectedDocente) return;
-
-        const selectedDocenteName = selectedDocente.fullname;
-
+      
         try {
-        // Obtener los cursos asignados al docente
-        const responseCursos = await fetch(`/api/course/searcht?profesores=${selectedDocenteName}`);
-        if (!responseCursos.ok) throw new Error("Error al obtener los cursos del docente");
-
-        const cursosData: Curso[] = await responseCursos.json();
-        setCursos(cursosData);
-
-        const coursesMessage = cursosData.length
+          // ✅ Buscar cursos por ID del docente
+          const responseCursos = await fetch(`/api/course/searcht?profesores=${docenteId}`);
+          if (!responseCursos.ok) throw new Error("Error al obtener los cursos del docente");
+      
+          const cursosData: Curso[] = await responseCursos.json();
+          setCursos(cursosData);
+      
+          const coursesMessage = cursosData.length
             ? `El docente elegido tiene los siguientes cursos asignados: ${cursosData.map((curso) => curso.nombre).join(" - ")}.`
             : "El docente elegido no tiene cursos asignados.";
-        setMessage(coursesMessage);
-
-        // Obtener el horario del docente , si en caso no hay datos guardado igual se los cursos asignados, revisar eso
-        const responseSchedule = await fetch(`/api/schedule/${docenteId}`);
-        if (!responseSchedule.ok) throw new Error("Error al obtener el horario");
-        const userSchedule = await responseSchedule.json();
-
-        if (userSchedule) {
+          setMessage(coursesMessage);
+      
+          // Obtener el horario del docente
+          const responseSchedule = await fetch(`/api/schedule/${docenteId}`);
+          if (!responseSchedule.ok) throw new Error("Error al obtener el horario");
+      
+          const userSchedule = await responseSchedule.json();
+      
+          if (userSchedule) {
             setSchedule([
-            userSchedule.lunes,
-            userSchedule.martes,
-            userSchedule.miercoles,
-            userSchedule.jueves,
-            userSchedule.viernes,
+              userSchedule.lunes,
+              userSchedule.martes,
+              userSchedule.miercoles,
+              userSchedule.jueves,
+              userSchedule.viernes,
             ]);
-        }
+          }
         } catch (error) {
-            setSchedule(Array.from({ length: 14 }, () => Array(5).fill(null))); 
-            console.error("Error al obtener los datos:", error);
-        // para restingir setMessage("Error al obtener los datos.");
+          setSchedule(Array.from({ length: 14 }, () => Array(5).fill(null)));
+          console.error("Error al obtener los datos:", error);
         }
-    };
+      };
+      
 
     if (status === "loading") return <div>Cargando...</div>;
     if (!session) return <div>No estás autenticado. Por favor, inicia sesión.</div>;
