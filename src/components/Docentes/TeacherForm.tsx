@@ -15,7 +15,7 @@ const TeacherForm = ({ onSubmit, teacher, setShowPopup }: TeacherFormProps) => {
         email: teacher?.email || "",
         password: teacher?.password || "",
         fullname: teacher?.fullname || "",
-        role: teacher?.role || "profesor",
+        role: teacher?.role || "profeC",
         status: teacher?.status || "activo",
         image: teacher?.image || "/images/props/pfp_default.png",
         office: teacher?.office || "",
@@ -45,6 +45,10 @@ const TeacherForm = ({ onSubmit, teacher, setShowPopup }: TeacherFormProps) => {
     const handleInputValidation = () => {
         if(!formData.fullname || !formData.email) {
             setErrorMessage("Se requiere al menos nombre y apellidos, y correo electrónico.");
+            return false;
+        }
+        if (formData.role === "nada") {
+            setErrorMessage("Rol no seleccionado, seleccione uno.");
             return false;
         }
         return true;
@@ -182,7 +186,7 @@ const TeacherForm = ({ onSubmit, teacher, setShowPopup }: TeacherFormProps) => {
                                 onChange={handleInputChange}
                                 value={formData.role}
                             >
-                                <option value="profeC" className="selected">Profesor contratado</option>
+                                <option value="profeC">Profesor contratado</option>
                                 <option value="profeN">Profesor nombrado</option>
                                 <option value="admin">Administrador</option>
                                 <option value="directorE">Director de escuela</option>

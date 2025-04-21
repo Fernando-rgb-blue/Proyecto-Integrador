@@ -13,6 +13,7 @@ interface ScheduleItem {
     professor: string;
     activity: string;
     classroom: string;
+    hours?: number;
   }[];
 }
 
@@ -34,7 +35,7 @@ const ScheduleModal: React.FC<{
 }> = ({ visible, onClose, onSubmit, onDelete, onDeleteCourse, initialData, courses }) => {
   const [courseData, setCourseData] = useState(
     initialData?.courses || [
-      { course: "", professor: "", activity: "", classroom: "" }
+      { course: "", professor: "", activity: "", classroom: "", hours: 2  }
     ]
   );
   const [classrooms, setClassrooms] = useState<string[]>([]);
@@ -194,8 +195,22 @@ const ScheduleModal: React.FC<{
                 ))}
               </select>
             </div>
+            
+            {/* //"nuevoooo" */}
+            <div className="mb-4">
+              <label className="block text-sm font-medium mb-1">Horas</label>
+              <select
+                value={course.hours || 1}
+                onChange={(e) => handleCourseChange(index, "hours", e.target.value)}
+                className="border rounded w-full p-2"
+              >
+                {[1, 2, 3, 4, 5].map((h) => (
+                  <option key={h} value={h}>{h}</option>
+                ))}
+              </select>
+            </div>
 
-
+            {/* fin nuevo */}
             {courseData.length > 1 && (
               <button
                 onClick={() => handleDeleteCourse(index)}
@@ -276,12 +291,12 @@ const ScheduleTable: React.FC = () => {
   //colores
 
   const colors = [
+    "bg-red-200",
     "bg-gray-200",
     "bg-green-200",
     "bg-blue-200",
     "bg-orange-200",
     "bg-pink-200",
-    "bg-red-200",
     "bg-purple-200",
   ];
 
@@ -514,16 +529,50 @@ const ScheduleTable: React.FC = () => {
     if (cellIndex) {
       const { dayIndex, hourIndex } = cellIndex;
       const updatedSchedule = [...schedule];
-
-
-      updatedSchedule[hourIndex][dayIndex] = { available: 1, ...data };
-
-      // Actualizar la celda directamente debajo de la seleccionada (si existe)
-      if (hourIndex + 1 < updatedSchedule.length) {
-        updatedSchedule[hourIndex + 1][dayIndex] = { available: 1, ...data };
+  
+      const cantidadHoras = Number(data.courses[0]?.hours) || 1;
+  
+      for (let i = 0; i < cantidadHoras; i++) {
+        if (hourIndex + i >= updatedSchedule.length) break;
+        updatedSchedule[hourIndex + i][dayIndex] = {
+          available: 1,
+          courses: [...data.courses],
+        };
       }
-
-
+  
+      // Limpia celdas sobrantes si antes había más horas
+      if (hourIndex + cantidadHoras < updatedSchedule.length) {
+        for (
+          let i = hourIndex + cantidadHoras;
+          i < updatedSchedule.length;
+          i++
+        ) {
+          if (
+            updatedSchedule[i][dayIndex] &&
+            updatedSchedule[i][dayIndex].courses[0].course ===
+              data.courses[0].course &&
+            updatedSchedule[i][dayIndex].courses[0].activity ===
+              data.courses[0].activity &&
+            updatedSchedule[i][dayIndex].available === 1
+          ) {
+            updatedSchedule[i][dayIndex] = {
+              available: 0,
+              courses: [
+                {
+                  course: "",
+                  professor: "",
+                  classroom: "",
+                  activity: "",
+                  hours: 1,
+                },
+              ],
+            };
+          } else {
+            break;
+          }
+        }
+      }
+  
       setSchedule(updatedSchedule);
     }
   };
@@ -744,16 +793,16 @@ const ScheduleTable: React.FC = () => {
         {/* Cuadro de horario */}
         <div className="container mx-auto mt-10 mb-10 p-4" style={{ marginTop: '1cm' }}>
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[800px] sm:min-w-[600px] table-auto border-collapse border border-gray-300 dark:bg-dark">
+            <table className="w-full min-w-[800px] sm:min-w-[600px] table-auto border-collapse border-[4px] border-gray-300 dark:bg-dark">
               <thead>
                 <tr>
-                  <th className="bg-blue-800 text-white p-3 text-xs sm:text-base border border-gray-300 w-[120px] sm:w-[150px] text-center">
+                  <th className="bg-blue-800 text-white p-3 text-xs sm:text-base border-[4px] border-gray-300 dark:border-black w-[120px] sm:w-[150px] text-center">
                     HORAS
                   </th>
                   {days.map((day, index) => (
                     <th
                       key={index}
-                      className="bg-blue-800 text-white p-3 text-xs sm:text-base border border-gray-300 w-[120px] sm:w-[150px] text-center"
+                      className="bg-blue-800 text-white p-3 text-xs sm:text-base border-[4px] border-gray-300 dark:border-black w-[120px] sm:w-[150px] text-center"
                     >
                       {day}
                     </th>
@@ -764,7 +813,7 @@ const ScheduleTable: React.FC = () => {
               <tbody>
                 {hours.map((hour, hourIndex) => (
                   <tr key={hourIndex}>
-                    <td className="p-2 text-center border border-gray-300 text-sm">
+                    <td className="p-2 text-center border-[4px] border-gray-300 dark:border-black text-sm ">
                       {hour}
                     </td>
                     {days.map((_, dayIndex) => {
@@ -810,7 +859,7 @@ const ScheduleTable: React.FC = () => {
                       return (
                         <td
                           key={`${hourIndex}-${dayIndex}`}
-                          className="text-center align-middle border border-gray-300 text-sm whitespace-normal"
+                          className="text-center align-middle border-[4px] border-gray-300 dark:border-black text-sm whitespace-normal"
                           rowSpan={rowSpan}
                           onClick={() => toggleCellSelection(dayIndex, hourIndex)}
                         >

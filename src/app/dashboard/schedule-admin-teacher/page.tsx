@@ -189,13 +189,13 @@ const ScheduleTable: React.FC = () => {
           <table className="w-full min-w-[800px] sm:min-w-[600px] table-auto border-collapse border border-gray-300 dark:bg-dark " >
             <thead>
               <tr>
-                <th className="bg-blue-800 text-white p-3 text-xs sm:text-base border border-gray-300 w-[120px] sm:w-[150px] text-center">
+                <th className="bg-blue-800 text-white p-3 text-xs sm:text-base border-[4px] border-gray-300 dark:border-black w-[120px] sm:w-[150px] text-center">
                   HORAS
                 </th>
                 {days.map((day, index) => (
                   <th
                     key={index}
-                    className="bg-blue-800 text-white p-3 text-xs sm:text-base border border-gray-300 w-[120px] sm:w-[150px] text-center"
+                    className="bg-blue-800 text-white p-3 text-xs sm:text-base border-[4px] border-gray-300 dark:border-black w-[120px] sm:w-[150px] text-center"
                   >
                     {day}
                   </th>
@@ -205,7 +205,7 @@ const ScheduleTable: React.FC = () => {
             <tbody>
               {hours.map((hour, hourIndex) => (
                 <tr key={hourIndex}>
-                  <td className="p-2 text-center border-2  border-gray-300 text-sm">
+                  <td className="p-2 text-center border-[4px] border-gray-300 dark:border-black text-sm">
                     {hour}
                   </td>
                   {days.map((_, dayIndex) => {
@@ -242,7 +242,7 @@ const ScheduleTable: React.FC = () => {
                       return (
                         <td
                           key={`${hourIndex}-${dayIndex}`}
-                          className="border-2  border-gray-300 text-center"
+                          className="border-[4px] border-gray-300 dark:border-black text-center"
                         >
                           {/* Celda vacía sin contenido xdd */}
                         </td>
@@ -252,7 +252,7 @@ const ScheduleTable: React.FC = () => {
                     return (
                       <td
                         key={`${hourIndex}-${dayIndex}`}
-                        className={`text-center align-middle border-2  border-gray-300 text-sm whitespace-normal ${currentCell && currentCell.available === 1 && currentCell.courses[0]?.course
+                        className={`text-center align-middle border-[4px] border-gray-300 dark:border-black text-sm whitespace-normal ${currentCell && currentCell.available === 1 && currentCell.courses[0]?.course
                           ? getCourseColor(currentCell.courses[0].course)
                           : ""
                           }`}
