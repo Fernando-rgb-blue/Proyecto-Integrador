@@ -27,7 +27,8 @@ const CoursesList = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const [isError, setIsError] = useState(false);
-
+  const [isFocused, setIsFocused] = useState(false);
+  
   useEffect(() => {
     const fetchCourses = async () => {
       try {
@@ -105,6 +106,7 @@ const CoursesList = () => {
     }
   };
 
+
   const handleSave = async () => {
     if (!selectedDocente) {
       alert("Por favor, seleccione un docente para agregar o eliminar.");
@@ -112,13 +114,18 @@ const CoursesList = () => {
     }
 
     const coursesToAddDocente = allCourses.filter(
-      (course) => selectedCourses.has(course._id) && !course.profesores.includes(selectedDocente)
+      (course) =>
+        selectedCourses.has(course._id) &&
+        !course.profesores.includes(selectedDocente)
     );
 
     const coursesToRemoveDocente = allCourses.filter(
-      (course) => !selectedCourses.has(course._id) && course.profesores.includes(selectedDocente)
+      (course) =>
+        !selectedCourses.has(course._id) &&
+        course.profesores.includes(selectedDocente)
     );
 
+    // Agregar docente (por ID)
     for (const course of coursesToAddDocente) {
       try {
         const response = await fetch(`/api/course/${course._id}`, {
@@ -129,9 +136,10 @@ const CoursesList = () => {
           body: JSON.stringify({
             nombre: course.nombre,
             ciclo: course.ciclo,
-            profesores: [...course.profesores, selectedDocente],
+            profesores: [...course.profesores, selectedDocente], // solo IDs
           }),
         });
+
         if (response.ok) {
           setCourses((prevCourses) =>
             prevCourses.map((c) =>
@@ -149,6 +157,7 @@ const CoursesList = () => {
       }
     }
 
+    // Quitar docente (por ID)
     for (const course of coursesToRemoveDocente) {
       try {
         const response = await fetch(`/api/course/${course._id}`, {
@@ -159,14 +168,22 @@ const CoursesList = () => {
           body: JSON.stringify({
             nombre: course.nombre,
             ciclo: course.ciclo,
-            profesores: course.profesores.filter((prof) => prof !== selectedDocente),
+            profesores: course.profesores.filter(
+              (prof) => prof !== selectedDocente
+            ),
           }),
         });
+
         if (response.ok) {
           setCourses((prevCourses) =>
             prevCourses.map((c) =>
               c._id === course._id
-                ? { ...c, profesores: c.profesores.filter((prof) => prof !== selectedDocente) }
+                ? {
+                  ...c,
+                  profesores: c.profesores.filter(
+                    (prof) => prof !== selectedDocente
+                  ),
+                }
                 : c
             )
           );
@@ -179,6 +196,7 @@ const CoursesList = () => {
       }
     }
 
+    // Refrescar cursos
     const fetchUpdatedCourses = async () => {
       try {
         const response = await fetch("/api/course");
@@ -214,35 +232,86 @@ const CoursesList = () => {
     setModalVisible(true);
   };
 
+
+
   const closeModal = () => {
     setModalVisible(false);
   };
 
   return (
     <>
-      <ProtectedRoute /> 
+      <ProtectedRoute />
       <BreadDash />
       <DashboardTabs />
+
+
       <div className="container mx-auto px-4 pb-9 sm:px-6 lg:px-8 mt-4">
         <div className="mb-6">
-          
+
           <label htmlFor="docentes" className="block text-lg font-medium mb-2">
             Docente
           </label>
-          <div className="flex flex-wrap items-center gap-4">
-            <select
-              id="docentes"
-              value={selectedDocente}
-              onChange={handleDocenteChange}
-              className="p-2 border border-gray-300 rounded-lg w-full sm:w-auto dark:bg-dark"
-            >
-              <option value="">Seleccionar Docente</option>
-              {docentes.map((users) => (
-                <option key={users._id} value={users.fullname}>
-                  {users.fullname}
-                </option>
-              ))}
-            </select>
+
+
+
+          <div className="flex flex-wrap items-start gap-4 relative w-full sm:w-auto">
+            <div className="relative w-full sm:w-72">
+              <input
+                type="text"
+                id="docente-search"
+                value={
+                  docentes.find((d) => d._id === selectedDocente)?.fullname || selectedDocente
+                }
+                onChange={(e) => {
+                  const input = e.target.value;
+                  setSelectedDocente(input); // aún puede ser texto temporal
+                  setIsFocused(true);
+                }}
+                onFocus={() => setIsFocused(true)}
+                onBlur={() => setTimeout(() => setIsFocused(false), 200)}
+                placeholder="Escribe el nombre del docente..."
+                className="p-2 border border-gray-300 rounded-lg w-full dark:bg-dark"
+              />
+
+              {isFocused && (
+                <ul className="absolute z-10 mt-1 w-full max-h-48 overflow-y-auto bg-white border border-gray-300 rounded-lg shadow-md dark:bg-slate-800">
+                  {docentes
+                    .filter((docente) =>
+                      docente.fullname.toLowerCase().includes(selectedDocente.toLowerCase())
+                    )
+                    .map((docente) => (
+                      <li
+                        key={docente._id}
+                        onClick={() => {
+                          setSelectedDocente(docente._id); // 👈 Guardamos el ID
+                          setIsFocused(false);
+
+                          // Filtramos cursos que tienen este ID en su array `profesores`
+                          const filteredCourses = allCourses.filter((course) =>
+                            course.profesores.includes(docente._id)
+                          );
+                          const selectedIds = new Set(
+                            filteredCourses.map((course: Course) => course._id)
+                          );
+                          setSelectedCourses(selectedIds);
+                          setCourses(filteredCourses);
+                        }}
+                        className="cursor-pointer px-3 py-2 hover:bg-gray-100 dark:hover:bg-slate-700"
+                      >
+                        {docente.fullname}
+                      </li>
+                    ))}
+                  {docentes.filter((d) =>
+                    d.fullname.toLowerCase().includes(selectedDocente.toLowerCase())
+                  ).length === 0 && (
+                      <li className="px-3 py-2 text-sm text-gray-500 dark:text-gray-300">
+                        No se encontraron docentes.
+                      </li>
+                    )}
+                </ul>
+              )}
+            </div>
+
             <button
               onClick={handleSave}
               className="bg-green-500 text-white py-2 px-4 rounded-lg w-full sm:w-auto"
@@ -250,7 +319,14 @@ const CoursesList = () => {
               Guardar
             </button>
           </div>
+
+
+
+
         </div>
+
+
+
 
         <div>
           {loading ? (
@@ -286,50 +362,50 @@ const CoursesList = () => {
 
         {/* Modal */}
         {modalVisible && (
-        <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center z-50">
-          <div
-            className="bg-white p-6 rounded-md shadow-md text-center"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <svg
-              className="mx-auto mb-4"
-              width="50"
-              height="50"
-              viewBox="0 0 50 50"
+          <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center z-50">
+            <div
+              className="bg-white p-6 rounded-md shadow-md text-center"
+              onClick={(e) => e.stopPropagation()}
             >
-              <circle
-                cx="25"
-                cy="25"
-                r="22"
-                fill="none"
-                stroke={isError ? "red" : "green"}
-                strokeWidth="4"
-                strokeDasharray="138"
-                strokeDashoffset="138"
-                style={{
-                  animation: "draw-circle 1s forwards",
-                }}
-              />
-              <text
-                x="50%"
-                y="50%"
-                textAnchor="middle"
-                dy=".3em"
-                fontSize="24"
-                fill={isError ? "red" : "green"}
+              <svg
+                className="mx-auto mb-4"
+                width="50"
+                height="50"
+                viewBox="0 0 50 50"
               >
-                {isError ? "✕" : "✓"}
-              </text>
-            </svg>
-            <p className="text-lg dark:text-black">{modalMessage}</p>
-            <button
-              onClick={closeModal}
-              className={`mt-4 px-4 py-2 rounded-lg text-white ${isError ? "bg-red-500" : "bg-green-500"}`}
-            >
-              Ok
-            </button>
+                <circle
+                  cx="25"
+                  cy="25"
+                  r="22"
+                  fill="none"
+                  stroke={isError ? "red" : "green"}
+                  strokeWidth="4"
+                  strokeDasharray="138"
+                  strokeDashoffset="138"
+                  style={{
+                    animation: "draw-circle 1s forwards",
+                  }}
+                />
+                <text
+                  x="50%"
+                  y="50%"
+                  textAnchor="middle"
+                  dy=".3em"
+                  fontSize="24"
+                  fill={isError ? "red" : "green"}
+                >
+                  {isError ? "✕" : "✓"}
+                </text>
+              </svg>
+              <p className="text-lg dark:text-black">{modalMessage}</p>
+              <button
+                onClick={closeModal}
+                className={`mt-4 px-4 py-2 rounded-lg text-white ${isError ? "bg-red-500" : "bg-green-500"}`}
+              >
+                Ok
+              </button>
+            </div>
           </div>
-        </div>
         )}
 
         <style jsx>{`
@@ -342,9 +418,9 @@ const CoursesList = () => {
             }
           }
         `}</style>
-    </div>
-  </>
-);
+      </div>
+    </>
+  );
 };
 
 export default CoursesList;
