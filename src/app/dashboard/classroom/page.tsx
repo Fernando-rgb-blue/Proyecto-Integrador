@@ -3,6 +3,7 @@ import Classrooms from "@/components/Classroom/classroom";
 import { Metadata } from "next";
 import BreadDash from "@/components/Common/BreadDash";
 import ProtectedRoute from "@/components/Proteccion"
+import RoleGuard from "@/components/RoleGuard/RoleGuard";
 
 
 export const metadata: Metadata = {
@@ -16,7 +17,9 @@ const DocentesPage = () => {
             <ProtectedRoute />
             <BreadDash/>
             <DashboardTabs/>
-            <Classrooms />
+            <RoleGuard allowedRoles={["admin"]} fallback={<p className="text-center my-8">No estás autenticado o no tienes permitido el acceso.</p>}>
+                <Classrooms />
+            </RoleGuard>
         </section>
     );
 }

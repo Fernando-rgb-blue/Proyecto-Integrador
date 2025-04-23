@@ -124,6 +124,7 @@ const Header = () => {
                       {menuItem.path ? (
                         <Link
                           href={menuItem.path}
+                          onClick={() => setNavbarOpen(false)}
                           className={`flex py-2 text-base lg:mr-0 lg:inline-flex lg:px-0 lg:py-6 ${
                             path === menuItem.path
                               ? "text-primary dark:text-white"
@@ -162,6 +163,7 @@ const Header = () => {
                               <Link
                                 href={submenuItem.path}
                                 key={index}
+                                onClick={() => {setNavbarOpen(false); setOpenIndex(-1);}}
                                 className="block rounded py-2.5 text-sm text-dark hover:text-primary dark:text-white/70 dark:hover:text-white lg:px-3"
                                 target={submenuItem.newTab ? "_blank" : "_self"}
                               >

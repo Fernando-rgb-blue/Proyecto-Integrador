@@ -4,6 +4,7 @@ import DisDos from "@/components/dispoDocentes/disDos";
 import { Metadata } from "next";
 import BreadDash from "@/components/Common/BreadDash";
 import ProtectedRoute from "@/components/Proteccion"
+import RoleGuard from "@/components/RoleGuard/RoleGuard";
 
 export const metadata: Metadata = {
     title: "Disponibilidad Docentes | Escuela de Informática",
@@ -16,7 +17,9 @@ const DisDocentesPage = () => {
             <ProtectedRoute />
             <BreadDash/>
             <DashboardTabs/>
-            <DisDos />
+            <RoleGuard allowedRoles={["admin", "directorE"]} fallback={<p className="text-center my-8">No estás autenticado o no tienes permitido el acceso.</p>}>
+                <DisDos />
+            </RoleGuard>
         </section>
     );
 }

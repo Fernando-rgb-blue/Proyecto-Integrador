@@ -143,7 +143,7 @@ const ScheduleTable: React.FC = () => {
   };
 
   if (status === "loading") return <div>Cargando...</div>;
-  if (!session) return <div>No estás autenticado. Por favor, inicia sesión.</div>;
+  //if (!session) return <div>No estás autenticado. Por favor, inicia sesión.</div>;
 
   return (
     <>

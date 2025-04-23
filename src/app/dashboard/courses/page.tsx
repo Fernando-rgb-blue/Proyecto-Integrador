@@ -3,7 +3,8 @@ import DashboardTabs from "@/components/Dashboard/DashboardTabs";
 import Courses from "@/components/CoursesList/index";
 import { Metadata } from "next";
 import BreadDash from "@/components/Common/BreadDash";
-import ProtectedRoute from "@/components/Proteccion"
+import ProtectedRoute from "@/components/Proteccion";
+import RoleGuard from "@/components/RoleGuard/RoleGuard";
 
 export const metadata: Metadata = {
     title: "Gestionar Cursos | Escuela de Informática",
@@ -16,7 +17,9 @@ const DocentesPage = () => {
             <ProtectedRoute />
             <BreadDash/>
             <DashboardTabs/>
-            <Courses />
+            <RoleGuard allowedRoles={["admin"]} fallback={<p className="text-center my-8">No estás autenticado o no tienes permitido el acceso.</p>}>
+                <Courses />
+            </RoleGuard>
         </section>
     );
 }
