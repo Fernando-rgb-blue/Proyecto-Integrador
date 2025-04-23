@@ -627,14 +627,14 @@ const CurriculosSVG = () => {
                     </svg>
                 </div>
                 <div className="relative w-full max-w-[500px] aspect-[5/2] mx-auto">
-  <Image
-    src="/images/curriculos/curriculos_leyenda.png"
-    alt="Leyenda de currículos"
-    fill
-    className="object-contain"
-    sizes="(max-width: 768px) 100vw, 500px"
-  />
-</div>
+                <Image
+                    src="/images/curriculos/curriculos_leyenda.png"
+                    alt="Leyenda de currículos"
+                    fill
+                    className="object-contain"
+                    sizes="(max-width: 768px) 100vw, 500px"
+                />
+                </div>
                 <div className="text-center xl:text-left">
                     <h3 className="text-lg font-semibold mb-2">
                         Total de créditos
