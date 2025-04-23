@@ -102,32 +102,31 @@ const ScheduleTable: React.FC = () => {
     fetchAula();
   }, []);
 
-  const mapScheduleData = (data: any[], slotsPerDay: number) => {
+  const mapScheduleData = (data: any, slotsPerDay: number) => {
     const updatedSchedule = Array.from({ length: slotsPerDay }, () => Array(5).fill(null));
     const daysMap = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes'];
-
-    data.forEach((schedule, index) => {
-      daysMap.forEach((day, dayIndex) => {
-        if (schedule[day]) {
-          schedule[day].forEach((slot: ScheduleItem, hourIndex: number) => {
-            if (hourIndex < slotsPerDay) {
-              updatedSchedule[hourIndex][dayIndex] = {
-                courses: slot.courses.map(course => ({
-                  course: course.course || "",
-                  professor: course.professor || "",
-                  classroom: course.classroom || "",
-                  activity: course.activity || ""
-                })),
-                available: slot.available || 0,
-              };
-            }
-          });
-        }
-      });
+  
+    daysMap.forEach((day, dayIndex) => {
+      if (data[day]) {
+        data[day].forEach((slot: ScheduleItem, hourIndex: number) => {
+          if (hourIndex < slotsPerDay) {
+            updatedSchedule[hourIndex][dayIndex] = {
+              courses: slot.courses.map(course => ({
+                course: course.course || "",
+                professor: course.professor || "",
+                classroom: course.classroom || "",
+                activity: course.activity || ""
+              })),
+              available: slot.available || 0
+            };
+          }
+        });
+      }
     });
-
+  
     return updatedSchedule;
   };
+  
 
   const handleDocenteAula = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     const neweAula = e.target.value;

@@ -3,36 +3,55 @@
 import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 
+interface Curso {
+  _id: string;
+  nombre: string;
+  profesores: string[];
+}
+
 const ScheduleTable: React.FC = () => {
   const { data: session, status } = useSession();
-  const [schedule, setSchedule] = useState<number[][]>(Array.from({ length: 5 }, () => Array(15).fill(0)));
+
+  const [schedule, setSchedule] = useState<number[][]>(
+    Array.from({ length: 5 }, () => Array(15).fill(0))
+  );
   const [scheduleId, setScheduleId] = useState<string | null>(null);
   const [isSaved, setIsSaved] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const [isError, setIsError] = useState(false);
+  const [message, setMessage] = useState("");
   const userId = session?.user?._id;
 
-  
   const days = ["LUNES", "MARTES", "MIÉRCOLES", "JUEVES", "VIERNES"];
-
   const hours = [
-    "07:00 AM a 08:00 AM", "08:00 AM a 09:00 AM", "09:00 AM a 10:00 AM", 
-    "10:00 AM a 11:00 AM", "11:00 AM a 12:00 PM", "12:00 PM a 01:00 PM", 
+    "07:00 AM a 08:00 AM", "08:00 AM a 09:00 AM", "09:00 AM a 10:00 AM",
+    "10:00 AM a 11:00 AM", "11:00 AM a 12:00 PM", "12:00 PM a 01:00 PM",
     "01:00 PM a 02:00 PM", "02:00 PM a 03:00 PM",
-    "03:00 PM a 04:00 PM", "04:00 PM a 05:00 PM", 
-    "05:00 PM a 06:00 PM", "06:00 PM a 07:00 PM", 
+    "03:00 PM a 04:00 PM", "04:00 PM a 05:00 PM",
+    "05:00 PM a 06:00 PM", "06:00 PM a 07:00 PM",
     "07:00 PM a 08:00 PM", "08:00 PM a 09:00 PM",
   ];
-  
 
   useEffect(() => {
-    const fetchSchedule = async () => {
+    const fetchData = async () => {
       if (!userId) return;
       try {
-        const response = await fetch(`/api/schedule/${userId}`);
-        if (!response.ok) throw new Error('Error al obtener el horario');
-        const userSchedule = await response.json();
+        // ✅ Obtener cursos asignados
+        const responseCursos = await fetch(`/api/course/searcht?profesores=${userId}`);
+        if (!responseCursos.ok) throw new Error("Error al obtener los cursos");
+        const cursosData: Curso[] = await responseCursos.json();
+
+        const coursesMessage = cursosData.length
+          ? `Tienes los siguientes cursos asignados: ${cursosData.map((curso) => curso.nombre).join(" - ")}.`
+          : "No tienes cursos asignados actualmente.";
+        setMessage(coursesMessage);
+
+        // ✅ Obtener horario
+        const responseSchedule = await fetch(`/api/schedule/${userId}`);
+        if (!responseSchedule.ok) throw new Error("Error al obtener el horario");
+        const userSchedule = await responseSchedule.json();
+
         if (userSchedule) {
           setScheduleId(userSchedule._id);
           setSchedule([
@@ -46,10 +65,13 @@ const ScheduleTable: React.FC = () => {
           await createSchedule(userId);
         }
       } catch (error) {
-        console.error('Error al hacer la solicitud:', error);
+        console.error("Error al obtener los datos del usuario:", error);
+        setSchedule(Array.from({ length: 5 }, () => Array(15).fill(0)));
+        setMessage("No se pudo cargar tu información.");
       }
     };
-    fetchSchedule();
+
+    fetchData();
   }, [userId]);
 
   useEffect(() => {
@@ -107,8 +129,6 @@ const ScheduleTable: React.FC = () => {
       setIsSaved(true);
       setModalMessage("Se registró correctamente");
       setIsError(false);
-      // setModalMessage("Error al registrar horario");
-      // setIsError(true);
       setModalVisible(true);
     } catch (error) {
       console.error('Error al hacer la solicitud:', error);
@@ -128,9 +148,12 @@ const ScheduleTable: React.FC = () => {
   return (
     <>
       <div className="container w-full sm:w-11/12 md:w-8/12 mx-auto">
-        <p className="text-center mb-6 text-base font-medium leading-relaxed text-body-color sm:text-lg sm:leading-relaxed lg:text-base lg:leading-relaxed xl:text-lg xl:leading-relaxed">
+        <p className="text-center mb-4 text-base font-medium text-body-color">
           Profesores a tiempo completo guardar 20 horas, profesores a tiempo parcial guardar 15 horas.
         </p>
+
+        <p className="text-center mb-4 text-base font-medium text-body-color">{message}</p>
+
         <div className="overflow-x-auto">
           <table className="w-full table-auto border-collapse border border-gray-300">
             <thead>
@@ -160,13 +183,12 @@ const ScheduleTable: React.FC = () => {
                     return (
                       <td
                         key={dayIndex}
-                        className={`p-3 border border-gray-300 text-center cursor-pointer text-xs dark:bg-dark sm:text-base ${
-                          isSavedCell
+                        className={`p-3 border border-gray-300 text-center cursor-pointer text-xs dark:bg-dark sm:text-base ${isSavedCell
                             ? "bg-blue-400 dark:bg-gray-500"
                             : isSelected
-                            ? "bg-blue-300 dark:bg-gray-500"
-                            : "bg-blue-50"
-                        }`}
+                              ? "bg-blue-300 dark:bg-gray-500"
+                              : "bg-blue-50"
+                          }`}
                         onClick={() => toggleCellSelection(dayIndex, hourIndex)}
                       />
                     );
@@ -177,6 +199,7 @@ const ScheduleTable: React.FC = () => {
           </table>
         </div>
       </div>
+
       <div className="container mx-auto flex justify-center mt-6 mb-10">
         <button
           onClick={handleSave}
@@ -228,11 +251,10 @@ const ScheduleTable: React.FC = () => {
             <p className="text-lg text-dark">{modalMessage}</p>
             <button
               onClick={closeModal}
-              className={`mt-4 px-4 py-2 ${
-                isError
+              className={`mt-4 px-4 py-2 ${isError
                   ? "bg-red-500 hover:bg-red-600"
                   : "bg-green-500 hover:bg-green-600"
-              } text-white rounded`}
+                } text-white rounded`}
             >
               OK
             </button>
@@ -251,8 +273,6 @@ const ScheduleTable: React.FC = () => {
         }
       `}</style>
     </>
-
-    
   );
 };
 
