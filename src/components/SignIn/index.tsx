@@ -51,6 +51,7 @@ const SignInComponent = () => {
                       Correo
                     </label>
                     <input
+                      id="email"
                       type="email"
                       name="email"
                       placeholder="Ingrese su correo"
@@ -65,12 +66,20 @@ const SignInComponent = () => {
                       Contraseña
                     </label>
                     <input
+                      id="password"
                       type="password"
                       name="password"
                       placeholder="Ingrese su contraseña"
                       className="border-stroke dark:text-body-color-dark dark:shadow-two w-full rounded-sm border bg-[#f8f8f8] px-6 py-3 text-base text-body-color outline-none transition-all duration-300 focus:border-primary dark:border-transparent dark:bg-[#2C303B] dark:focus:border-primary dark:focus:shadow-none"
                     />
                   </div>
+                  
+                  <div className="mb-6">
+                    <button className="shadow-submit dark:shadow-submit-dark flex w-full items-center justify-center rounded-sm bg-primary px-9 py-4 text-base font-medium text-white duration-300 hover:bg-primary/90">
+                      Ingresar
+                    </button>
+                  </div>
+
                   <div className="mb-8 flex items-center justify-center">
                     <span className="hidden h-[1px] w-full max-w-[40px] bg-body-color/50 sm:block"></span>
                     <p className="w-full grow px-1 text-center text-base font-medium text-body-color">
@@ -117,11 +126,7 @@ const SignInComponent = () => {
                     Ingresa con Google
                   </button>
                   
-                  <div className="mb-6">
-                    <button className="shadow-submit dark:shadow-submit-dark flex w-full items-center justify-center rounded-sm bg-primary px-9 py-4 text-base font-medium text-white duration-300 hover:bg-primary/90">
-                      Ingresar
-                    </button>
-                  </div>
+                  
                 </form>
                 {/* <p className="text-center text-base font-medium text-body-color">
                   Don’t you have an account?{" "}

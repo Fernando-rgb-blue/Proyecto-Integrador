@@ -1,3 +1,5 @@
+
+
 'use client';
 import React, { useEffect, useState } from "react";
 import axios from "axios";
@@ -29,11 +31,11 @@ const ScheduleModal: React.FC<{
   initialData?: ScheduleItem | null;
   courses: string[];
 }> = ({ visible, onClose, onSubmit, onDelete, onDeleteCourse, initialData, courses }) => {
-  const [courseData, setCourseData] = useState(
-    initialData?.courses || [
-      { course: "", professor: "", activity: "", classroom: "", hours: 2 }
-    ]
-  );
+  const makeDefault = () => [{ course: "", professor: "", activity: "", classroom: "", hours: 2 }];
+  const initialCourses = (initialData?.courses && initialData.courses.length > 0)
+    ? initialData!.courses
+    : makeDefault();
+  const [courseData, setCourseData] = useState(initialCourses);
   const [classrooms, setClassrooms] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [docentes, setDocentes] = useState<any[]>([]);
@@ -55,8 +57,12 @@ const ScheduleModal: React.FC<{
 
 
   useEffect(() => {
-    if (visible && initialData?.courses) {
-      setCourseData(initialData.courses);
+    if (visible) {
+      // si vienen cursos, úsalos; si no, arranca con uno vacío
+      const newCourses = (initialData?.courses && initialData.courses.length > 0)
+        ? initialData.courses
+        : makeDefault();
+      setCourseData(newCourses);
       setError(null);
     }
   }, [visible, initialData]);
@@ -151,7 +157,7 @@ const ScheduleModal: React.FC<{
       {/* Fondo oscuro */}
       <div className="fixed inset-0 bg-black bg-opacity-80" onClick={onClose}></div>
 
-
+      
       {/* Contenido del modal */}
       <div className="bg-white w-full max-w-2xl  p-4 rounded-lg shadow-lg z-10 relative max-h-[90vh] overflow-y-auto mx-3 dark:bg-dark">
         <h2 className="text-xl font-semibold mb-4">Modificar Horario</h2>
@@ -239,7 +245,7 @@ const ScheduleModal: React.FC<{
             </div>
 
             {/* fin nuevo */}
-            {courseData.length > 1 && (
+            {courseData.length >= 1 && (
               <button
                 onClick={() => handleDeleteCourse(index)}
                 className="mt-2 bg-red-500 text-white p-2 rounded w-full"
@@ -269,14 +275,14 @@ const ScheduleModal: React.FC<{
         </button>
 
 
-        {courseData.length === 1 && (
+        {/* {courseData.length === 1 && (
           <button
             onClick={handleDelete}
             className="mt-2 bg-red-500 text-white p-2 rounded w-full"
           >
             Borrar Datos de Celda
           </button>
-        )}
+        )} */}
         <button onClick={onClose} className="mt-2 bg-gray-500 text-white p-2 rounded w-full">
           Cerrar
         </button>
@@ -300,7 +306,8 @@ const ScheduleModal: React.FC<{
 
 const ScheduleTable: React.FC = () => {
 
-
+  //aaaaaaaaaaaaaa
+  const [initialCourses, setInitialCourses] = useState<ScheduleItem['courses']>([]);
 
   const [schedule, setSchedule] = useState<Array<Array<ScheduleItem | null>>>(Array.from({ length: 14 }, () => Array(5).fill(null)));
   const [modalVisible, setModalVisible] = useState(false);
@@ -572,56 +579,80 @@ const ScheduleTable: React.FC = () => {
   };
 
 
-  const handleCellSubmit = async (data: ScheduleItem) => {
-    if (cellIndex) {
-      const { dayIndex, hourIndex } = cellIndex;
-      const updatedSchedule = [...schedule];
-
-      const cantidadHoras = Number(data.courses[0]?.hours) || 1;
-
-      for (let i = 0; i < cantidadHoras; i++) {
-        if (hourIndex + i >= updatedSchedule.length) break;
-        updatedSchedule[hourIndex + i][dayIndex] = {
-          available: 1,
-          courses: [...data.courses],
-        };
+  const handleCellSubmit = (data: ScheduleItem) => {
+    if (!cellIndex) return;
+    const { dayIndex, hourIndex } = cellIndex;
+  
+    // 1) Copia profunda
+    const updated = schedule.map(row =>
+      row.map(cell => ({
+        available: cell?.available ?? 0,
+        courses: cell?.courses.map(c => ({ ...c }))
+      }))
+    );
+  
+    // 2) Detectar cursos que existían pero ya no están en `data.courses`
+    const removed = initialCourses.filter(ic =>
+      !data.courses.some(nc =>
+        nc.course    === ic.course    &&
+        nc.activity  === ic.activity  &&
+        nc.classroom === ic.classroom &&
+        nc.professor === ic.professor
+      )
+    );
+  
+    // 3) Para cada curso eliminado, barrer hacia arriba y abajo y quitarlo
+    removed.forEach(rem => {
+      // Hacia arriba (incluyendo la fila actual)
+      for (let r = hourIndex; r >= 0; r--) {
+        const cell = updated[r][dayIndex];
+        const before = cell.courses.length;
+        cell.courses = cell.courses.filter(c =>
+          !(c.course    === rem.course    &&
+            c.activity  === rem.activity  &&
+            c.classroom === rem.classroom &&
+            c.professor === rem.professor)
+        );
+        if (cell.courses.length === 0) cell.available = 0;
+        if (cell.courses.length === before) break;  // si en esa fila no había rem, paramos
       }
-
-      // Limpia celdas sobrantes si antes había más horas
-      if (hourIndex + cantidadHoras < updatedSchedule.length) {
-        for (
-          let i = hourIndex + cantidadHoras;
-          i < updatedSchedule.length;
-          i++
-        ) {
-          if (
-            updatedSchedule[i][dayIndex] &&
-            updatedSchedule[i][dayIndex].courses[0].course ===
-            data.courses[0].course &&
-            updatedSchedule[i][dayIndex].courses[0].activity ===
-            data.courses[0].activity &&
-            updatedSchedule[i][dayIndex].available === 1
-          ) {
-            updatedSchedule[i][dayIndex] = {
-              available: 0,
-              courses: [
-                {
-                  course: "",
-                  professor: "",
-                  classroom: "",
-                  activity: "",
-                  hours: 1,
-                },
-              ],
-            };
-          } else {
-            break;
-          }
+      // Hacia abajo
+      for (let r = hourIndex + 1; r < updated.length; r++) {
+        const cell = updated[r][dayIndex];
+        const before = cell.courses.length;
+        cell.courses = cell.courses.filter(c =>
+          !(c.course    === rem.course    &&
+            c.activity  === rem.activity  &&
+            c.classroom === rem.classroom &&
+            c.professor === rem.professor)
+        );
+        if (cell.courses.length === 0) cell.available = 0;
+        if (cell.courses.length === before) break;
+      }
+    });
+  
+    // 4) Insertar/actualizar los cursos que vienen en `data.courses`
+    data.courses.forEach(courseEntry => {
+      const h = Number(courseEntry.hours) || 1;
+      for (let offset = 0; offset < h; offset++) {
+        const r = hourIndex + offset;
+        if (r >= updated.length) break;
+        const cell = updated[r][dayIndex];
+        cell.available = 1;
+        // reemplazamos la lista de courses por la nueva (sin duplicados)
+        const exists = cell.courses.some(c =>
+          c.course    === courseEntry.course    &&
+          c.activity  === courseEntry.activity  &&
+          c.classroom === courseEntry.classroom &&
+          c.professor === courseEntry.professor
+        );
+        if (!exists) {
+          cell.courses.push({ ...courseEntry });
         }
       }
-
-      setSchedule(updatedSchedule);
-    }
+    });
+  
+    setSchedule(updated);
   };
 
 
@@ -704,15 +735,34 @@ const ScheduleTable: React.FC = () => {
       alert("No se ha encontrado un horario válido para guardar.");
       return;
     }
+  
     const dayMap = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes'];
-    const payload = {};
-
-
+    const payload: Record<string, any[]> = {};
+  
     dayMap.forEach((day, dayIndex) => {
-      payload[day] = schedule.map((row) => row[dayIndex] || null).filter(item => item !== null);
+      // Recorremos cada fila del schedule para este día
+      payload[day] = schedule.map((row) => {
+        const cell = row[dayIndex] || { available: 0, courses: [] };
+  
+        // Si no hay ningún curso, metemos el placeholder
+        const courses = cell.courses.length > 0
+          ? cell.courses
+          : [{
+              course:    "",
+              professor: "",
+              classroom: "",
+              activity:  ""
+            }];
+  
+        return {
+          available: cell.available ?? 0,
+          courses
+        };
+      });
+      // Si realmente quieres omitir los null (no recomendable aquí), podrías filtrar:
+      // .filter(item => item !== null)
     });
-
-
+  
     try {
       await axios.put(`/api/scheduleadmin/${horarioID}`, payload);
       alert("Horario guardado exitosamente.");
@@ -732,8 +782,9 @@ const ScheduleTable: React.FC = () => {
 
   const toggleCellSelection = (dayIndex: number, hourIndex: number) => {
     setCellIndex({ dayIndex, hourIndex });
+    setInitialCourses(schedule[hourIndex][dayIndex].courses);
     setModalVisible(true);
-  };
+  }
 
 
   // Pantalla de la busqueda de ciclo y horario - Cuadro de horario
@@ -838,99 +889,71 @@ const ScheduleTable: React.FC = () => {
         {error && <p className="mt-4 text-red-500">{error}</p>}
 
         {/* Cuadro de horario */}
-        <div className="container mx-auto mt-10 mb-10 p-4" style={{ marginTop: '1cm' }}>
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[800px] sm:min-w-[600px] table-auto border-collapse border-[4px] border-gray-300 dark:bg-dark">
-              <thead>
-                <tr>
-                  <th className="bg-blue-800 text-white p-3 text-xs sm:text-base border-[4px] border-gray-300 dark:border-black w-[120px] sm:w-[150px] text-center">
-                    HORAS
-                  </th>
-                  {days.map((day, index) => (
-                    <th
-                      key={index}
-                      className="bg-blue-800 text-white p-3 text-xs sm:text-base border-[4px] border-gray-300 dark:border-black w-[120px] sm:w-[150px] text-center"
-                    >
-                      {day}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
+        {/* Cuadro de horario (sin tabla crj) */}
+        <div className="overflow-x-auto container mx-auto mt-10 mb-10 p-4" style={{ marginTop: '1cm' }}>
+          <div className=" min-w-[800px] sm:min-w-[600px]">
+            <div className="grid" style={{ display: 'grid', gridTemplateColumns: `repeat(${days.length + 1}, minmax(120px, 1fr))` }}>
+              {/* Encabezado */}
+              <div className="bg-blue-800 text-white p-3 text-xs sm:text-base border-[4px] border-gray-300 dark:border-dark text-center font-bold">
+                HORAS
+              </div>
+              {days.map((day, index) => (
+                <div
+                  key={index}
+                  className="bg-blue-800 text-white p-3 text-xs sm:text-base border-[4px] border-gray-300 dark:border-dark text-center font-bold"
+                >
+                  {day}
+                </div>
+              ))}
 
-              <tbody>
-                {hours.map((hour, hourIndex) => (
-                  <tr key={hourIndex}>
-                    <td className="p-2 text-center border-[4px] border-gray-300 dark:border-black text-sm ">
-                      {hour}
-                    </td>
-                    {days.map((_, dayIndex) => {
-                      const currentCell = schedule[hourIndex][dayIndex];
-                      let isMasterCell = true;
-                      let rowSpan = 1;
-
-                      // Verificar si es parte de un grupo de celdas
-                      if (hourIndex > 0) {
-                        const previousCell = schedule[hourIndex - 1][dayIndex];
-                        if (
-                          previousCell &&
-                          currentCell &&
-                          previousCell.courses[0]?.course === currentCell.courses[0]?.course &&
-                          previousCell.courses[0]?.activity === currentCell.courses[0]?.activity &&
-                          currentCell.available === 1
-                        ) {
-                          isMasterCell = false; // No renderizar esta celda
-                        }
-                      }
-
-                      // Calcular cuántas filas debe abarcar esta celda
-                      if (isMasterCell) {
-                        for (let i = hourIndex + 1; i < schedule.length; i++) {
-                          const nextCell = schedule[i][dayIndex];
-                          if (
-                            nextCell &&
-                            currentCell &&
-                            nextCell.courses[0]?.course === currentCell.courses[0]?.course &&
-                            nextCell.courses[0]?.activity === currentCell.courses[0]?.activity &&
-                            nextCell.available === 1
-                          ) {
-                            rowSpan++;
-                          } else {
-                            break;
-                          }
-                        }
-                      }
-
-                      // Si no es la celda principal, no renderizar nada
-                      if (!isMasterCell) return null;
-
-                      return (
-                        <td
-                          key={`${hourIndex}-${dayIndex}`}
-                          className="text-center align-middle border-[4px] border-gray-300 dark:border-black text-sm whitespace-normal"
-                          rowSpan={rowSpan}
-                          onClick={() => toggleCellSelection(dayIndex, hourIndex)}
-                        >
-                          {currentCell && currentCell.courses.length > 0 ? (
-                            currentCell.courses.map((course, index) => (
-                              <div key={index} className="text-xs dark:text-dark">
-                                <p className={course.course ? getCourseColor(course.course) : ""}>{course.course}</p>
-                                <p className={course.course ? getCourseColor(course.course) : ""}>
-                                  {getNombreDocente(course.professor)}
-                                </p>
-                                <p className={course.course ? getCourseColor(course.course) : ""}>{course.activity}</p>
-                                <p className={course.course ? getCourseColor(course.course) : ""}>{course.classroom}</p>
-                              </div>
-                            ))
-                          ) : (
-                            <span className="text-xs text-gray-500">Vacío</span>
-                          )}
-                        </td>
-                      );
-                    })}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+              {/* Cuerpo */}
+              {hours.map((hour, hourIndex) => (
+                <React.Fragment key={hourIndex}>
+                  {/* Celda de la hora */}
+                  <div className="p-2 text-center border-[4px] border-gray-300 dark:border-dark text-sm flex items-center justify-center">
+                    {hour}
+                  </div>
+                  {/* Celdas del horario */}
+                  {days.map((_, dayIndex) => {
+                    const currentCell = schedule[hourIndex][dayIndex];
+                    return (
+                      <div
+                        key={`${hourIndex}-${dayIndex}`}
+                        className="text-center align-middle border-[4px] border-gray-300 dark:border-dark text-sm whitespace-normal flex flex-col justify-center items-center p-2"
+                        style={{ gridRow: 'span 1' }}
+                        onClick={() => toggleCellSelection(dayIndex, hourIndex)}
+                      >
+                        {currentCell && currentCell.courses.length > 0 && currentCell.available === 1 ? (
+                          currentCell.courses.map((course, idx) => (
+                            <div key={idx} className="text-xs dark:text-dark">
+                              <p className={course.course ? getCourseColor(course.course) : ""}>
+                                {course.course}
+                              </p>
+                              <p className={course.course ? getCourseColor(course.course) : ""}>
+                                {getNombreDocente(course.professor)}
+                              </p>
+                              <p className={course.course ? getCourseColor(course.course) : ""}>
+                                {course.activity}
+                              </p>
+                              <p className={course.course ? getCourseColor(course.course) : ""}>
+                                {course.classroom}
+                              </p>
+                            </div>
+                          ))
+                        ) : (
+                          <span
+                            className="text-xs text-gray-500"
+                            onClick={() => toggleCellSelection(dayIndex, hourIndex)}
+                          >
+                            -
+                          </span>
+                        )}
+                      </div>
+                    );
+                  })}
+                </React.Fragment>
+              ))}
+            </div>
           </div>
         </div>
 
