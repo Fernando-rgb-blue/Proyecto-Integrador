@@ -74,9 +74,9 @@ const menuData: Menu[] = [
       },
       {
         id: 59,
-        title: "Sustitutorio",
-        path: "/sustitutorio",
-        newTab: false,
+        title: "Codigos de pagos",
+        path: "https://scontent-lim1-1.xx.fbcdn.net/v/t39.30808-6/473191556_9661392593888829_6340802527860916477_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=127cfc&_nc_ohc=qdL_hm1P2-MQ7kNvwH0JJCi&_nc_oc=AdlNSulURTT8Mwo-IHrGawnAtd04c1vYt5uVjDC50Qbg0-R8XqLtzAmDg0QIEHUWsnc&_nc_zt=23&_nc_ht=scontent-lim1-1.xx&_nc_gid=IJsb9KlsZ7YrL1MLvqVzSA&oh=00_AfENjqOtGKjpiCZtSCFDrXrwGsF-3Gny-PEublZNUrg12A&oe=680E4255",
+        newTab: true,
       },
       {
         id: 60,
