@@ -336,7 +336,7 @@ const Classrooms = () => {
             {showDeletePopup && currentClassroom && (
                 <div className="fixed inset-0 bg-black/80 flex justify-center items-center z-50 transition-opacity duration-150" onClick={closeModals}>
                     <div onClick={(e) => e.stopPropagation()} className="p-6 rounded-lg max-w-sm w-full bg-white dark:bg-dark overflow-hidden">
-                        <h4>¿Estás seguro de que deseas eliminar el aula "{currentClassroom.name}"?</h4>
+                        <h4>¿Estás seguro de que deseas eliminar el aula &quot;{currentClassroom.name}&quot;?</h4>
                         <div className="flex justify-between mt-4">
                             <button onClick={(e) => deleteClassroom(currentClassroom._id, e)} className="px-8 py-4 bg-red-600 text-white rounded-md">
                                 Eliminar

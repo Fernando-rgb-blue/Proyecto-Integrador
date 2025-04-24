@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo, useCallback } from 'react';
 import courses from "./CurriculaData";
 import { Course } from "@/types/course";
 import Image from "next/image";
@@ -9,7 +9,10 @@ const CurriculosSVG = () => {
     const [creditCount, setCreditCount] = useState<number>(0);
     const [requisitosCompetencia, setRequisitosCompetencia] = useState<{[index: string]: string[]}>({});
     const [hoveredCourse, setHoveredCourse] = useState<string | null>(null);
-    const creditCourses = courses.filter((c) => c.creditRequirement);
+    const creditCourses = useMemo(
+        () => courses.filter(c => c.creditRequirement),
+        []
+      );
 
     const getPrerequisites = (courseId: string) => {
         const course = courses.find((c) => c.id === courseId);
@@ -33,32 +36,32 @@ const CurriculosSVG = () => {
         }
     }
 
-    const removeDependents = (id: string) => {
-        const dependents = courses.filter((c) => 
-            (c.prerequisites?.includes(id) || requisitosCompetencia[c.id]?.includes(id)) ||
-            (c.creditRequirement && creditCount < c.creditRequirement)
+    const removeDependents = useCallback((id: string) => {
+        const dependents = courses.filter(c => 
+          (c.prerequisites?.includes(id) || requisitosCompetencia[c.id]?.includes(id)) ||
+          (c.creditRequirement && creditCount < c.creditRequirement)
         );
-        dependents.forEach((dependent) => {
-            if (completedCourses.includes(dependent.id)) {
-                setCompletedCourses((prev) => prev.filter((completed) => completed !== dependent.id));
-                removeDependents(dependent.id);
-            }
+        dependents.forEach(dep => {
+          if (completedCourses.includes(dep.id)) {
+            setCompletedCourses(prev => prev.filter(x => x !== dep.id));
+            removeDependents(dep.id);  // recursión ok gracias a useCallback
+          }
         });
-    }
+      }, [completedCourses, creditCount, requisitosCompetencia]);
 
-    useEffect(() => {
-        const creditSum = completedCourses.map((courseId) => {
-            return courses.find((c) => c.id === courseId).credits;
-        }).reduce((acc, credit) => acc + credit, 0);
+      useEffect(() => {
+        const creditSum = completedCourses
+          .map(id => courses.find(c => c.id === id)!.credits)
+          .reduce((a, b) => a + b, 0);
         setCreditCount(creditSum);
-
-        creditCourses.forEach((creditCourse) => {
-            if (creditCourse.creditRequirement && completedCourses.includes(creditCourse.id) && creditSum < creditCourse.creditRequirement) {
-                setCompletedCourses((prev) => prev.filter((id) => id !== creditCourse.id));
-                removeDependents(creditCourse.id);
-            }
+    
+        creditCourses.forEach(cc => {
+          if (cc.creditRequirement && completedCourses.includes(cc.id) && creditSum < cc.creditRequirement) {
+            setCompletedCourses(prev => prev.filter(id => id !== cc.id));
+            removeDependents(cc.id);
+          }
         });
-    }, [completedCourses]);
+      }, [completedCourses, creditCourses, removeDependents]);
 
     const toggleCourse = (courseId: string) => {
         const course = courses.find((c) => c.id === courseId);
