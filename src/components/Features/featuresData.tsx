@@ -1,44 +1,65 @@
 import { Feature } from "@/types/feature";
+import Image from "next/image";
 
 const featuresData: Feature[] = [
   {
     id: 1,
     icon: (
-      <img src="/images/features/desarrollo.svg" width="40" height="40" />
+      <Image
+        src="/images/features/desarrollo.svg"
+        alt="Icono de Desarrollo de Software"
+        width={40}
+        height={40}
+      />
     ),
     title: "Desarrollo de Software",
     paragraph:
       "Diseñar, programar y probar aplicaciones y sistemas informáticos, desde sistemas operativos hasta aplicaciones web, móviles o de escritorio.",
   },
   {
-    id: 1,
+    id: 2,
     icon: (
-      <img src="/images/features/bd.svg" width="40" height="40" />
+      <Image
+        src="/images/features/bd.svg"
+        alt="Icono de Gestión de Bases de Datos"
+        width={40}
+        height={40}
+      />
     ),
     title: "Gestión de Bases de Datos",
     paragraph:
       "Diseñar, implementar y administrar bases de datos para almacenar, organizar y asegurar grandes volúmenes de información.",
   },
   {
-    id: 1,
+    id: 3,
     icon: (
-      <img src="/images/features/ciber.svg" width="40" height="40" />
+      <Image
+        src="/images/features/ciber.svg"
+        alt="Icono de Ciberseguridad"
+        width={40}
+        height={40}
+      />
     ),
     title: "Ciberseguridad",
     paragraph:
       "Implementar medidas de seguridad para proteger sistemas, redes, y datos frente a amenazas como ataques cibernéticos, malware, y accesos no autorizados.",
   },
   {
-    id: 1,
+    id: 4,
     icon: (
-      <img src="/images/features/redes.svg" width="40" height="40" />
+      <Image
+        src="/images/features/redes.svg"
+        alt="Icono de Redes y Telecomunicaciones"
+        width={40}
+        height={40}
+      />
     ),
     title: "Redes y Telecomunicaciones",
     paragraph:
       "Diseñar y gestionar redes informáticas que conectan diferentes dispositivos y sistemas, asegurando una comunicación eficiente y segura entre ellos, tanto a nivel local como en redes más amplias (WAN).",
   },
   {
-    id: 1,
+    id: 5,
     icon: (
       <svg width="40" height="42" viewBox="0 0 40 42" className="fill-current">
         <path
@@ -53,7 +74,7 @@ const featuresData: Feature[] = [
       "Evaluar y mejorar el rendimiento de sistemas informáticos, tanto en términos de hardware como de software, para garantizar que operen de manera eficiente, rápida y con el menor uso de recursos posible.",
   },
   {
-    id: 1,
+    id: 6,
     icon: (
       <svg width="40" height="45" viewBox="0 0 40 45" className="fill-current">
         <path

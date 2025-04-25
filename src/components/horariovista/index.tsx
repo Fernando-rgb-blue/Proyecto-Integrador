@@ -1,8 +1,6 @@
 'use client';
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import BreadDash from "@/components/Common/BreadDash";
-import DashboardTabs from "@/components/Dashboard/DashboardTabs";
 
 interface ScheduleItem {
   _id?: string;
@@ -16,6 +14,15 @@ interface ScheduleItem {
   }[];
 }
 
+const days = ["LUNES", "MARTES", "MIÉRCOLES", "JUEVES", "VIERNES"] as const;
+  const hours = [
+    "07:00 AM a 08:00 AM", "08:00 AM a 09:00 AM", "09:00 AM a 10:00 AM",
+    "10:00 AM a 11:00 AM", "11:00 AM a 12:00 PM", "12:00 PM a 01:00 PM",
+    "01:00 PM a 02:00 PM", "02:00 PM a 03:00 PM",
+    "03:00 PM a 04:00 PM", "04:00 PM a 05:00 PM",
+    "05:00 PM a 06:00 PM", "06:00 PM a 07:00 PM",
+    "07:00 PM a 08:00 PM", "08:00 PM a 09:00 PM",
+  ] as const;
 const ScheduleTable: React.FC = () => {
   const [schedule, setSchedule] = useState<Array<Array<ScheduleItem | null>>>(
     Array.from({ length: 14 }, () => Array(5).fill(null))
@@ -52,15 +59,7 @@ const ScheduleTable: React.FC = () => {
   const optionsAnio = ['2025'];
   const optionsPeriodo = ['I', 'II'];
   const filteredCiclos = periodo ? optionsCiclo[periodo] : [];
-  const days = ["LUNES", "MARTES", "MIÉRCOLES", "JUEVES", "VIERNES"];
-  const hours = [
-    "07:00 AM a 08:00 AM", "08:00 AM a 09:00 AM", "09:00 AM a 10:00 AM",
-    "10:00 AM a 11:00 AM", "11:00 AM a 12:00 PM", "12:00 PM a 01:00 PM",
-    "01:00 PM a 02:00 PM", "02:00 PM a 03:00 PM",
-    "03:00 PM a 04:00 PM", "04:00 PM a 05:00 PM",
-    "05:00 PM a 06:00 PM", "06:00 PM a 07:00 PM",
-    "07:00 PM a 08:00 PM", "08:00 PM a 09:00 PM",
-  ];
+  
 
   // Buscar horario
   const handleSearch = async () => {
@@ -84,19 +83,23 @@ const ScheduleTable: React.FC = () => {
 
   // Efecto de carga de datos
   useEffect(() => {
+    const template = { available: 0, courses: [{ course: '', professor: '', activity: '', classroom: '' }] };
+
     const createNewSchedule = async (id: string) => {
-      const template = { available: 0, courses: [{ course: '', professor: '', activity: '', classroom: '' }] };
       const payload: any = { _id: id };
-      ['lunes','martes','miercoles','jueves','viernes'].forEach(day => payload[day] = Array(hours.length).fill(template));
+      // inicializo cada día con el template
+      ['lunes','martes','miercoles','jueves','viernes'].forEach(day => {
+        payload[day] = Array(hours.length).fill(template);
+      });
       await axios.post('/api/scheduleadmin', payload);
       setSchedule(Array.from({ length: hours.length }, () => Array(days.length).fill(template)));
     };
 
-    const mapScheduleData = (data: any, slots: number) => {
-      const grid = Array.from({ length: slots }, () => Array(days.length).fill(null));
+    const mapScheduleData = (data: any) => {
+      const grid = Array.from({ length: hours.length }, () => Array(days.length).fill(null));
       ['lunes','martes','miercoles','jueves','viernes'].forEach((day, di) => {
         data[day].forEach((itm: any, hi: number) => {
-          if (hi < slots) grid[hi][di] = { available: itm.available, courses: itm.courses };
+          if (hi < hours.length) grid[hi][di] = { available: itm.available, courses: itm.courses };
         });
       });
       return grid;
@@ -106,8 +109,7 @@ const ScheduleTable: React.FC = () => {
       try {
         const res = await fetch('/api/auth/signup');
         const data = await res.json();
-        const activos = data.filter((u: any) => u.status === 'activo' && u.role !== 'admin');
-        setDocentes(activos);
+        setDocentes(data.filter((u: any) => u.status === 'activo' && u.role !== 'admin'));
       } catch (e) {
         console.error(e);
       }
@@ -120,11 +122,17 @@ const ScheduleTable: React.FC = () => {
         const data = res.data;
         const required = ['lunes','martes','miercoles','jueves','viernes'];
         const ok = required.every(d => data[d] && Array.isArray(data[d]));
-        if (!ok) await createNewSchedule(horarioID);
-        else setSchedule(mapScheduleData(data, hours.length));
+        if (!ok) {
+          await createNewSchedule(horarioID);
+        } else {
+          setSchedule(mapScheduleData(data));
+        }
       } catch (err: any) {
-        if (err.response?.status === 404) await createNewSchedule(horarioID);
-        else setError('Error al cargar: ' + err.message);
+        if (err.response?.status === 404) {
+          await createNewSchedule(horarioID);
+        } else {
+          setError('Error al cargar: ' + err.message);
+        }
       } finally {
         setLoading(false);
       }
@@ -132,7 +140,8 @@ const ScheduleTable: React.FC = () => {
 
     fetchDocentes();
     fetchSchedule();
-  }, [horarioID, hours.length]);
+  }, [horarioID]); 
+
 
   const getNombreDocente = (id: string) => {
     const d = docentes.find(dc => dc._id === id);
