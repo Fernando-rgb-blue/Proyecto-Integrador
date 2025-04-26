@@ -3,7 +3,7 @@ import FUTForm from "@/components/FUT/FUTForm";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "FUT | Escuela de Informática",
+    title: "FUT | Escuela de Informática | UNT",
     description: "Un formulario para editar y descargar el Formato Único de Trámite."
 };
 

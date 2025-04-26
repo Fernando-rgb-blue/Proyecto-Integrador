@@ -6,7 +6,7 @@ import Breadcrumb from "@/components/Common/Breadcrumb";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Acreditación | Escuela de Informática",
+    title: "Acreditación | Escuela de Informática | UNT",
     description: "Esta es la página de Documentos de Acreditación",
     // other metadata
 };

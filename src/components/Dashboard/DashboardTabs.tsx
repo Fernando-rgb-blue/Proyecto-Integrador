@@ -77,8 +77,8 @@ const DashboardTabs = () => {
                             Registrar mi Horario
                         </Link>
                         <Link
-                            className={`tab-link ${path === '/dashboard/schedule-ad' ? 'active' : ''}`}
-                            href="/dashboard/schedule-ad"
+                            className={`tab-link ${path === '/dashboard/main-schedule' ? 'active' : ''}`}
+                            href="/dashboard/main-schedule"
                         >
                             Horario General
                         </Link>
@@ -142,8 +142,8 @@ const DashboardTabs = () => {
                 )}{isGoogleUser && (
                     <>
                         <Link
-                            className={`tab-link ${path === '/dashboard/schedule-ad' ? 'active' : ''}`}
-                            href="/dashboard/schedule-ad"
+                            className={`tab-link ${path === '/dashboard/main-schedule' ? 'active' : ''}`}
+                            href="/dashboard/main-schedule"
                         >
                             Horario General
                         </Link>

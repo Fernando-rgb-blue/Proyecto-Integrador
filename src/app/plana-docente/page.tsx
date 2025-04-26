@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Plana Docente | Escuela de Informática",
+  title: "Plana Docente | Escuela de Informática | UNT",
   description: "Aquí se muestra la plana docente ejerciendo su cargo en la escuela de informática.",
 };
 

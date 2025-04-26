@@ -7,7 +7,7 @@ import ProtectedRoute from "@/components/Proteccion"
 import RoleGuard from "@/components/RoleGuard/RoleGuard";
 
 export const metadata: Metadata = {
-    title: "Disponibilidad Docentes | Escuela de Informática",
+    title: "Disponibilidad Docentes | Escuela de Informática | UNT",
     description: "Página de disponibilidad horario de todos los docentes"
 };
 

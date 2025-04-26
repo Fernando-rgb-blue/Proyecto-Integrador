@@ -5,7 +5,7 @@ import BackgroundCanvas from "@/components/BackgroundCanvas";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-    title: "Error | Escuela de Informática",
+    title: "Error | Escuela de Informática | UNT",
     description: "Esta es la página de Error (Página no encontrada)",
 };
 

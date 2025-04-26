@@ -8,7 +8,7 @@ import Conveniosf from "@/components/Convenios/Showcon";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Inicio | Escuela de Informática",
+  title: "Inicio | Escuela de Informática | UNT",
   description: "Esta es la página de Inicio",
   // other metadata
 };

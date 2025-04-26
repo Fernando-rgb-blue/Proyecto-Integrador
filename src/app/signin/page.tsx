@@ -2,7 +2,7 @@ import SignInComponent from "@/components/SignIn";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Inicio de sesión | Escuela de Informática",
+    title: "Inicio de sesión | Escuela de Informática | UNT",
     description: "Un formulario para editar y descargar el Formato Único de Trámite."
 };
 

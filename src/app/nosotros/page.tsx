@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Nosotros | Escuela de Informática",
+  title: "Nosotros | Escuela de Informática | UNT",
   description: "Esta es la página de Nosotros",
 };
 

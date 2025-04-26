@@ -5,11 +5,11 @@ import ProtectedRoute from "@/components/Proteccion"
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Perfil | Escuela de Informática",
+  title: "Perfil | Escuela de Informática | UNT",
   description: "Página para el perfil de usuario."
 };
 
-function ProfilePage() {
+const ProfilePage = () => {
   return (
 
     <section>

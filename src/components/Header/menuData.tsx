@@ -51,7 +51,7 @@ const menuData: Menu[] = [
       {
         id: 55,
         title: "Horarios",
-        path: "/dashboard/schedule-ad",
+        path: "/dashboard/main-schedule",
         newTab: false,
       },
       {
