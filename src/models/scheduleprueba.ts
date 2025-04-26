@@ -1,6 +1,11 @@
-import { Schema, model, models } from 'mongoose';
+import { Document, Model, Schema, model, models } from 'mongoose';
 
-const esquemaHorarioPrueba = new Schema({
+interface IScheduleprueba extends Document {
+  ciclo: string;
+  seccion: string;
+}
+
+const esquemaHorarioPrueba = new Schema<IScheduleprueba>({
   ciclo: {
     type: String, 
     required: true,
@@ -14,6 +19,6 @@ const esquemaHorarioPrueba = new Schema({
 }, {
   timestamps: true 
 });
-const scheduleprueba = models.scheduleprueba || model('scheduleprueba', esquemaHorarioPrueba);
+const scheduleprueba: Model<IScheduleprueba> = models.scheduleprueba || model<IScheduleprueba>('scheduleprueba', esquemaHorarioPrueba);
 
 export default scheduleprueba;

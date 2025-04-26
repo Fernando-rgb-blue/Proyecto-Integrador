@@ -1,4 +1,4 @@
-import { Schema, Document, model, models } from 'mongoose';
+import { Schema, Document, model, models, Model } from 'mongoose';
 
 interface ICourse {
   course: string;
@@ -35,7 +35,7 @@ const TimeSlotSchema = new Schema<ITimeSlot>({
   }
 });
 
-const ScheduleSchema: Schema = new Schema({
+const ScheduleSchema: Schema = new Schema<ISchedule>({
   _id: { type: String, required: true },
   lunes: { type: [TimeSlotSchema], default: Array(14).fill({}) },
   martes: { type: [TimeSlotSchema], default: Array(14).fill({}) },
@@ -45,5 +45,6 @@ const ScheduleSchema: Schema = new Schema({
 });
 
 // Exportar el modelo con el nombre de la colección 'scheduleAdmin'
-const Schedule = models.ScheduleAdmin2 || model<ISchedule>('ScheduleAdmin2', ScheduleSchema);
+const Schedule: Model<ISchedule> = models.ScheduleAdmin2 || model<ISchedule>('ScheduleAdmin2', ScheduleSchema);
+
 export default Schedule;

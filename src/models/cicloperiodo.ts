@@ -1,6 +1,13 @@
-import { Schema, model, models } from 'mongoose';
+import { Document, Model, Schema, model, models } from 'mongoose';
 
-const esquemaCicloPeriodo = new Schema({
+interface ICicloperiodo extends Document {
+  ciclo: string;
+  seccion: string;
+  anio: number;
+  periodo: string;
+}
+
+const esquemaCicloPeriodo = new Schema<ICicloperiodo>({
   ciclo: {
     type: String, 
     required: true,
@@ -25,6 +32,6 @@ const esquemaCicloPeriodo = new Schema({
   collection: 'cicloperiodo'  // Nombre personalizado de la colección en la base de datos
 });
 
-const cicloperiodo = models.cicloperiodo || model('cicloperiodo', esquemaCicloPeriodo);
+const cicloperiodo: Model<ICicloperiodo> = models.cicloperiodo || model<ICicloperiodo>('cicloperiodo', esquemaCicloPeriodo);
 
 export default cicloperiodo;

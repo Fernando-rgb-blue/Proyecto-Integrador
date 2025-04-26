@@ -21,7 +21,7 @@ const UserProfile = () => {
     }
 
     try {
-      const response = await axios.put(`/api/auth/edituser/${session?.user?.id}`, {
+      const response = await axios.put(`/api/auth/edituser/${session?.user?._id}`, {
         password,
       });
 

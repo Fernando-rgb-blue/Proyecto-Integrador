@@ -1,6 +1,12 @@
-import { Schema, model, models } from 'mongoose';
+import { Document, Model, Schema, model, models } from 'mongoose';
 
-const esquemaClassroom = new Schema({
+interface IClassroom extends Document {
+  name: string;
+  capacity: number;
+  description: string;
+}
+
+const esquemaClassroom = new Schema<IClassroom>({
   name: {
     type: String,
     required: true,
@@ -21,6 +27,6 @@ const esquemaClassroom = new Schema({
   collection: 'classrooms' 
 });
 
-const classroom = models.classroom || model('classroom', esquemaClassroom);
+const classroom: Model<IClassroom> = models.classroom || model<IClassroom>('classroom', esquemaClassroom);
 
 export default classroom;

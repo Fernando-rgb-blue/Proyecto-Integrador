@@ -1,4 +1,4 @@
-import { Schema, Document, model, models } from 'mongoose';
+import { Schema, Document, model, models, Model } from 'mongoose';
 
 // Definir la interfaz para el esquema de horarios de usuario
 interface ISchedule extends Document {
@@ -11,7 +11,7 @@ interface ISchedule extends Document {
 }
 
 // Definir el esquema del horario en Mongoose
-const ScheduleSchema: Schema = new Schema({
+const ScheduleSchema: Schema = new Schema<ISchedule>({
   userId: { type: String, required: true },       // ID del usuario es obligatorio
   lunes: { type: [Number], default: Array(15).fill(0) },       // 14 slots para horas (de 07:00 AM a 08:00 PM)
   martes: { type: [Number], default: Array(15).fill(0) },      // Array de 14 booleanos para martes
@@ -21,5 +21,6 @@ const ScheduleSchema: Schema = new Schema({
 });
 
 // Exportar el modelo
-const Schedule = models.Schedule || model<ISchedule>('Schedule', ScheduleSchema);
+const Schedule: Model<ISchedule> = models.Schedule || model<ISchedule>('Schedule', ScheduleSchema);
+
 export default Schedule;
