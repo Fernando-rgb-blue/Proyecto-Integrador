@@ -4,7 +4,7 @@ import PerfilE from "@/components/PerfilEgresado";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Perfil del Egresado | Escuela de Informática",
+  title: "Perfil del Egresado | Escuela de Informática | UNT",
   description: "Esta es la página de Perfil del Egresado",
   // other metadata
 };

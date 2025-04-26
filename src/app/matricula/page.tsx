@@ -4,7 +4,7 @@ import Breadcrumb from "@/components/Common/Breadcrumb";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Matrícula | Escuela de Informática",
+    title: "Matrícula | Escuela de Informática | UNT",
     description: "Esta es la página de Indicaiones de Matrícula",
     // other metadata
 };

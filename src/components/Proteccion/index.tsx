@@ -22,7 +22,7 @@ const ProtectedRoute = () => {
         
         // Si el usuario de Google trata de acceder a una ruta restringida, redirígelo
         if (isGoogleUser && restrictedPaths.includes(window.location.pathname)) {
-            router.push('/dashboard/schedule-ad');
+            router.push('/dashboard/main-schedule');
         } else {
             // Si no está en una ruta restringida, establece el estado de carga a falso
             setLoading(false);

@@ -3,7 +3,7 @@ import VistaHorarios from "@/components/VistaHorarios/VistaHorarios";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Horarios | Escuela de Informática",
+    title: "Horarios | Escuela de Informática | UNT",
     description: "Horarios correspondientes al periodo actual"
 };
 

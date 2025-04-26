@@ -7,7 +7,7 @@ import ProtectedRoute from "@/components/Proteccion";
 import RoleGuard from "@/components/RoleGuard/RoleGuard";
 
 export const metadata: Metadata = {
-    title: "Gestionar Cursos | Escuela de Informática",
+    title: "Gestionar Cursos | Escuela de Informática | UNT",
     description: "Página de administrador para gestionar Cursos."
 };
 

@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-    title: "Currícula antigua | Escuela de Informática",
+    title: "Currícula antigua | Escuela de Informática | UNT | UNT",
     description: "La malla curricular antigua de la escuela de informática UNT.",
 };
 

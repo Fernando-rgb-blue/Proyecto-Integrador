@@ -7,7 +7,7 @@ import RoleGuard from "@/components/RoleGuard/RoleGuard";
 
 
 export const metadata: Metadata = {
-    title: "Gestionar Aulas | Escuela de Informática",
+    title: "Gestionar Aulas | Escuela de Informática | UNT",
     description: "Página de administrador para gestionar aulas."
 };
 
