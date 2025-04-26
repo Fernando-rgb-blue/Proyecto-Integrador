@@ -103,7 +103,7 @@ const TeacherList = () => {
                 <ul className="mb-12">
                 {docentes
                     .filter((docente) =>
-                    docente.fullname.toLowerCase().includes(searchTerm.toLowerCase())
+                    docente?.fullname?.toLowerCase().includes(searchTerm.toLowerCase())
                     )
                     .map((docente) => (
                     <li key={docente._id}>

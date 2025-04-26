@@ -277,7 +277,7 @@ const CoursesList = () => {
                 <ul className="absolute z-10 mt-1 w-full max-h-48 overflow-y-auto bg-white border border-gray-300 rounded-lg shadow-md dark:bg-slate-800">
                   {docentes
                     .filter((docente) =>
-                      docente.fullname.toLowerCase().includes(selectedDocente.toLowerCase())
+                      docente?.fullname?.toLowerCase().includes(selectedDocente.toLowerCase())
                     )
                     .map((docente) => (
                       <li
@@ -302,7 +302,7 @@ const CoursesList = () => {
                       </li>
                     ))}
                   {docentes.filter((d) =>
-                    d.fullname.toLowerCase().includes(selectedDocente.toLowerCase())
+                    d?.fullname?.toLowerCase().includes(selectedDocente.toLowerCase())
                   ).length === 0 && (
                       <li className="px-3 py-2 text-sm text-gray-500 dark:text-gray-300">
                         No se encontraron docentes.

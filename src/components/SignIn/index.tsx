@@ -20,8 +20,6 @@ const SignInComponent = () => {
     });
     if (res?.error) return setError(res.error as string);
     if (res?.ok) return router.push('/dashboard/profile')
-    console.log(res);
-
   }
 
   return (

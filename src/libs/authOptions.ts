@@ -1,17 +1,18 @@
 // C:\laragon\www\startup-nextjs\src\app\api\auth\[...nextauth]\route.ts
 
+import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import User from "@/models/user";
 import { connectDB } from "@/libs/mongodb";
 import bcrypt from "bcryptjs"
 import GoogleProvider from "next-auth/providers/google"
 import { MongoDBAdapter } from "@auth/mongodb-adapter"
-import { Adapter } from "next-auth/adapters";
+//import { Adapter } from "next-auth/adapters";
 import client from "@/libs/mongoForGoogle"
 
 // Configuración de NextAuth
-export const authOptions = {
-  adapter: MongoDBAdapter(client) as Adapter,
+const authOptions = {
+  addapter: MongoDBAdapter(client),
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
@@ -27,7 +28,7 @@ export const authOptions = {
       async authorize(credentials, req) {
 
         await connectDB()
-        //console.log(credentials);
+        // console.log('credentials', credentials);
 
         const userFound = await User.findOne({
           email: credentials?.email,
@@ -37,7 +38,7 @@ export const authOptions = {
 
         if (userFound.status !== "activo") throw new Error("Usuario no activo");
 
-        //console.log(userFound);
+        // console.log('userFound', userFound);
         const passwordMatch = await bcrypt.compare(
           credentials!.password,
           userFound.password
@@ -48,28 +49,27 @@ export const authOptions = {
           id: userFound._id.toString(),
           name: userFound.fullname,
           email: userFound.email,
-          image: userFound.image || undefined
+          image: userFound.image || undefined,
+          role: userFound.role
         };
       },
     }),
   ],
   callbacks: {
     jwt({ account, token, user, profile, session }) {
-      if (user) {
-        token.user = {
-          _id: user.id,
-          fullname: user.name,
-          email: user.email,
-          role: user.role
-        }
-      }
-      console.log(token);
+      if (user) token.user = user;
+      // console.log(token);
       return token;
     },
     session({ session, token }) {
       // Pasa la información completa del usuario a la sesión
       if (token.user) {
-        session.user = token.user; // Incluye el rol en la sesión
+        session.user = {
+          _id: token.user.id,
+          email: token.user.email,
+          fullname: token.user.name,
+          role: token.user.role, // Incluye el rol en la sesión
+        };
       }
       return session;
     },
@@ -81,8 +81,8 @@ export const authOptions = {
 };
 
 // Exportar la configuración de NextAuth
-//const handler = NextAuth(authOptions);
+// const handler = NextAuth(authOptions);
 
-//export { handler as GET, handler as POST };
+// export { handler as GET, handler as POST };
 
-// export { authOptions }; // Exportar authOptions
+export { authOptions }; // Exportar authOptions
