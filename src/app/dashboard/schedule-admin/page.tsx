@@ -206,16 +206,10 @@ const ScheduleModal: React.FC<{
               >
                 <option value="">Seleccione una Actividad</option>
                 <option value="Práctica">Práctica</option>
-                <option value="Teoría">Teoría</option>
                 <option value="Laboratorio 1">Laboratorio 1</option>
                 <option value="Laboratorio 2">Laboratorio 2</option>
                 <option value="Laboratorio 3">Laboratorio 3</option>
-                <option value="Laboratorio 4">Laboratorio 4</option>
-                <option value="Grupo 1">Grupo 1</option>
-                <option value="Grupo 2">Grupo 2</option>
-                <option value="Grupo 3">Grupo 3</option>
-                <option value="Grupo 4">Grupo 4</option>
-                <option value="Grupo 5">Grupo 5</option>
+                <option value="Teoría">Teoría</option>
               </select>
             </div>
 
@@ -266,7 +260,7 @@ const ScheduleModal: React.FC<{
         {error && <div className="text-red-500 mb-4">{error}</div>}
 
 
-        {(courseData.length === 1 || courseData.length === 2)&& (
+        {courseData.length === 1 && (
           <button
             onClick={handleAddCourse}
             className="mt-2 bg-green-500 text-white p-2 rounded w-full"
