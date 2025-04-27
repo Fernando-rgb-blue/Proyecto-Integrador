@@ -38,9 +38,9 @@ const ScheduleTableClassroom: React.FC = () => {
     "bg-red-200",
     "bg-lime-200",
     "bg-purple-300",
-    "bg-teal-200",  
-    "bg-indigo-200", 
-    "bg-yellow-200", 
+    "bg-teal-200",
+    "bg-indigo-200",
+    "bg-yellow-200",
   ];
 
   const courseColorMap: { [key: string]: string } = {};
@@ -71,30 +71,39 @@ const ScheduleTableClassroom: React.FC = () => {
         throw new Error('Por favor, seleccione un aula');
       }
       setLoading(true);
-      const response = await axios.get(
-        `/api/scheduleclassroom?classroom=${selectedAula}`
-      );
+      const response = await axios.get(`/api/scheduleclassroom?classroom=${selectedAula}`);
+      
       if (response.status !== 200) {
         throw new Error('Error al buscar el horario');
       }
+  
       const data = response.data;
-      setSchedule(mapScheduleData(data, 14)); // Actualizar con datos recibidos
-      setError(''); // Limpiar errores si todo es exitoso
+      setSchedule(mapScheduleData(data, 14)); 
+      setError(''); 
     } catch (err: any) {
-      setSchedule(Array.from({ length: 14 }, () => Array(5).fill(null))); // Reiniciar la tabla
-      setError(err.message || 'Error al buscar el horario'); // Mostrar mensaje de error
+      setSchedule(Array.from({ length: 14 }, () => Array(5).fill(null)));
+  
+      if (axios.isAxiosError(err)) {
+        if (err.response?.status === 404) {
+          setError('Esta aula de momento no cuenta con clases disponibles');
+        } else {
+          setError('Error al buscar el horario');
+        }
+      } else {
+        setError(err.message || 'Error desconocido');
+      }
     } finally {
       setLoading(false);
     }
   };
-
+  
   useEffect(() => {
     const fetchAula = async () => {
       try {
         const response = await fetch("/api/classroom/");
         if (!response.ok) throw new Error("Error al obtener las aulas");
         const data = await response.json();
-        setAula(data);  // Aquí usamos 'data' en lugar de 'response'
+        setAula(data); 
       } catch (error: any) {
         setError(error.message);
       }
@@ -115,7 +124,7 @@ const ScheduleTableClassroom: React.FC = () => {
   const mapScheduleData = (data: any, slotsPerDay: number) => {
     const updatedSchedule = Array.from({ length: slotsPerDay }, () => Array(5).fill(null));
     const daysMap = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes'];
-  
+
     daysMap.forEach((day, dayIndex) => {
       if (data[day]) {
         data[day].forEach((slot: ScheduleItem, hourIndex: number) => {
@@ -133,7 +142,7 @@ const ScheduleTableClassroom: React.FC = () => {
         });
       }
     });
-  
+
     return updatedSchedule;
   };
 
@@ -179,6 +188,12 @@ const ScheduleTableClassroom: React.FC = () => {
             Buscar
           </button>
         </div>
+
+        {error && (
+          <div className="flex justify-center items-center mt-8">
+            <p className="text-center text-gray-300 text-lg">{error}</p>
+          </div>
+        )}
       </div>
 
       {/* <div className="flex justify-center mb-4">
@@ -191,7 +206,6 @@ const ScheduleTableClassroom: React.FC = () => {
       </div> */}
 
       {loading && <p className="text-blue-500">Cargando horarios...</p>}
-      {error && <p className="mt-4 text-red-500">{error}</p>}
 
       <div className="container mx-auto mt-10 mb-10 p-4">
         <div className="overflow-x-auto">
@@ -212,77 +226,76 @@ const ScheduleTableClassroom: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-            {hours.map((hour, hourIndex) => (
-              <tr key={hourIndex}>
-                <td className="p-2 text-center border-[4px] border-gray-500 dark:border-black text-sm">
-                  {hour}
-                </td>
-                {days.map((_, dayIndex) => {
-                  const currentCell = schedule[hourIndex][dayIndex];
+              {hours.map((hour, hourIndex) => (
+                <tr key={hourIndex}>
+                  <td className="p-2 text-center border-[4px] border-gray-500 dark:border-black text-sm">
+                    {hour}
+                  </td>
+                  {days.map((_, dayIndex) => {
+                    const currentCell = schedule[hourIndex][dayIndex];
 
-                  // Lógica para evitar combinar celdas vacías
-                  if (
-                    hourIndex > 0 &&
-                    schedule[hourIndex - 1][dayIndex] &&
-                    JSON.stringify(schedule[hourIndex - 1][dayIndex]) === JSON.stringify(currentCell) &&
-                    currentCell && currentCell.courses.length > 0
-                  ) {
-                    return null; // No renderizar la celda repetida si tiene contenido igual
-                  }
+                    // Lógica para evitar combinar celdas vacías
+                    if (
+                      hourIndex > 0 &&
+                      schedule[hourIndex - 1][dayIndex] &&
+                      JSON.stringify(schedule[hourIndex - 1][dayIndex]) === JSON.stringify(currentCell) &&
+                      currentCell && currentCell.courses.length > 0
+                    ) {
+                      return null; // No renderizar la celda repetida si tiene contenido igual
+                    }
 
-                  // Calcular rowSpan solo si la celda actual tiene contenido
-                  let rowSpan = 1;
-                  if (currentCell && currentCell.courses.length > 0) {
-                    for (let i = hourIndex + 1; i < hours.length; i++) {
-                      if (
-                        schedule[i][dayIndex] &&
-                        JSON.stringify(schedule[i][dayIndex]) === JSON.stringify(currentCell) &&
-                        schedule[i][dayIndex].courses.length > 0
-                      ) {
-                        rowSpan++;
-                      } else {
-                        break;
+                    // Calcular rowSpan solo si la celda actual tiene contenido
+                    let rowSpan = 1;
+                    if (currentCell && currentCell.courses.length > 0) {
+                      for (let i = hourIndex + 1; i < hours.length; i++) {
+                        if (
+                          schedule[i][dayIndex] &&
+                          JSON.stringify(schedule[i][dayIndex]) === JSON.stringify(currentCell) &&
+                          schedule[i][dayIndex].courses.length > 0
+                        ) {
+                          rowSpan++;
+                        } else {
+                          break;
+                        }
                       }
                     }
-                  }
 
-                  // Mostrar celda vacía si no tiene contenido
-                  if (!currentCell || currentCell.courses.length === 0) {
+                    // Mostrar celda vacía si no tiene contenido
+                    if (!currentCell || currentCell.courses.length === 0) {
+                      return (
+                        <td
+                          key={`${hourIndex}-${dayIndex}`}
+                          className="border-[4px] border-gray-500 dark:border-black text-center"
+                        >
+                          {/* Celda vacía sin contenido */}
+                        </td>
+                      );
+                    }
+
                     return (
                       <td
                         key={`${hourIndex}-${dayIndex}`}
-                        className="border-[4px] border-gray-500 dark:border-black text-center"
+                        className={`text-center align-middle border-[4px] border-gray-500 dark:border-black text-sm whitespace-normal ${currentCell && currentCell.available === 1 && currentCell.courses[0]?.course
+                            ? getCourseColor(currentCell.courses[0].course)
+                            : ""
+                          }`}
+
+                        rowSpan={rowSpan}
+                        onClick={() => toggleCellSelection(dayIndex, hourIndex)}
                       >
-                        {/* Celda vacía sin contenido */}
+                        {currentCell.courses.map((course, index) => (
+                          <div key={index} className="text-xs dark:text-dark">
+                            <p>{course.course}</p>
+                            <p>{getNombreDocente(course.professor)}</p>
+                            <p>{course.activity}</p>
+                            <p>{course.classroom}</p>
+                          </div>
+                        ))}
                       </td>
                     );
-                  }
-
-                  return (
-                    <td
-                      key={`${hourIndex}-${dayIndex}`}
-                      className={`text-center align-middle border-[4px] border-gray-500 dark:border-black text-sm whitespace-normal ${
-                        currentCell && currentCell.available === 1 && currentCell.courses[0]?.course
-                          ? getCourseColor(currentCell.courses[0].course)
-                          : ""
-                      }`}
-                      
-                      rowSpan={rowSpan}
-                      onClick={() => toggleCellSelection(dayIndex, hourIndex)}
-                    >
-                      {currentCell.courses.map((course, index) => (
-                        <div key={index} className="text-xs dark:text-dark">
-                          <p>{course.course}</p>
-                          <p>{getNombreDocente(course.professor)}</p>
-                          <p>{course.activity}</p>
-                          <p>{course.classroom}</p>
-                        </div>
-                      ))}
-                    </td>
-                  );
-                })}
-              </tr>
-            ))}
+                  })}
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
