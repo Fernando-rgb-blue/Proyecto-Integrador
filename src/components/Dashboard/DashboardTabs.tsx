@@ -148,12 +148,6 @@ const DashboardTabs = () => {
                             Horario General
                         </Link>
                         <Link
-                            className={`tab-link ${path === '/dashboard/schedule-admin-teacher' ? 'active' : ''}`}
-                            href="/dashboard/schedule-admin-teacher"
-                        >
-                            Horario por Docente
-                        </Link>
-                        <Link
                             className={`tab-link ${path === '/dashboard/schedule-admin-classroom' ? 'active' : ''}`}
                             href="/dashboard/schedule-admin-classroom"
                         >

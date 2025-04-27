@@ -129,12 +129,12 @@ const Footer = () => {
                 <ul>
                   <li>
                     <Link
-                      href="https://transparencia.unitru.edu.pe/doc/TUSNE/Anexo%20Oficio%20015-2019%20Tasas%20UNT%202019.pdf"
+                      href="https://aulavirtual2.unitru.edu.pe"
                       className="mb-4 inline-block text-base text-body-color duration-300 hover:text-primary dark:text-body-color-dark dark:hover:text-primary"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      Tasas Educativas
+                      Aula Virtual UNT
                     </Link>
                   </li>
                   <li>
@@ -155,12 +155,10 @@ const Footer = () => {
                   </li>
                   <li>
                     <Link
-                      href="https://aulavirtual2.unitru.edu.pe"
+                      href="/developers"
                       className="mb-4 inline-block text-base text-body-color duration-300 hover:text-primary dark:text-body-color-dark dark:hover:text-primary"
-                      target="_blank"
-                      rel="noopener noreferrer"
                     >
-                      Aula Virtual UNT
+                      Desarrolladores
                     </Link>
                   </li>
                 </ul>

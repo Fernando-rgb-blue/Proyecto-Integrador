@@ -1,8 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import DashboardTabs from "@/components/Dashboard/DashboardTabs";
-import BreadDash from "@/components/Common/BreadDash";
-import ProtectedRoute from "@/components/Proteccion"
+
 
 interface Course {
   _id: string;
