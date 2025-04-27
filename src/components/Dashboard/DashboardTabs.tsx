@@ -11,12 +11,7 @@ const DashboardTabs = () => {
     
     // Verificar si el usuario inició sesión con Google
     const isGoogleUser = session?.sub?.startsWith('116341') || (session?.user?.email.includes('unitru.edu.pe') && !session?.user?.role);
-    
-    const isAdmin2 = session?.user?.role === "admin";
-    const isDocente = session?.user?.role === "profeC";
-    const isDocenteC = session?.user?.role === "profeN";
-    const isDirectorE = session?.user?.role === "directorE";
-    const isDirectorD = session?.user?.role === "directorD";
+    const sessionRole = session?.user?.role;
 
     const [mostrarCerrarSes, setMostrarCerrarSes] = useState(false);
 
@@ -27,7 +22,7 @@ const DashboardTabs = () => {
     return (
         <>
             <div className="flex flex-wrap items-center justify-center gap-4 p-4">
-                {isAdmin2 && (
+                {sessionRole === "admin" && (
                     <>
                         <Link
                             className={`tab-link ${path === '/dashboard/profile' ? 'active' : ''}`}
@@ -61,7 +56,7 @@ const DashboardTabs = () => {
                         </Link>
                     </>
                 )}
-                {isDocenteC && !isDocente && (
+                {(sessionRole === "profeC" || sessionRole === "profeN") && (
                     <>
                         <Link
                             className={`tab-link ${path === '/dashboard/profile' ? 'active' : ''}`}
@@ -84,7 +79,7 @@ const DashboardTabs = () => {
                         </Link>
                     </>
                 )}
-                {isDirectorE && (
+                {sessionRole === "directorE" && (
                     <>
                         <Link
                             className={`tab-link ${path === '/dashboard/profile' ? 'active' : ''}`}
@@ -112,7 +107,7 @@ const DashboardTabs = () => {
                         </Link>
                     </>
                 )}
-                {isDirectorD && (
+                {sessionRole === "directorD" && (
                     <>
                         <Link
                             className={`tab-link ${path === '/dashboard/profile' ? 'active' : ''}`}
@@ -148,8 +143,8 @@ const DashboardTabs = () => {
                             Horario General
                         </Link>
                         <Link
-                            className={`tab-link ${path === '/dashboard/schedule-admin-classroom' ? 'active' : ''}`}
-                            href="/dashboard/schedule-admin-classroom"
+                            className={`tab-link ${path === '/dashboard/schedule-classroom' ? 'active' : ''}`}
+                            href="/dashboard/schedule-classroom"
                         >
                             Horario por Aula
                         </Link>

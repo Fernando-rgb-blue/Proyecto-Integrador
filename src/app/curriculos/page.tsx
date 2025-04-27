@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-    title: "Currícula | Escuela de Informática | UNT | UNT",
+    title: "Currícula | Escuela de Informática | UNT",
     description: "La malla curricular de la escuela de informática UNT.",
 };
 

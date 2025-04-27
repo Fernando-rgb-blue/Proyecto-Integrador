@@ -6,7 +6,7 @@ import RoleGuard from "@/components/RoleGuard/RoleGuard";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Asignar cursos | Escuela de Informática | UNT | UNT",
+  title: "Asignar cursos | Escuela de Informática | UNT",
   description: "Página para asignar los cursos que dictarán los profesores."
 };
 
