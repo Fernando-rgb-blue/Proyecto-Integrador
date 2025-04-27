@@ -28,6 +28,7 @@ const ScheduleTableClassroom: React.FC = () => {
   const [aula, setAula] = useState<Aula[]>([]);
   const [error, setError] = useState<string>("");
   const [selectedAula, setSelectedAula] = useState<string>("");
+  const [docentes, setDocentes] = useState<any[]>([]);
   const colors = [
     "bg-gray-200",
     "bg-green-200",
@@ -98,7 +99,16 @@ const ScheduleTableClassroom: React.FC = () => {
         setError(error.message);
       }
     };
-    
+    const fetchDocentes = async () => {
+      try {
+        const res = await fetch('/api/auth/signup');
+        const data = await res.json();
+        setDocentes(data.filter((u: any) => u.status === 'activo' && u.role !== 'admin'));
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    fetchDocentes();
     fetchAula();
   }, []);
 
@@ -126,7 +136,11 @@ const ScheduleTableClassroom: React.FC = () => {
   
     return updatedSchedule;
   };
-  
+
+  const getNombreDocente = (id: string) => {
+    const d = docentes.find(dc => dc._id === id);
+    return d ? d.fullname : id;
+  };
 
   const handleDocenteAula = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     const neweAula = e.target.value;
@@ -259,6 +273,7 @@ const ScheduleTableClassroom: React.FC = () => {
                       {currentCell.courses.map((course, index) => (
                         <div key={index} className="text-xs dark:text-dark">
                           <p>{course.course}</p>
+                          <p>{getNombreDocente(course.professor)}</p>
                           <p>{course.activity}</p>
                           <p>{course.classroom}</p>
                         </div>
