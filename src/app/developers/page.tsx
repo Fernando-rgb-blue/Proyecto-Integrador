@@ -7,7 +7,7 @@ import Breadcrumb from "@/components/Common/Breadcrumb";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Team | Escuela de Informática | UNT",
+  title: "Developers | Escuela de Informática | UNT",
   description: "Esta es la página de los nombres de los creadores de la página web",
 };
 

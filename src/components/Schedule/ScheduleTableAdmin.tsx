@@ -220,6 +220,7 @@ const ScheduleModal: React.FC<{
                 className="border rounded w-full p-2"
               >
                 <option value="">Seleccione un aula</option>
+                <option value="Aula no definida">Aula no definida</option>
                 {classrooms.map((classroom, i) => (
                   <option key={i} value={classroom}>
                     {classroom}
@@ -236,7 +237,7 @@ const ScheduleModal: React.FC<{
                 onChange={(e) => handleCourseChange(index, "hours", e.target.value)}
                 className="border rounded w-full p-2"
               >
-                {[1, 2, 3, 4, 5].map((h) => (
+                {[1, 2, 3, 4, 5, 6].map((h) => (
                   <option key={h} value={h}>{h}</option>
                 ))}
               </select>
@@ -258,7 +259,7 @@ const ScheduleModal: React.FC<{
         {error && <div className="text-red-500 mb-4">{error}</div>}
 
 
-        {courseData.length === 1 && (
+        {(courseData.length === 1 || courseData.length === 2)&& (
           <button
             onClick={handleAddCourse}
             className="mt-2 bg-green-500 text-white p-2 rounded w-full"
@@ -304,13 +305,15 @@ const ScheduleModal: React.FC<{
 
 const ScheduleTableAdmin: React.FC = () => {
 
+  // Nuevo estado para controlar ta tabla q ta dando error
+  const [searched, setSearched] = useState(false);
   //aaaaaaaaaaaaaa
   const [initialCourses, setInitialCourses] = useState<ScheduleItem['courses']>([]);
 
   const [schedule, setSchedule] = useState<Array<Array<ScheduleItem | null>>>(Array.from({ length: 14 }, () => Array(5).fill(null)));
   const [modalVisible, setModalVisible] = useState(false);
   const [cellIndex, setCellIndex] = useState<{ dayIndex: number; hourIndex: number } | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [anio, setAnio] = useState('');
   const [periodo, setPeriodo] = useState('');
   const [ciclo, setCiclo] = useState('');
@@ -364,7 +367,7 @@ const ScheduleTableAdmin: React.FC = () => {
 
 
   const optionsSeccion = ['A', 'B'];
-  const optionsAnio = ['2025'];
+  const optionsAnio = ['2025','2026'];
   const optionsPeriodo = ['I', 'II'];
   const filteredCiclos = periodo ? optionsCiclo[periodo] : [];
   const days = ["LUNES", "MARTES", "MIÉRCOLES", "JUEVES", "VIERNES"];
@@ -388,6 +391,7 @@ const ScheduleTableAdmin: React.FC = () => {
       if (!anio || !periodo || !ciclo || !seccion) {
         throw new Error('Por favor complete todos los campos');
       }
+      setSearched(true);
       const response = await fetch('/api/cicloperiodo/search?' + new URLSearchParams({
         anio,
         periodo,
@@ -411,7 +415,7 @@ const ScheduleTableAdmin: React.FC = () => {
     const fetchSchedule = async () => {
       if (!horarioID) return;
       try {
-
+        setLoading(true);
         const response = await axios.get(`/api/scheduleadmin/${horarioID}`);
         const data = response.data;
 
@@ -881,90 +885,98 @@ const ScheduleTableAdmin: React.FC = () => {
         </div>
 
         {error && <p className="mt-4 text-red-500">{error}</p>}
-
+        {loading && <p className="text-blue-500 text-center">Cargando horario...</p>}      
         {/* Cuadro de horario */}
-        {/* Cuadro de horario (sin tabla crj) */}
-        <div className="overflow-x-auto container mx-auto mt-10 mb-10 p-4" style={{ marginTop: '1cm' }}>
-          <div className=" min-w-[800px] sm:min-w-[600px]">
-            <div className="grid" style={{ display: 'grid', gridTemplateColumns: `repeat(${days.length + 1}, minmax(120px, 1fr))` }}>
-              {/* Encabezado */}
-              <div className="bg-blue-800 text-white p-3 text-xs sm:text-base border-[4px] border-gray-300 dark:border-dark text-center font-bold">
-                HORAS
-              </div>
-              {days.map((day, index) => (
-                <div
-                  key={index}
-                  className="bg-blue-800 text-white p-3 text-xs sm:text-base border-[4px] border-gray-300 dark:border-dark text-center font-bold"
-                >
-                  {day}
+        {(searched) && (
+          <>
+            <div className="overflow-x-auto container mx-auto mt-10 mb-10 p-4" style={{ marginTop: '1cm' }}>
+            <div className=" min-w-[800px] sm:min-w-[600px]">
+              <div className="grid" style={{ display: 'grid', gridTemplateColumns: `repeat(${days.length + 1}, minmax(120px, 1fr))` }}>
+                {/* Encabezado */}
+                <div className="bg-blue-800 text-white p-3 text-xs sm:text-base border-[4px] border-gray-300 dark:border-dark text-center font-bold">
+                  HORAS
                 </div>
-              ))}
-
-              {/* Cuerpo */}
-              {hours.map((hour, hourIndex) => (
-                <React.Fragment key={hourIndex}>
-                  {/* Celda de la hora */}
-                  <div className="p-2 text-center border-[4px] border-gray-300 dark:border-dark text-sm flex items-center justify-center">
-                    {hour}
+                {days.map((day, index) => (
+                  <div
+                    key={index}
+                    className="bg-blue-800 text-white p-3 text-xs sm:text-base border-[4px] border-gray-300 dark:border-dark text-center font-bold"
+                  >
+                    {day}
                   </div>
-                  {/* Celdas del horario */}
-                  {days.map((_, dayIndex) => {
-                    const currentCell = schedule[hourIndex][dayIndex];
-                    return (
-                      <div
-                        key={`${hourIndex}-${dayIndex}`}
-                        className="text-center align-middle border-[4px] border-gray-300 dark:border-dark text-sm whitespace-normal flex flex-col justify-center items-center p-2"
-                        style={{ gridRow: 'span 1' }}
-                        onClick={() => toggleCellSelection(dayIndex, hourIndex)}
-                      >
-                        {currentCell && currentCell.courses.length > 0 && currentCell.available === 1 ? (
-                          currentCell.courses.map((course, idx) => (
-                            <div key={idx} className="text-xs dark:text-dark">
-                              <p className={course.course ? getCourseColor(course.course) : ""}>
-                                {course.course}
-                              </p>
-                              <p className={course.course ? getCourseColor(course.course) : ""}>
-                                {getNombreDocente(course.professor)}
-                              </p>
-                              <p className={course.course ? getCourseColor(course.course) : ""}>
-                                {course.activity}
-                              </p>
-                              <p className={course.course ? getCourseColor(course.course) : ""}>
-                                {course.classroom}
-                              </p>
-                            </div>
-                          ))
-                        ) : (
-                          <span
-                            className="text-xs text-gray-500"
-                            onClick={() => toggleCellSelection(dayIndex, hourIndex)}
-                          >
-                            -
-                          </span>
-                        )}
-                      </div>
-                    );
-                  })}
-                </React.Fragment>
-              ))}
+                ))}
+
+                {/* Cuerpo */}
+                {hours.map((hour, hourIndex) => (
+                  <React.Fragment key={hourIndex}>
+                    {/* Celda de la hora */}
+                    <div className="p-2 text-center border-[4px] border-gray-300 dark:border-dark text-sm flex items-center justify-center">
+                      {hour}
+                    </div>
+                    {/* Celdas del horario */}
+                    {days.map((_, dayIndex) => {
+                      const currentCell = schedule[hourIndex][dayIndex];
+                      return (
+                        <div
+                          key={`${hourIndex}-${dayIndex}`}
+                          className="text-center align-middle border-[4px] border-gray-300 dark:border-dark text-sm whitespace-normal flex flex-col justify-center items-center p-2"
+                          style={{ gridRow: 'span 1' }}
+                          onClick={() => toggleCellSelection(dayIndex, hourIndex)}
+                        >
+                          {currentCell && currentCell.courses.length > 0 && currentCell.available === 1 ? (
+                            currentCell.courses.map((course, idx) => (
+                              <div key={idx} className="text-xs dark:text-dark">
+                                <p className={course.course ? getCourseColor(course.course) : ""}>
+                                  {course.course}
+                                </p>
+                                <p className={course.course ? getCourseColor(course.course) : ""}>
+                                  {getNombreDocente(course.professor)}
+                                </p>
+                                <p className={course.course ? getCourseColor(course.course) : ""}>
+                                  {course.activity}
+                                </p>
+                                <p className={course.course ? getCourseColor(course.course) : ""}>
+                                  {course.classroom}
+                                </p>
+                              </div>
+                            ))
+                          ) : (
+                            <span
+                              className="text-xs text-gray-500"
+                              onClick={() => toggleCellSelection(dayIndex, hourIndex)}
+                            >
+                              -
+                            </span>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </React.Fragment>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
+          <div className="mt-4 flex justify-center">
+            <button
+              onClick={handleSaveGeneral}
+              className="px-4 py-2 bg-blue-500 text-white rounded-lg"
+              
+            >
+              {loading ? (
+                <span className="text-black">Elija horario</span>
+              ) : (
+                "Guardar Horario General"
+              )}
+            </button>
+          </div>
+          </>
+          
+
+        )}
+        {/* Cuadro de horario (sin tabla crj) */}
+        
 
         {/* Boton de guardado */}
-        <div className="mt-4 flex justify-center">
-          <button
-            onClick={handleSaveGeneral}
-            className="px-4 py-2 bg-blue-500 text-white rounded-lg"
-            disabled={loading}
-          >
-            {loading ? (
-              <span className="text-black">Elija horario</span>
-            ) : (
-              "Guardar Horario General"
-            )}
-          </button>
-        </div>
+        
 
         {/* Fin cuadro de horario */}
         <ScheduleModal

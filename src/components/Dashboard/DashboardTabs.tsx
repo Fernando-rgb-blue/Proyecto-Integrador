@@ -52,7 +52,19 @@ const DashboardTabs = () => {
                             className={`tab-link ${path === '/dashboard/schedule-docentes' ? 'active' : ''}`}
                             href="/dashboard/schedule-docentes"
                         >
-                            Ver Horarios
+                            Ver Disponibilidad
+                        </Link>
+                        <Link
+                            className={`tab-link ${path === '/dashboard/asigdocentes' ? 'active' : ''}`}
+                            href="/dashboard/asigdocentes"
+                        >
+                            Asignar Cursos
+                        </Link>
+                        <Link
+                            className={`tab-link ${path === '/dashboard/schedule-admin' ? 'active' : ''}`}
+                            href="/dashboard/schedule-admin"
+                        >
+                            Crear Horario General
                         </Link>
                     </>
                 )}
@@ -69,13 +81,19 @@ const DashboardTabs = () => {
                             className={`tab-link ${path === '/dashboard/schedule' ? 'active' : ''}`}
                             href="/dashboard/schedule"
                         >
-                            Registrar mi Horario
+                            Registrar mi Disponibilidad
                         </Link>
                         <Link
                             className={`tab-link ${path === '/dashboard/main-schedule' ? 'active' : ''}`}
                             href="/dashboard/main-schedule"
                         >
                             Horario General
+                        </Link>
+                        <Link
+                            className={`tab-link ${path === '/dashboard/schedule-classroom' ? 'active' : ''}`}
+                            href="/dashboard/schedule-classroom"
+                        >
+                            Horario por Aula
                         </Link>
                     </>
                 )}
@@ -91,20 +109,33 @@ const DashboardTabs = () => {
                             className={`tab-link ${path === '/dashboard/schedule' ? 'active' : ''}`}
                             href="/dashboard/schedule"
                         >
-                            Registrar mi Horario
+                            Registrar mi Disponibilidad
                         </Link>
                         <Link
                             className={`tab-link ${path === '/dashboard/schedule-docentes' ? 'active' : ''}`}
                             href="/dashboard/schedule-docentes"
                         >
-                            Ver Horarios
+                            Ver Disponibilidad
                         </Link>
                         <Link
                             className={`tab-link ${path === '/dashboard/schedule-admin' ? 'active' : ''}`}
                             href="/dashboard/schedule-admin"
                         >
-                            Horario General
+                            Crear Horario General
                         </Link>
+                        <Link
+                            className={`tab-link ${path === '/dashboard/schedule-classroom' ? 'active' : ''}`}
+                            href="/dashboard/schedule-classroom"
+                        >
+                            Horario por Aula Final
+                        </Link>
+                        <Link
+                            className={`tab-link ${path === '/dashboard/main-schedule' ? 'active' : ''}`}
+                            href="/dashboard/main-schedule"
+                        >
+                            Horario General Final
+                        </Link>
+                        
                     </>
                 )}
                 {sessionRole === "directorD" && (
@@ -119,7 +150,7 @@ const DashboardTabs = () => {
                             className={`tab-link ${path === '/dashboard/schedule' ? 'active' : ''}`}
                             href="/dashboard/schedule"
                         >
-                            Registrar mi Horario
+                            Registrar mi Disponibilidad
                         </Link>
                         <Link
                             className={`tab-link ${path === '/dashboard/docentes' ? 'active' : ''}`}
@@ -132,6 +163,18 @@ const DashboardTabs = () => {
                             href="/dashboard/asigdocentes"
                         >
                             Asignar Cursos
+                        </Link>
+                        <Link
+                            className={`tab-link ${path === '/dashboard/schedule-classroom' ? 'active' : ''}`}
+                            href="/dashboard/schedule-classroom"
+                        >
+                            Horario por Aula Final
+                        </Link>
+                        <Link
+                            className={`tab-link ${path === '/dashboard/main-schedule' ? 'active' : ''}`}
+                            href="/dashboard/main-schedule"
+                        >
+                            Horario General Final
                         </Link>
                     </>
                 )}{isGoogleUser && (

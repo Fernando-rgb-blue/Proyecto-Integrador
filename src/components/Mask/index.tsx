@@ -2,8 +2,8 @@
 import React, { useRef } from 'react';
 
 const members = [
-  { name: 'Alfato Titto Anthony Fernando', email: 'alfaro@gmail.com' },
-  { name: 'Gonzales Matos Walter Manuel', email: 'manuel@gmail.com' },
+  { name: 'Alfato Titto Anthony Fernando', email: 'TuZamakito1999@gmail.com' },
+  { name: 'Gonzales Matos Walter Manuel', email: 'manuelgonzmatos@gmail.com' },
   { name: 'Urcia Peláez Luis Alexander', email: 'urciapelaezluisalex@gmail.com' },
 ];
 

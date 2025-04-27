@@ -1,3 +1,5 @@
+// este es la vista del horario general y con la opcion de descargar el horario como imágen
+
 'use client';
 import React, { useEffect, useState } from "react";
 import axios from "axios";
@@ -27,7 +29,7 @@ const ScheduleTable: React.FC = () => {
   const [schedule, setSchedule] = useState<Array<Array<ScheduleItem | null>>>(
     Array.from({ length: 14 }, () => Array(5).fill(null))
   );
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [anio, setAnio] = useState('');
   const [periodo, setPeriodo] = useState('');
   const [ciclo, setCiclo] = useState('');
@@ -56,7 +58,7 @@ const ScheduleTable: React.FC = () => {
     'II': ['I','II','III','IV','V','VI','VII','VIII','IX','X'],
   };
   const optionsSeccion = ['A', 'B'];
-  const optionsAnio = ['2025'];
+  const optionsAnio = ['2025','2026'];
   const optionsPeriodo = ['I', 'II'];
   const filteredCiclos = periodo ? optionsCiclo[periodo] : [];
   
@@ -71,7 +73,7 @@ const ScheduleTable: React.FC = () => {
       const resp = await fetch('/api/cicloperiodo/search?' +
         new URLSearchParams({ anio, periodo, ciclo, seccion })
       );
-      if (!resp.ok) throw new Error('Error al buscar el horario');
+      if (!resp.ok) throw new Error('Error al buscar el horario / El horario no exixste');
       const data = await resp.json();
       setHorarioID(data._id);
       setError('');
@@ -118,6 +120,7 @@ const ScheduleTable: React.FC = () => {
     const fetchSchedule = async () => {
       if (!horarioID) return;
       try {
+        setLoading(true);
         const res = await axios.get(`/api/scheduleadmin/${horarioID}`);
         const data = res.data;
         const required = ['lunes','martes','miercoles','jueves','viernes'];
@@ -193,6 +196,52 @@ const ScheduleTable: React.FC = () => {
 
   const { spans, skip } = computeSpans();
 
+  // Función para descargar imagen completa
+  const handleDownload = async () => {
+    // 1) Cargar html2canvas desde CDN si no está
+    if (!window.html2canvas) {
+      await new Promise<void>((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js';
+        script.onload = () => resolve();
+        script.onerror = () => reject(new Error('No se pudo cargar html2canvas.'));
+        document.body.appendChild(script);
+      });
+    }
+
+    // 2) Seleccionar el div scrollable
+    const original = document.querySelector('.overflow-x-auto') as HTMLElement;
+    if (!original) {
+      alert('No se encontró el horario para descargar.');
+      return;
+    }
+
+    // 3) Clonar para quitar overflow y usar todo el ancho/alto
+    const clone = original.cloneNode(true) as HTMLElement;
+    const fullW = original.scrollWidth;
+    const fullH = original.scrollHeight;
+
+    clone.style.overflow = 'visible';
+    clone.style.width = fullW + 'px';
+    clone.style.height = fullH + 'px';
+    clone.style.position = 'absolute';
+    clone.style.top = '0';
+    clone.style.left = '-9999px';
+    document.body.appendChild(clone);
+
+    // 4) Renderizar el clon con html2canvas
+    const canvas = await window.html2canvas(clone, { scrollX: 0, scrollY: 0 });
+    document.body.removeChild(clone);
+
+    // 5) Descargar la imagen pipipi
+    const link = document.createElement('a');
+    link.download = 'horario.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  };
+
+
+
   return (
     <>
       <div className="container mx-auto p-4 pt-10">
@@ -231,9 +280,10 @@ const ScheduleTable: React.FC = () => {
           <button onClick={handleSearch} className="bg-blue-500 text-white px-4 py-2 rounded w-full md:w-auto">Buscar</button>
         </div>
         {error && <p className="mt-4 text-red-500">{error}</p>}
+        {loading && <p className="text-blue-500 text-center">Cargando horario...</p>}
 
         {/* Tabla de Horario */}
-        <div className="overflow-x-auto mt-10 mb-10 p-4 ">
+        <div className="overflow-x-auto mt-10 mb-8 p-4 ">
           <div className="min-w-[800px] sm:min-w-[600px] dark:bg-dark">
             <div className="grid" style={{ gridTemplateColumns: `repeat(${days.length+1}, minmax(120px,1fr))` }}>
               <div className="bg-blue-800 text-white p-3 border-[2px] border-gray-500 dark:border-black text-center font-bold">HORAS</div>
@@ -263,7 +313,7 @@ const ScheduleTable: React.FC = () => {
                               <p className="text-center text-black text-xs break-all font-bold">{c.course}</p>
                               <p className="text-center text-black break-all">{getNombreDocente(c.professor)}</p>
                               <p className="text-center text-black break-all font-bold">{c.activity}</p>
-                              <p className="text-center text-black break-all">{c.classroom}</p>
+                              <p className="text-center text-black break-all mb-2">{c.classroom}</p>
                             </div>
                           ))
                         ) : (
@@ -277,9 +327,25 @@ const ScheduleTable: React.FC = () => {
             </div>
           </div>
         </div>
+        {/* BOTÓN DE DESCARGAR ABAJO */}
+        <div className="flex justify-center mb-10">
+          <button
+            onClick={handleDownload}
+            className="bg-green-500 text-white px-6 py-3 rounded shadow-md hover:bg-green-600 transition"
+          >
+            Descargar horario
+          </button>
+        </div>
       </div>
     </>
   );
 };
 
 export default ScheduleTable;
+
+// Para TypeScript evite errores y no moleste =:v
+declare global {
+  interface Window {
+    html2canvas?: any;
+  }
+}

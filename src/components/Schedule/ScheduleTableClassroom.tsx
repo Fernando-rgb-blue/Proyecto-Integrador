@@ -1,4 +1,4 @@
-'use client';
+'use client';  
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import BreadDash from "@/components/Common/BreadDash";
@@ -32,15 +32,16 @@ const ScheduleTableClassroom: React.FC = () => {
   const colors = [
     "bg-gray-200",
     "bg-green-200",
-    "bg-blue-200",
+    "bg-blue-300",
     "bg-orange-200",
     "bg-pink-200",
-    "bg-red-200",
+    "bg-yellow-200",
+    "bg-red-300",
     "bg-lime-200",
     "bg-purple-300",
-    "bg-teal-200",
+    "bg-teal-300",
     "bg-indigo-200",
-    "bg-yellow-200",
+    
   ];
 
   const courseColorMap: { [key: string]: string } = {};
@@ -161,6 +162,52 @@ const ScheduleTableClassroom: React.FC = () => {
     setModalVisible(true);
   };
 
+
+
+  // Función para descargar imagen completa
+  const handleDownload = async () => {
+    // 1) Cargar html2canvas desde CDN si no está
+    if (!window.html2canvas) {
+      await new Promise<void>((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js';
+        script.onload = () => resolve();
+        script.onerror = () => reject(new Error('No se pudo cargar html2canvas.'));
+        document.body.appendChild(script);
+      });
+    }
+
+    // 2) Seleccionar el div scrollable
+    const original = document.querySelector('.overflow-x-auto') as HTMLElement;
+    if (!original) {
+      alert('No se encontró el horario para descargar.');
+      return;
+    }
+
+    // 3) Clonar para quitar overflow y usar todo el ancho/alto
+    const clone = original.cloneNode(true) as HTMLElement;
+    const fullW = original.scrollWidth;
+    const fullH = original.scrollHeight;
+
+    clone.style.overflow = 'visible';
+    clone.style.width = fullW + 'px';
+    clone.style.height = fullH + 'px';
+    clone.style.position = 'absolute';
+    clone.style.top = '0';
+    clone.style.left = '-9999px';
+    document.body.appendChild(clone);
+
+    // 4) Renderizar el clon con html2canvas
+    const canvas = await window.html2canvas(clone, { scrollX: 0, scrollY: 0 });
+    document.body.removeChild(clone);
+
+    // 5) Descargar la imagen pipipi
+    const link = document.createElement('a');
+    link.download = 'horario.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  };
+
   return (
     <>
       <div className="container mx-auto px-4 pb-1 sm:px-6 lg:px-8 mt-4">
@@ -205,9 +252,9 @@ const ScheduleTableClassroom: React.FC = () => {
         </button>
       </div> */}
 
-      {loading && <p className="text-blue-500">Cargando horarios...</p>}
+      {loading && <p className="text-blue-500 text-center">Cargando horario...</p>}
 
-      <div className="container mx-auto mt-10 mb-10 p-4">
+      <div className="container mx-auto mt-10 mb-8 p-4">
         <div className="overflow-x-auto">
           <table className="w-full min-w-[800px] sm:min-w-[600px] table-auto border-collapse border border-gray-500 dark:bg-dark">
             <thead>
@@ -285,10 +332,10 @@ const ScheduleTableClassroom: React.FC = () => {
                       >
                         {currentCell.courses.map((course, index) => (
                           <div key={index} className="text-xs dark:text-dark">
-                            <p>{course.course}</p>
-                            <p>{getNombreDocente(course.professor)}</p>
+                            <p className=" font-bold ">{course.course}</p>
+                            <p className="pr-1 pl-1 ">{getNombreDocente(course.professor)}</p>
                             <p>{course.activity}</p>
-                            <p>{course.classroom}</p>
+                            <p className="mb-2 ">{course.classroom}</p>
                           </div>
                         ))}
                       </td>
@@ -299,9 +346,26 @@ const ScheduleTableClassroom: React.FC = () => {
             </tbody>
           </table>
         </div>
+        {/* BOTÓN DE DESCARGAR ABAJO */}
+        
       </div>
+      <div className="flex justify-center mb-10">
+          <button
+            onClick={handleDownload}
+            className="bg-green-500 text-white px-6 py-3 rounded shadow-md hover:bg-green-600 transition"
+          >
+            Descargar horario
+          </button>
+        </div>
     </>
   );
 };
 
 export default ScheduleTableClassroom;
+
+// Para TypeScript evite errores y no moleste =:v
+declare global {
+  interface Window {
+    html2canvas?: any;
+  }
+}
