@@ -40,9 +40,9 @@ const Video = () => {
             >
               <div className="relative aspect-[77/40] items-center justify-center">
                 <Image
-                  src="/images/video/Fondovideo2.png"
+                  src="/images/video/FondoVideo2.png"
                   alt="video image"
-                  fill
+                  fill 
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
                 <div className="absolute right-0 top-0 flex h-full w-full items-center justify-center">
