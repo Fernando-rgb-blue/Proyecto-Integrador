@@ -18,7 +18,7 @@ const ProtectedRoute = () => {
         const isGoogleUser = session?.sub?.startsWith('116341') || (session?.user?.email.includes('unitru.edu.pe') && !session?.user?.role);
         
         // Rutas restringidas para usuarios de Google
-        const restrictedPaths = ['/dashboard/schedule-admin', '/dashboard/asigdocentes', '/dashboard/profile', '/dashboard/schedule-docentes', '/dashboard/docentes', '/dashboard/courses', '/dashboard/classroom', '/dashboard/schedule'];
+        const restrictedPaths = ['/dashboard/final-schedule','/dashboard/schedule-admin', '/dashboard/asigdocentes', '/dashboard/profile', '/dashboard/schedule-docentes', '/dashboard/docentes', '/dashboard/courses', '/dashboard/classroom', '/dashboard/schedule'];
         
         // Si el usuario de Google trata de acceder a una ruta restringida, redirígelo
         if (isGoogleUser && restrictedPaths.includes(window.location.pathname)) {

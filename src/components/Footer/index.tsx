@@ -35,7 +35,7 @@ const Footer = () => {
                 </p>
                 <div className="flex items-center">
                   <a
-                    href="https://www.facebook.com/ep.informaticaunt/?locale=es_LA"
+                    href="https://www.facebook.com/profile.php?id=61569647381199"
                     aria-label="social-link"
                     target="_blank"
                     rel="noopener noreferrer"

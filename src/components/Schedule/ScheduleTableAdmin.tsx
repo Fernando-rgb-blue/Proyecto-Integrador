@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import BreadDash from "@/components/Common/BreadDash";
 import DashboardTabs from "@/components/Dashboard/DashboardTabs";
-import ProtectedRoute from "@/components/Proteccion"
+import ProtectedRoute from "@/components/Proteccion";
 
 interface ScheduleItem {
   _id?: string;
@@ -17,9 +17,13 @@ interface ScheduleItem {
   }[];
 }
 
-//  Inicio del modal para agregar, editar, borrar
-// Componente ScheduleModal actualizado
+// Definimos la interfaz para las aulas con nombre y capacidad
+interface ClassroomOption {
+  name: string;
+  capacity: number;
+}
 
+// Componente ScheduleModal actualizado para mostrar nombre y capacidad de aula
 const ScheduleModal: React.FC<{
   visible: boolean;
   onClose: () => void;
@@ -34,29 +38,17 @@ const ScheduleModal: React.FC<{
     ? initialData!.courses
     : makeDefault();
   const [courseData, setCourseData] = useState(initialCourses);
-  const [classrooms, setClassrooms] = useState<string[]>([]);
+  const [classrooms, setClassrooms] = useState<ClassroomOption[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [docentes, setDocentes] = useState<any[]>([]);
 
-  // Bloquear scroll en el fondo cuando el modal esté visible
   useEffect(() => {
-    if (visible) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-
-
-    // Limpieza del efecto al desmontar el componente
-    return () => {
-      document.body.style.overflow = '';
-    };
+    document.body.style.overflow = visible ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
   }, [visible]);
 
-
   useEffect(() => {
     if (visible) {
-      // si vienen cursos, úsalos; si no, arranca con uno vacío
       const newCourses = (initialData?.courses && initialData.courses.length > 0)
         ? initialData.courses
         : makeDefault();
@@ -65,13 +57,12 @@ const ScheduleModal: React.FC<{
     }
   }, [visible, initialData]);
 
-
   useEffect(() => {
     const fetchClassrooms = async () => {
       try {
-        const response = await axios.get("/api/classroom/");
-        const classroomNames = response.data.map((room: { name: string }) => room.name);
-        setClassrooms(classroomNames);
+        // Traemos aula con name y capacity
+        const response = await axios.get<ClassroomOption[]>("/api/classroom/");
+        setClassrooms(response.data);
       } catch (error) {
         console.error("Error al cargar las aulas:", error);
       }
@@ -82,11 +73,9 @@ const ScheduleModal: React.FC<{
         const response = await fetch("/api/auth/signup/");
         if (!response.ok) throw new Error("Error al obtener los docentes");
         const data = await response.json();
-
         const filteredDocentes = data.filter(
           (docente: any) => docente.role !== "admin" && docente.status === "activo"
         );
-
         setDocentes(filteredDocentes);
       } catch (error) {
         console.error("Error cargando docentes:", error);
@@ -94,19 +83,13 @@ const ScheduleModal: React.FC<{
     };
 
     fetchDocentes();
-
     fetchClassrooms();
   }, []);
-
-
-
-
-
 
   const handleAddCourse = () => {
     setCourseData([
       ...courseData,
-      { course: "", professor: "", activity: "", classroom: "" },
+      { course: "", professor: "", activity: "", classroom: "", hours: 2 },
     ]);
   };
 
@@ -124,7 +107,7 @@ const ScheduleModal: React.FC<{
   };
 
   const handleSubmit = () => {
-    if (courseData.some(course => !course.professor || !course.activity || !course.classroom || !course.course)) {
+    if (courseData.some(c => !c.professor || !c.activity || !c.classroom || !c.course)) {
       setError("Todos los campos son obligatorios.");
       return;
     }
@@ -132,12 +115,10 @@ const ScheduleModal: React.FC<{
     onClose();
   };
 
-
   const handleDelete = () => {
     onDelete();
     onClose();
   };
-
 
   const handleDeleteCourse = (index: number) => {
     const updatedCourses = [...courseData];
@@ -146,55 +127,39 @@ const ScheduleModal: React.FC<{
     onDeleteCourse(index);
   };
 
-
   if (!visible) return null;
-
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-[5000]">
-      {/* Fondo oscuro */}
       <div className="fixed inset-0 bg-black bg-opacity-80" onClick={onClose}></div>
-
-      
-      {/* Contenido del modal */}
-      <div className="bg-white w-full max-w-2xl  p-4 rounded-lg shadow-lg z-10 relative max-h-[90vh] overflow-y-auto mx-3 dark:bg-dark">
+      <div className="bg-white w-full max-w-2xl p-4 rounded-lg shadow-lg z-10 relative max-h-[90vh] overflow-y-auto mx-3 dark:bg-dark">
         <h2 className="text-xl font-semibold mb-4">Modificar Horario</h2>
-
-
         {courseData.map((course, index) => (
-
           <div key={index} className="space-y-4 border-b pb-4">
             <h3 className="text-lg font-medium">Curso {index + 1}</h3>
 
-
+            {/* Selector de curso/profesor */}
             <div className="mb-4">
               <label className="block text-sm font-medium mb-1">Curso</label>
-
-
               <select
                 value={`${course.course} / ${course.professor}`}
                 onChange={(e) => handleCourseChange(index, "course", e.target.value)}
                 className="border rounded w-full p-2"
               >
                 <option value="">Seleccione un curso</option>
-                {courses.map((courseWithProfessor, i) => {
-                  const [courseName, professorId] = courseWithProfessor.split(" / ");
-                  const professor = docentes.find((d) => d._id === professorId);
-                  const professorName = professor ? professor.fullname : "Desconocido";
-
+                {courses.map((cpf, i) => {
+                  const [name, pid] = cpf.split(" / ");
+                  const prof = docentes.find(d => d._id === pid);
                   return (
-                    <option key={i} value={courseWithProfessor}>
-                      {courseName} / {professorName}
+                    <option key={i} value={cpf}>
+                      {name} / {prof ? prof.fullname : "Desconocido"}
                     </option>
                   );
                 })}
               </select>
-
-
-
             </div>
 
-
+            {/* Selector de actividad */}
             <div className="mb-4">
               <label className="block text-sm font-medium mb-1">Actividad</label>
               <select
@@ -211,7 +176,7 @@ const ScheduleModal: React.FC<{
               </select>
             </div>
 
-
+            {/* Selector de aula con nombre y capacidad */}
             <div className="mb-4">
               <label className="block text-sm font-medium mb-1">Aula</label>
               <select
@@ -221,15 +186,15 @@ const ScheduleModal: React.FC<{
               >
                 <option value="">Seleccione un aula</option>
                 <option value="Aula no definida">Aula no definida</option>
-                {classrooms.map((classroom, i) => (
-                  <option key={i} value={classroom}>
-                    {classroom}
+                {classrooms.map((room, i) => (
+                  <option key={i} value={room.name}>
+                    {`${room.name} - Capacidad: ${room.capacity}`}
                   </option>
                 ))}
               </select>
             </div>
 
-            {/* //"nuevoooo" */}
+            {/* Selector de horas */}
             <div className="mb-4">
               <label className="block text-sm font-medium mb-1">Horas</label>
               <select
@@ -237,13 +202,12 @@ const ScheduleModal: React.FC<{
                 onChange={(e) => handleCourseChange(index, "hours", e.target.value)}
                 className="border rounded w-full p-2"
               >
-                {[1, 2, 3, 4, 5, 6].map((h) => (
+                {[1, 2, 3, 4, 5, 6].map(h => (
                   <option key={h} value={h}>{h}</option>
                 ))}
               </select>
             </div>
 
-            {/* fin nuevo */}
             {courseData.length >= 1 && (
               <button
                 onClick={() => handleDeleteCourse(index)}
@@ -255,11 +219,8 @@ const ScheduleModal: React.FC<{
           </div>
         ))}
 
-
         {error && <div className="text-red-500 mb-4">{error}</div>}
-
-
-        {(courseData.length === 1 || courseData.length === 2)&& (
+        {(courseData.length === 1 || courseData.length === 2) && (
           <button
             onClick={handleAddCourse}
             className="mt-2 bg-green-500 text-white p-2 rounded w-full"
@@ -268,20 +229,9 @@ const ScheduleModal: React.FC<{
           </button>
         )}
 
-
         <button onClick={handleSubmit} className="mt-2 bg-blue-500 text-white p-2 rounded w-full">
           Guardar Cambios
         </button>
-
-
-        {/* {courseData.length === 1 && (
-          <button
-            onClick={handleDelete}
-            className="mt-2 bg-red-500 text-white p-2 rounded w-full"
-          >
-            Borrar Datos de Celda
-          </button>
-        )} */}
         <button onClick={onClose} className="mt-2 bg-gray-500 text-white p-2 rounded w-full">
           Cerrar
         </button>
@@ -289,7 +239,6 @@ const ScheduleModal: React.FC<{
     </div>
   );
 };
-
 
 
 

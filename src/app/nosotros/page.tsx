@@ -5,7 +5,46 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Nosotros | Escuela de Informática | UNT",
-  description: "Esta es la página de Nosotros",
+  description: "La Escuela de Informática de la Universidad Nacional de Trujillo (UNT) fue fundada el 12 de septiembre de 1995, impulsada por un grupo de docentes del Departamento de Matemáticas.",
+  keywords: [
+    'Informática',
+    'UNT',
+    'Escuela de Informática',
+    'Nosotros',
+    'Nacimiento de la Escuela',
+    'Misión',
+    'Visión',
+    'Trayectoria'
+  ],
+  authors: [
+    { name: 'Escuela de Informática UNT - Alfato Titto Anthony Fernando - Gonzales Matos Walter Manuel - Urcia Peláez Luis Alexander', url: 'https://inf.unitru.edu.pe/nosotros' },
+  ],
+  openGraph: {
+    title: 'Nosotros | Escuela de Informática | UNT',
+    description: 'La Escuela de Informática de la Universidad Nacional de Trujillo (UNT) fue fundada el 12 de septiembre de 1995, impulsada por un grupo de docentes del Departamento de Matemáticas.',
+    url: 'https://inf.unitru.edu.pe/nosotros',
+    siteName: 'Escuela de Informática UNT',
+    locale: 'es_PE',
+    type: 'website',
+    images: [
+      {
+        url: 'https://inf.unitru.edu.pe/_next/image?url=%2Fimages%2Fnosotros%2Frese%C3%B1a_frontis_escuela_informatica.webp&w=1920&q=75',
+        width: 1200,
+        height: 630,
+        alt: 'Sección Nosotros - Escuela de Informática UNT',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Nosotros | Escuela de Informática | UNT',
+    description: 'La Escuela de Informática de la Universidad Nacional de Trujillo (UNT) fue fundada el 12 de septiembre de 1995, impulsada por un grupo de docentes del Departamento de Matemáticas.',
+    images: ['https://inf.unitru.edu.pe/_next/image?url=%2Fimages%2Fnosotros%2Frese%C3%B1a_frontis_escuela_informatica.webp&w=1920&q=75'],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 const AboutPage = () => {

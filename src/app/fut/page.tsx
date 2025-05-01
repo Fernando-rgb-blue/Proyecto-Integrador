@@ -4,7 +4,15 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
     title: "FUT | Escuela de Informática | UNT",
-    description: "Un formulario para editar y descargar el Formato Único de Trámite."
+    description: "Un formulario para editar y descargar el Formato Único de Trámite.",
+    keywords: [
+        'FUT UNT',
+        'documento FUT',
+        'descargar FUT',
+        'FUT interactivo',
+        'Formulario FUT',
+        'Editar FUT',
+    ],
 };
 
 const FUTPage = () => {

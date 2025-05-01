@@ -4,8 +4,49 @@ import { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-    title: "Currícula | Escuela de Informática | UNT",
-    description: "La malla curricular de la escuela de informática UNT.",
+    title: 'Currícula | Escuela de Informática | UNT',
+    description: 'Una vista interactiva de la malla curricular vigente (20218) en la escuela de informática. Selecciona un curso para activarlo. Si ese curso abre otro, se volverá disponible.',
+    keywords: [
+        'Informática',
+        'UNT',
+        'Escuela de Informática',
+        'Currícula',
+        'Malla curricular',
+        'Plan de estudios',
+        'Asignaturas',
+        'Programas',
+        'Currícula 2018',
+        'Currícula interactiva',
+    ],
+    authors: [
+    { name: 'Escuela de Informática UNT - Alfato Titto Anthony Fernando - Gonzales Matos Walter Manuel - Urcia Peláez Luis Alexander', url: 'https://inf.unitru.edu.pe/curriculos' },
+    ],
+    openGraph: {
+        title: 'Currícula | Escuela de Informática | UNT',
+        description: 'Una vista interactiva de la malla curricular vigente (20218) en la escuela de informática. Selecciona un curso para activarlo. Si ese curso abre otro, se volverá disponible.',
+        url: 'https://inf.unitru.edu.pe/curriculos',
+        siteName: 'Escuela de Informática UNT',
+        locale: 'es_PE',
+        type: 'website',
+        images: [
+            {
+            url: 'https://inf.unitru.edu.pe/_next/image?url=%2Fimages%2Fcurriculos%2Fcurriculos_leyenda.png&w=640&q=75',
+            width: 1200,
+            height: 630,
+            alt: 'Malla Curricular - Escuela de Informática UNT',
+            },
+        ],
+    },
+    twitter: {
+        card: 'summary_large_image',
+        title: 'Currícula | Escuela de Informática | UNT',
+        description: 'Una vista interactiva de la malla curricular vigente (20218) en la escuela de informática. Selecciona un curso para activarlo. Si ese curso abre otro, se volverá disponible.',
+        images: ['https://inf.unitru.edu.pe/_next/image?url=%2Fimages%2Fcurriculos%2Fcurriculos_leyenda.png&w=640&q=75'],
+    },
+    robots: {
+        index: true,
+        follow: true,
+    },
 };
 
 const CurriculosPage = () => {
