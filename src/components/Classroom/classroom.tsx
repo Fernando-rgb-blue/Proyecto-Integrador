@@ -206,7 +206,7 @@ const Classrooms = () => {
             {showAddPopup && (
                 <div className="fixed inset-0 bg-black/80 flex justify-center items-center z-50 transition-opacity duration-150" onClick={closeModals}>
                     <div onClick={(e) => e.stopPropagation()} className="p-6 rounded-lg max-w-sm w-full bg-white dark:bg-dark overflow-hidden">
-                        <label>Nombre del Aula</label>
+                        <label>Nombre del Aula*</label>
                         <input
                             type="text"
                             placeholder="Nombre del aula"
@@ -214,7 +214,7 @@ const Classrooms = () => {
                             className="w-full mt-1 mb-5 border rounded"
                         />
 
-                        <label>Capacidad</label>
+                        <label>Capacidad*</label>
                         <input
                             type="number"
                             placeholder="Capacidad"
@@ -222,7 +222,7 @@ const Classrooms = () => {
                             className="w-full mt-1 mb-5 border rounded"
                         />
 
-                        <label>Descripción</label>
+                        <label>Descripción*</label>
                         <textarea
                             placeholder="Descripción del aula"
                             id="description"

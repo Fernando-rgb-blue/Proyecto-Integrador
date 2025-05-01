@@ -240,7 +240,7 @@ const Courses = () => {
             {showAddPopup && (
                 <div className="fixed inset-0 bg-black/80 flex justify-center items-center z-50 transition-opacity duration-150" onClick={closeModals}>
                     <div onClick={(e) => e.stopPropagation()} className="p-6 rounded-lg max-w-sm w-full bg-white dark:bg-dark overflow-hidden">
-                        <label>Nombre del Curso</label>
+                        <label>Nombre del Curso*</label>
                         <input
                             type="text"
                             placeholder="Nombre del curso"

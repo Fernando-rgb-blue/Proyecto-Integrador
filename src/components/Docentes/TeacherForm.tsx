@@ -104,7 +104,7 @@ const TeacherForm = ({ onSubmit, teacher, setShowPopup }: TeacherFormProps) => {
                     </div>
                     <div className="w-full flex flex-col">
                         <label htmlFor="fullname">
-                            Nombres y apellidos
+                            Nombres y apellidos*
                         </label>
                         <input
                             id="fullname"
@@ -117,7 +117,7 @@ const TeacherForm = ({ onSubmit, teacher, setShowPopup }: TeacherFormProps) => {
                         <div className="grid grid-cols-1 sm:grid-cols-10 gap-2">
                             <div className="col-span-10 sm:col-span-7">
                                 <label htmlFor="email">
-                                    Correo electrónico
+                                    Correo electrónico*
                                 </label>
                                 <input
                                     id="email"
