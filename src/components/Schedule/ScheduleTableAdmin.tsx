@@ -169,10 +169,11 @@ const ScheduleModal: React.FC<{
               >
                 <option value="">Seleccione una Actividad</option>
                 <option value="Práctica">Práctica</option>
+                <option value="Teoría">Teoría</option>
                 <option value="Laboratorio 1">Laboratorio 1</option>
                 <option value="Laboratorio 2">Laboratorio 2</option>
                 <option value="Laboratorio 3">Laboratorio 3</option>
-                <option value="Teoría">Teoría</option>
+                <option value="Laboratorio 4">Laboratorio 4</option>
               </select>
             </div>
 
