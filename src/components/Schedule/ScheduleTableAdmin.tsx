@@ -174,6 +174,11 @@ const ScheduleModal: React.FC<{
                 <option value="Laboratorio 2">Laboratorio 2</option>
                 <option value="Laboratorio 3">Laboratorio 3</option>
                 <option value="Laboratorio 4">Laboratorio 4</option>
+                <option value="Grupo 1">Grupo 1</option>
+                <option value="Grupo 2">Grupo 2</option>
+                <option value="Grupo 3">Grupo 3</option>
+                <option value="Grupo 4">Grupo 4</option>
+                <option value="Grupo 5">Grupo 5</option>
               </select>
             </div>
 
