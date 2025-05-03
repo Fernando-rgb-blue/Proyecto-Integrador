@@ -7,7 +7,7 @@ Si bien se permite realizar modificaciones, actualizaciones y mejoras con fines 
 
 Para que un trabajo académico (proyecto, informe, tesis u otro) fundamente su originalidad, deberá partir de un desarrollo completamente nuevo; no se considerarán aceptables las adaptaciones parciales de esta página.
 
-© 2025 Equipo de Proyecto Web. Autores originales: Alfato Titto Anthony Fernando, Gonzales Matos Walter Manuel y Urcia Peláez Luis Alexander
+© 2025 Equipo de Proyecto Web. Autores originales: Alfaro Titto Anthony Fernando, Gonzales Matos Walter Manuel y Urcia Peláez Luis Alexander
 
 
 

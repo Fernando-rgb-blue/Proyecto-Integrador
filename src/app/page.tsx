@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     'Horarios informática'
   ],
   authors: [
-    { name: 'Escuela de Informática UNT - Alfato Titto Anthony Fernando - Gonzales Matos Walter Manuel - Urcia Peláez Luis Alexander', url: 'https://inf.unitru.edu.pe/' },
+    { name: 'Escuela de Informática UNT - Alfaro Titto Anthony Fernando - Gonzales Matos Walter Manuel - Urcia Peláez Luis Alexander', url: 'https://inf.unitru.edu.pe/' },
   ],
   openGraph: {
     title: 'Escuela de Informática | UNT',

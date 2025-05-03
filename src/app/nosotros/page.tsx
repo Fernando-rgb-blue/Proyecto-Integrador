@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     'Trayectoria'
   ],
   authors: [
-    { name: 'Escuela de Informática UNT - Alfato Titto Anthony Fernando - Gonzales Matos Walter Manuel - Urcia Peláez Luis Alexander', url: 'https://inf.unitru.edu.pe/nosotros' },
+    { name: 'Escuela de Informática UNT - Alfaro Titto Anthony Fernando - Gonzales Matos Walter Manuel - Urcia Peláez Luis Alexander', url: 'https://inf.unitru.edu.pe/nosotros' },
   ],
   openGraph: {
     title: 'Nosotros | Escuela de Informática | UNT',

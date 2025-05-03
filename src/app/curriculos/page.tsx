@@ -19,7 +19,7 @@ export const metadata: Metadata = {
         'Currícula interactiva',
     ],
     authors: [
-    { name: 'Escuela de Informática UNT - Alfato Titto Anthony Fernando - Gonzales Matos Walter Manuel - Urcia Peláez Luis Alexander', url: 'https://inf.unitru.edu.pe/curriculos' },
+    { name: 'Escuela de Informática UNT - Alfaro Titto Anthony Fernando - Gonzales Matos Walter Manuel - Urcia Pelaez Luis Alexander', url: 'https://inf.unitru.edu.pe/curriculos' },
     ],
     openGraph: {
         title: 'Currícula | Escuela de Informática | UNT',

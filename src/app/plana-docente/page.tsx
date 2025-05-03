@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   ],
   authors: [
     {
-      name: 'Escuela de Informática UNT - Alfato Titto Anthony Fernando - Gonzales Matos Walter Manuel - Urcia Peláez Luis Alexander',
+      name: 'Escuela de Informática UNT - Alfaro Titto Anthony Fernando - Gonzales Matos Walter Manuel - Urcia Peláez Luis Alexander',
       url: 'https://inf.unitru.edu.pe/plana-docente'
     },
   ],

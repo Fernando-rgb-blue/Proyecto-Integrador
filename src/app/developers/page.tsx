@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   title: "Developers | Escuela de Informática | UNT",
   description: "Esta es la página de los nombres de los creadores de la página web",
   keywords: [
-    'Alfato Titto Anthony Fernando',
+    'Alfaro Titto Anthony Fernando',
     'Gonzales Matos Walter Manuel',
     'Urcia Peláez Luis Alexander',
     'Developers informática',
